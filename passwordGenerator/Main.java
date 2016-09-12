@@ -3,16 +3,37 @@ package passwordGenerator;
 import passwordGenerator.windows.JFramePasswordGenerator;
 
 /**
- * Handling commandline args or/and shows the GUI<br/>
- * 
- * @version 2012.09.20
  * @author Kevin Weis
+ * @version 09.12.2012
+ * <p>
+ * Handling commandline args or/and shows the GUI<br/>
+ * <p>
  */
 public final class Main {
 
 	/**
 	 * @param args
-	 *            please take a look at the help by executing "java -jar PasswordGenerator.jar --help"
+	 *            (as String[]) see following help:
+	 *            <p>
+	 *            Usage: The first number is the count of how much passwords will be generated<br>
+	 *            The second number is how long each password
+	 *            <p>
+	 *            --no-gui -S Get a default password<br>
+	 *            --help Prints this help<br>
+	 *            -n Set numbers<br>
+	 *            -a Set all lowercase<br>
+	 *            -A Set all UPPERCASE<br>
+	 *            -s Set spezial chars<br>
+	 *            --MD2 PASSWORD Get the MD2-Hash of the password<br>
+	 *            --MD5 PASSWORD Get the MD5-Hash of the password<br>
+	 *            --SHA1 PASSWORD Get the SHA1-Hash of the password<br>
+	 *            --SHA256 PASSWORD Get the SHA256-Hash of the password<br>
+	 *            --SHA384 PASSWORD Get the SHA384-Hash of the password<br>
+	 *            --SHA512 PASSWORD Get the SHA512-Hash of the password
+	 *            <p>
+	 *            To use multiple charsets use this: -Aans (or simular)<br>
+	 *            java -jar PassworGenerator.jar 3 6 -an<br>
+	 *            java -jar PassworGenerator.jar --sha256 PASSWORD<br>
 	 */
 	public static void main(String[] args) {
 		boolean fistNumberSet = false;
@@ -33,7 +54,21 @@ public final class Main {
 					if (string.equals("--no-gui") || string.equals("-S")) {
 						printDefaultPassword();
 						// continue;
-					} else if (args[0].startsWith("--") & args.length == 2) {
+					} else if (string.startsWith("-") && (args.length != 1)) {
+						charChoice = "";
+						if (string.contains("n")) {
+							charChoice += Password.Numbers;
+						}
+						if (string.contains("a")) {
+							charChoice += Password.AlphabetLOW;
+						}
+						if (string.contains("A")) {
+							charChoice += Password.AlphabetUP;
+						}
+						if (string.contains("s")) {
+							charChoice += Password.Special;
+						}
+					} else if (args[0].startsWith("--") && args.length == 2) {
 						String string1 = args[0];
 						Password pw;
 						if (string1.contains("md2") || string1.contains("MD2")) {
@@ -69,20 +104,6 @@ public final class Main {
 						} else {
 							printHelp();
 						}
-					} else if (string.startsWith("-") & (args.length != 1)) {
-						charChoice = "";
-						if (string.contains("n")) {
-							charChoice += Password.Numbers;
-						}
-						if (string.contains("a")) {
-							charChoice += Password.AlphabetLOW;
-						}
-						if (string.contains("A")) {
-							charChoice += Password.AlphabetUP;
-						}
-						if (string.contains("s")) {
-							charChoice += Password.Special;
-						}
 					} else {
 						try {
 							if (fistNumberSet) {
@@ -97,10 +118,7 @@ public final class Main {
 						}
 					}
 				}
-				for (int i = 0; i < pwCount; i++) {
-					printPassword(new Password(charChoice.toCharArray(), pwLength));
-					System.out.println();
-				}
+				new Worker(charChoice.toCharArray(), pwLength, pwCount).run();
 				System.exit(0);
 			} catch (Exception ex) {
 			}
@@ -151,10 +169,6 @@ public final class Main {
 		}
 	}
 
-	private static void printPassword(Password pw) {
-		System.out.print(pw);
-	}
-
 	private static void printDefaultPassword() {
 		System.out.println(new Password((Password.Numbers + Password.AlphabetLOW + Password.AlphabetUP).toCharArray(), 12));
 		System.exit(0);
@@ -171,24 +185,24 @@ public final class Main {
 		// System.out.println("-a                   Set all lowercase");
 		// System.out.println("-A                   Set all UPPERCASE");
 		// System.out.println("-s                   Set spezial chars");
-		// System.out.println("--MD2    <Password>  Get the MD2-Hash of the password");
-		// System.out.println("--MD5    <Password>  Get the MD5-Hash of the password");
-		// System.out.println("--SHA1   <Password>  Get the SHA1-Hash of the password");
-		// System.out.println("--SHA256 <Password>  Get the SHA256-Hash of the password");
-		// System.out.println("--SHA384 <Password>  Get the SHA384-Hash of the password");
-		// System.out.println("--SHA512 <Password>  Get the SHA512-Hash of the password");
+		// System.out.println("--MD2    PASSWORD  Get the MD2-Hash of the password");
+		// System.out.println("--MD5    PASSWORD  Get the MD5-Hash of the password");
+		// System.out.println("--SHA1   PASSWORD  Get the SHA1-Hash of the password");
+		// System.out.println("--SHA256 PASSWORD  Get the SHA256-Hash of the password");
+		// System.out.println("--SHA384 PASSWORD  Get the SHA384-Hash of the password");
+		// System.out.println("--SHA512 PASSWORD  Get the SHA512-Hash of the password");
 		// System.out.println();
 		// System.out.println("To use multiple charsets use this: -Aans (or simular)");
 		// System.out.println("java -jar PassworGenerator.jar 3 6 -an");
 		// System.out.println("java -jar PassworGenerator.jar --sha256 PASSWORD");
-		System.out.println("Usage:\r\nThe first number is the count of how much passwords will be generated\r\nThe second number is how long each password\r\n\r\n--no-gui  -S         Get a default password\r\n--help               Prints this help\r\n-n                   Set numbers\r\n-a                   Set all lowercase\r\n-A                   Set all UPPERCASE\r\n-s                   Set spezial chars\r\n--MD2    <Password>  Get the MD2-Hash of the password\r\n--MD5    <Password>  Get the MD5-Hash of the password\r\n--SHA1   <Password>  Get the SHA1-Hash of the password\r\n--SHA256 <Password>  Get the SHA256-Hash of the password\r\n--SHA384 <Password>  Get the SHA384-Hash of the password\r\n--SHA512 <Password>  Get the SHA512-Hash of the password\r\n\r\nTo use multiple charsets use this: -Aans (or simular)\r\njava -jar PassworGenerator.jar 3 6 -an\r\njava -jar PassworGenerator.jar --sha256 PASSWORD\r\n");
-		System.exit(0);
+		System.out.print("Usage:\r\nThe first number is the count of how much passwords will be generated\r\nThe second number is how long each password\r\n\r\n--no-gui  -S         Get a default password\r\n--help               Prints this help\r\n-n                   Set numbers\r\n-a                   Set all lowercase\r\n-A                   Set all UPPERCASE\r\n-s                   Set spezial chars\r\n--MD2    PASSWORD  Get the MD2-Hash of the password\r\n--MD5    PASSWORD  Get the MD5-Hash of the password\r\n--SHA1   PASSWORD  Get the SHA1-Hash of the password\r\n--SHA256 PASSWORD  Get the SHA256-Hash of the password\r\n--SHA384 PASSWORD  Get the SHA384-Hash of the password\r\n--SHA512 PASSWORD  Get the SHA512-Hash of the password\r\n\r\nTo use multiple charsets use this: -Aans (or simular)\r\njava -jar PassworGenerator.jar 3 6 -an\r\njava -jar PassworGenerator.jar --sha256 PASSWORD\r\n");
+		System.exit(1);
 	}
 
 	/**
 	 * contains the current version of this application (hard coded).
 	 */
-	public static final String version = "2.4.4";
+	public static final String version = "2.4.5";
 	/**
 	 * contains the version of the current latest application version. IMPORTANT: to use this you must verify the version
 	 * 
@@ -207,4 +221,23 @@ public final class Main {
 	 * holds the current language
 	 */
 	public static Language currentLanguage = new Language(Language.ENGLISH);
+	
+	private static class Worker extends Thread {
+		public Worker(char[] ch, int pwlen, int pwcnt) {
+			this.choice = ch;
+			this.pwLength = pwlen;
+			this.pwCount = pwcnt;
+		}
+		
+		@Override
+		public void run() {
+			for (int i = 0; i < pwCount; i++) {
+				System.out.print(new Password(choice, pwLength));
+				System.out.println();
+			}
+		}
+		private char[] choice;
+		private int pwLength;
+		private int pwCount;
+	}
 }

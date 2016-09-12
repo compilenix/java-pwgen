@@ -22,18 +22,19 @@ import javax.swing.filechooser.FileNameExtensionFilter;
  * don't forget to set the URL, with "setUpdateURL"!!!<br/>
  * with the method "setSelectedFile" you are able to choose the default filename.<br/>
  * 
- * @version 2012-08-18
+ * @version 2012.11.30
  * @author Kevin Weis
  */
-@SuppressWarnings("serial")
 public class JFrameDownloadUpdate extends javax.swing.JFrame {
+	private static final long serialVersionUID = -5252369525037320290L;
 
 	/**
 	 * Creates new form JFrameDownloadUpdate
 	 */
 	public JFrameDownloadUpdate() {
-		// setAlwaysOnTop(false);
-		// setType(Type.NORMAL);
+		/*
+		 * Disabled because OpenJDK can´t handle it... setAlwaysOnTop(false); setType(Type.NORMAL);
+		 */
 		setResizable(false);
 		jLabel = new javax.swing.JLabel();
 		jLabelStatus = new javax.swing.JLabel();
@@ -41,15 +42,15 @@ public class JFrameDownloadUpdate extends javax.swing.JFrame {
 
 		setTitle("Downloading in progress...");
 
-		jLabel.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+		jLabel.setFont(new java.awt.Font("Tahoma", 1, 14));
 		jLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-		jLabel.setText("Downloading the new Version, have fun with it ;-)");
+		jLabel.setText("Downloading a new version, have fun with it ;-)");
 
 		jProgressBar.setFocusable(false);
 		jProgressBar.setIndeterminate(true);
 		jProgressBar.setStringPainted(true);
 
-		jLabelStatus.setText("Waiting for selecting a destination...");
+		jLabelStatus.setText("Wait for selecting the destination...");
 		jLabelStatus.setHorizontalAlignment(SwingConstants.CENTER);
 
 		javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -73,13 +74,14 @@ public class JFrameDownloadUpdate extends javax.swing.JFrame {
 		getContentPane().setLayout(
 				layout);
 
+		// Get the current size of your screen
 		java.awt.Dimension screenSize = java.awt.Toolkit.getDefaultToolkit().getScreenSize();
+		// Center the position of this Window, relative to your screensize.
 		setBounds(
 				(screenSize.width - 468) / 2, (screenSize.height - 106) / 2, 468, 124);
+		// Set the Icon of the Window; replace with yours or comment it out.
 		setIconImage(Toolkit.getDefaultToolkit().getImage(
 				JFrameDownloadUpdate.class.getResource("res/Password.png")));
-		worker = new WorkerDownload();
-		worker.execute();
 	}
 
 	/**
@@ -122,7 +124,15 @@ public class JFrameDownloadUpdate extends javax.swing.JFrame {
 		this.DEFAULT_BUFFER_SIZE = size;
 	}
 
-	private void saveUrl() {
+	/**
+	 * Start with updating.
+	 */
+	public void run() {
+		worker = new WorkerDownload();
+		worker.execute();
+	}
+
+	private void checkAndDownload() {
 		JFileChooser jFileChooser = new JFileChooser();
 		jFileChooser.setDragEnabled(true);
 		jFileChooser.setFileFilter(new FileNameExtensionFilter("Executable Jar File (.jar)", "jar"));
@@ -133,26 +143,26 @@ public class JFrameDownloadUpdate extends javax.swing.JFrame {
 			try {
 				File selectedFile = jFileChooser.getSelectedFile();
 				if (!selectedFile.getPath().toLowerCase().endsWith(
-							".jar")) {
-						selectedFile = new File(selectedFile.getPath() + ".jar");
-					}
+						".jar")) {
+					selectedFile = new File(selectedFile.getPath() + ".jar");
+				}
 				jLabelStatus.setText("Connecting to Server...");
 				URLConnection con = url.openConnection();
 				con.connect();
-				int available = con.getContentLength();
+				long available = con.getContentLengthLong();
 				InputStream ina = con.getInputStream();
-				jProgressBar.setMaximum(available);
+				jProgressBar.setMaximum((int) available);
 				RandomAccessFile outFile = new RandomAccessFile(selectedFile, "rw");
 				byte[] buffer = new byte[DEFAULT_BUFFER_SIZE];
-				int bytesRead = 0;
-				int downloaded = 0; // number of bytes downloaded
+				long bytesRead = 0;
+				long downloaded = 0; // number of bytes downloaded
 				jLabelStatus.setText("Downloading...");
 				jProgressBar.setIndeterminate(false);
 				while ((bytesRead = ina.read(buffer)) != -1) {
 					outFile.write(
-							buffer, 0, bytesRead);
+							buffer, 0, (int) bytesRead);
 					downloaded += bytesRead;
-					jProgressBar.setValue(downloaded);
+					jProgressBar.setValue((int) downloaded);
 					buffer = new byte[DEFAULT_BUFFER_SIZE];
 				}
 				ina.close();
@@ -180,7 +190,7 @@ public class JFrameDownloadUpdate extends javax.swing.JFrame {
 
 		@Override
 		public Void doInBackground() {
-			saveUrl();
+			checkAndDownload();
 			return null;
 		}
 	}

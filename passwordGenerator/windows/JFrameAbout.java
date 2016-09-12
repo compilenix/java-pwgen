@@ -1,6 +1,5 @@
 package passwordGenerator.windows;
 
-import java.awt.Color;
 import java.awt.Desktop;
 import java.awt.Toolkit;
 import java.awt.event.MouseEvent;
