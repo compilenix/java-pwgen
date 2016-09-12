@@ -1,6 +1,5 @@
 package passwordgenerator;
 
-import java.util.logging.Logger;
 import javax.swing.DefaultListModel;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
@@ -9,17 +8,13 @@ import javax.swing.SpinnerNumberModel;
 import javax.swing.SwingUtilities;
 
 /**
- * This program can generate a MD5 Hash from a known String or generate a
- * password (incl. a MD5 Hash).
- *
+ * This program can generate a MD5 Hash from a known String or generate a password (incl. a MD5 Hash).
+ * <p/>
  * @author Kevin Weis
  * @version 2012-04-26
  */
 public class PasswordGenerator extends JFrame implements Runnable {
-    private static final long serialVersionUID = 1L;
-
     /**
-     *
      * Constructor: It will create the Frame.
      */
     public PasswordGenerator() {
@@ -27,6 +22,15 @@ public class PasswordGenerator extends JFrame implements Runnable {
         initComponents(); // generiert das gesammte layout des fensters und die erforderlichen objekte wie buttons etc.
         jTextFieldEnterPW.setEnabled(false); //setzt das eingabefeld für das bekannte passwort inaktiv (default)
         jLabelSliderInt.setText("12");// setzt die zu generierende zeichenlänge auf den standard 12
+        jButtonExport.setEnabled(false);
+        jButtonImport.setEnabled(false);
+    }
+
+    /**
+     * @return the Object of the GUI
+     */
+    protected static PasswordGenerator getPasswordGui() {
+        return PasswordGui;
     }
 
     @SuppressWarnings("unchecked")
@@ -35,7 +39,7 @@ public class PasswordGenerator extends JFrame implements Runnable {
 
         buttonGroup1 = new javax.swing.ButtonGroup();
         jRadioButtonGenPW = new javax.swing.JRadioButton();
-        jRadioButtonGenMD5 = new javax.swing.JRadioButton();
+        jRadioButtonGenOwnPW = new javax.swing.JRadioButton();
         jTextFieldEnterPW = new javax.swing.JTextField();
         jButtonGenerate = new javax.swing.JButton();
         jButtonClear = new javax.swing.JButton();
@@ -52,6 +56,8 @@ public class PasswordGenerator extends JFrame implements Runnable {
         jLabelPWCount = new javax.swing.JLabel();
         jButtonExport = new javax.swing.JButton();
         jButtonImport = new javax.swing.JButton();
+        jComboBoxAlg = new javax.swing.JComboBox();
+        jCheckBoxGenHash = new javax.swing.JCheckBox();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Password Generator"); // NOI18N
@@ -78,19 +84,10 @@ public class PasswordGenerator extends JFrame implements Runnable {
             }
         });
 
-        buttonGroup1.add(jRadioButtonGenMD5);
-        jRadioButtonGenMD5.setText("Gen. MD5 Hash");
-        jRadioButtonGenMD5.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseEntered(java.awt.event.MouseEvent evt) {
-                jRadioButtonGenMD5MouseEntered(evt);
-            }
-            public void mouseExited(java.awt.event.MouseEvent evt) {
-                jRadioButtonGenMD5MouseExited(evt);
-            }
-        });
-        jRadioButtonGenMD5.addActionListener(new java.awt.event.ActionListener() {
+        buttonGroup1.add(jRadioButtonGenOwnPW);
+        jRadioButtonGenOwnPW.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jRadioButtonGenMD5ActionPerformed(evt);
+                jRadioButtonGenOwnPWActionPerformed(evt);
             }
         });
 
@@ -231,6 +228,14 @@ public class PasswordGenerator extends JFrame implements Runnable {
         });
 
         jButtonImport.setText("Import");
+        jButtonImport.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                jButtonImportMouseEntered(evt);
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                jButtonImportMouseExited(evt);
+            }
+        });
         jButtonImport.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButtonImportActionPerformed(evt);
@@ -244,6 +249,11 @@ public class PasswordGenerator extends JFrame implements Runnable {
         jProgressBar.setMinimumSize(new java.awt.Dimension(10, 17));
         jProgressBar.setStringPainted(true);
 
+        jComboBoxAlg.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "SHA-1", "MD5"}));
+        jComboBoxAlg.setSelectedIndex(0);
+
+        jCheckBoxGenHash.setText("Gen. Hash");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -255,11 +265,11 @@ public class PasswordGenerator extends JFrame implements Runnable {
                     .addComponent(jScrollPane1)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jTextFieldEnterPW)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(jRadioButtonGenPW)
-                                .addGap(18, 18, 18)
-                                .addComponent(jRadioButtonGenMD5))
+                            .addComponent(jSliderPasswordLength, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                .addComponent(jRadioButtonGenOwnPW)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jTextFieldEnterPW))
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(jCheckBoxNum)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -267,15 +277,20 @@ public class PasswordGenerator extends JFrame implements Runnable {
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(jCheckBoxAZ)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jCheckBoxSpezial))
-                            .addComponent(jSliderPasswordLength, javax.swing.GroupLayout.DEFAULT_SIZE, 215, Short.MAX_VALUE))
+                                .addComponent(jCheckBoxSpezial)
+                                .addGap(0, 0, Short.MAX_VALUE))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jRadioButtonGenPW)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(jCheckBoxGenHash)))
                         .addGap(18, 18, 18)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(jButtonGenerate, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(jButtonClear, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(jLabelSliderInt, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addGap(55, 55, 55))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jComboBoxAlg, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addComponent(jSpinnerCountOf)))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addComponent(jLabelHint, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -293,16 +308,19 @@ public class PasswordGenerator extends JFrame implements Runnable {
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jTextFieldEnterPW, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButtonGenerate))
+                    .addComponent(jButtonGenerate)
+                    .addComponent(jRadioButtonGenOwnPW))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jRadioButtonGenPW)
-                    .addComponent(jRadioButtonGenMD5)
-                    .addComponent(jButtonClear))
+                    .addComponent(jButtonClear)
+                    .addComponent(jCheckBoxGenHash))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jSliderPasswordLength, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jLabelSliderInt))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jSliderPasswordLength, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                        .addComponent(jLabelSliderInt, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jComboBoxAlg, javax.swing.GroupLayout.Alignment.LEADING)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jCheckBoxNum)
@@ -326,11 +344,11 @@ public class PasswordGenerator extends JFrame implements Runnable {
         );
 
         java.awt.Dimension screenSize = java.awt.Toolkit.getDefaultToolkit().getScreenSize();
-        setBounds((screenSize.width-346)/2, (screenSize.height-557)/2, 346, 557);
+        setBounds((screenSize.width-341)/2, (screenSize.height-557)/2, 341, 557);
     }// </editor-fold>//GEN-END:initComponents
     private void jButtonClearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonClearActionPerformed
         listModel.clear(); //leert die gesamt liste (ausgabe)
-        Password.clearCount();
+        Password.resetCount();
         jProgressBar.setValue(0);
         jLabelPWCount.setText(Integer.toString(Password.getCount())); //textausgabe für die anzahl der generiwerten passwörtern
         jSpinnerCountOf.setValue(1);
@@ -338,26 +356,6 @@ public class PasswordGenerator extends JFrame implements Runnable {
     private void jButtonGenerateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonGenerateActionPerformed
         generate();
     }//GEN-LAST:event_jButtonGenerateActionPerformed
-    private void jRadioButtonGenPWActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButtonGenPWActionPerformed
-        jTextFieldEnterPW.setEnabled(false); //schaltet das Texteingabefeld aus
-        jCheckBoxNum.setEnabled(true); //schaltet die Checkbox Numbers ein
-        jCheckBoxaz.setEnabled(true); //schaltet die checkbox klein a-z ein
-        jCheckBoxAZ.setEnabled(true); //schaltet die checkbox groß A-Z ein
-        jCheckBoxSpezial.setEnabled(true); //schaltet die checkbox Spezial ein
-        jSliderPasswordLength.setEnabled(true); //schaltet den schieberegler zur zeichenlängenfestlegung ein
-        jLabelSliderInt.setEnabled(true); //schaltet die anzeige des aktuellen werdes des schiebereglers ein
-        jSpinnerCountOf.setEnabled(true); //schaltet den counter für die anzahl zu generierdenen passwörter ein
-    }//GEN-LAST:event_jRadioButtonGenPWActionPerformed
-    private void jRadioButtonGenMD5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButtonGenMD5ActionPerformed
-        jTextFieldEnterPW.setEnabled(true); //schaltet das Texteingabefeld ein
-        jCheckBoxNum.setEnabled(false); //schaltet die Checkbox Numbers aus
-        jCheckBoxaz.setEnabled(false); //schaltet die checkbox klein a-z aus
-        jCheckBoxAZ.setEnabled(false); //schaltet die checkbox groß A-Z aus
-        jCheckBoxSpezial.setEnabled(false); //schaltet die checkbox Spezial aus
-        jSliderPasswordLength.setEnabled(false); //schaltet den schieberegler zur zeichenlängenfestlegung aus
-        jLabelSliderInt.setEnabled(false); //schaltet die anzeige des aktuellen werdes des schiebereglers aus
-        jSpinnerCountOf.setEnabled(false); //schaltet den counter für die anzahl zu generierdenen passwörter aus
-    }//GEN-LAST:event_jRadioButtonGenMD5ActionPerformed
 
     private void jSliderPasswordLengthStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jSliderPasswordLengthStateChanged
         jLabelSliderInt.setText(Integer.toString(jSliderPasswordLength.getValue())); //sorgt für die aktuallisierung der anzeige des aktuellen wertes der zeichenlängenfestlegung
@@ -370,14 +368,6 @@ public class PasswordGenerator extends JFrame implements Runnable {
     private void jRadioButtonGenPWMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jRadioButtonGenPWMouseExited
         jLabelHint.setText(" ");
     }//GEN-LAST:event_jRadioButtonGenPWMouseExited
-
-    private void jRadioButtonGenMD5MouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jRadioButtonGenMD5MouseEntered
-        jLabelHint.setText("Generate a MD5 Hash of the text on the top");
-    }//GEN-LAST:event_jRadioButtonGenMD5MouseEntered
-
-    private void jRadioButtonGenMD5MouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jRadioButtonGenMD5MouseExited
-        jLabelHint.setText(" ");
-    }//GEN-LAST:event_jRadioButtonGenMD5MouseExited
 
     private void jTextFieldEnterPWMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTextFieldEnterPWMouseEntered
         jLabelHint.setText("Type here the password");
@@ -444,13 +434,13 @@ public class PasswordGenerator extends JFrame implements Runnable {
     }//GEN-LAST:event_jCheckBoxSpezialMouseExited
 
     private void jButtonExportActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonExportActionPerformed
-        if (!listModel.isEmpty()) {
-            new JFileChooser(listModel).setVisible(true);
-        }
+//        if (!listModel.isEmpty()) {
+//            new JFileChooser(listModel).setVisible(true);
+//        }
     }//GEN-LAST:event_jButtonExportActionPerformed
 
     private void jButtonImportActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonImportActionPerformed
-        new JFileChooser().setVisible(true);
+//        new JFileChooser().setVisible(true);
     }//GEN-LAST:event_jButtonImportActionPerformed
 
     private void jTextFieldEnterPWActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextFieldEnterPWActionPerformed
@@ -464,10 +454,48 @@ public class PasswordGenerator extends JFrame implements Runnable {
     private void jButtonExportMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButtonExportMouseExited
         jLabelHint.setText(" ");
     }//GEN-LAST:event_jButtonExportMouseExited
-    protected void addToList(Password pw) { //fügt das passwort und die dazugehörige MD5 Summe der Liste (ausgabe) hinzu
-        listModel.addElement(pw.getPassword()); //fügt das passwort der liste (ausgabe) hinzu
-        listModel.addElement(pw.getMD5()); //fügt die dazugehörige MD5 Summe der Liste (ausgabe) hinzu
-        jLabelPWCount.setText(Integer.toString(Password.getCount()));
+
+    private void jButtonImportMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButtonImportMouseEntered
+        jLabelHint.setText("Import all elements from a text file into the list");
+    }//GEN-LAST:event_jButtonImportMouseEntered
+
+    private void jButtonImportMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButtonImportMouseExited
+        jLabelHint.setText(" ");
+    }//GEN-LAST:event_jButtonImportMouseExited
+
+    private void jRadioButtonGenPWActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButtonGenPWActionPerformed
+        if (jRadioButtonGenPW.isEnabled()) {
+            jTextFieldEnterPW.setEnabled(false); //schaltet das Texteingabefeld aus
+            jCheckBoxNum.setEnabled(true); //schaltet die Checkbox Numbers ein
+            jCheckBoxaz.setEnabled(true); //schaltet die checkbox klein a-z ein
+            jCheckBoxAZ.setEnabled(true); //schaltet die checkbox groß A-Z ein
+            jCheckBoxSpezial.setEnabled(true); //schaltet die checkbox Spezial ein
+            jSliderPasswordLength.setEnabled(true); //schaltet den schieberegler zur zeichenlängenfestlegung ein
+            jLabelSliderInt.setEnabled(true); //schaltet die anzeige des aktuellen werdes des schiebereglers ein
+            jSpinnerCountOf.setEnabled(true); //schaltet den counter für die anzahl zu generierdenen passwörter ein
+        }
+    }//GEN-LAST:event_jRadioButtonGenPWActionPerformed
+
+    private void jRadioButtonGenOwnPWActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButtonGenOwnPWActionPerformed
+        if (jRadioButtonGenOwnPW.isEnabled()) {
+            jTextFieldEnterPW.setEnabled(true); //schaltet das Texteingabefeld aus
+            jCheckBoxNum.setEnabled(false); //schaltet die Checkbox Numbers ein
+            jCheckBoxaz.setEnabled(false); //schaltet die checkbox klein a-z ein
+            jCheckBoxAZ.setEnabled(false); //schaltet die checkbox groß A-Z ein
+            jCheckBoxSpezial.setEnabled(false); //schaltet die checkbox Spezial ein
+            jSliderPasswordLength.setEnabled(false); //schaltet den schieberegler zur zeichenlängenfestlegung ein
+            jLabelSliderInt.setEnabled(false); //schaltet die anzeige des aktuellen werdes des schiebereglers ein
+            jSpinnerCountOf.setEnabled(true); //schaltet den counter für die anzahl zu generierdenen passwörter ein
+        }
+    }//GEN-LAST:event_jRadioButtonGenOwnPWActionPerformed
+
+    /**
+     * 
+     * @param text will be added to list
+     */
+    protected void addToList(String text) { //fügt das passwort und die dazugehörige Prüf Summe der Liste (ausgabe) hinzu
+        this.listModel.addElement(text); //fügt das passwort der liste (ausgabe) hinzu
+        this.jLabelPWCount.setText(Integer.toString(Password.getCount()));
     }
 
     /**
@@ -479,16 +507,27 @@ public class PasswordGenerator extends JFrame implements Runnable {
     }
 
     /**
-     * @exception InterruptedException - by interrupt one of the worker This
      * will verify some input and choose what to do, depending on user input.
      */
     private void generate() {
         total = Integer.parseInt(jSpinnerCountOf.getValue().toString()); //setzt total mit der anzahl zu generierender passwörter
         jProgressBar.setValue(0); //setzt den fortschritsbalken zurrück
         jProgressBar.setMaximum(total); //setzt das maximum des fortschrittbalkens auf die anzahl zu generierender passwörter
-        if (jRadioButtonGenMD5.isSelected()) { //Wenn RadioButton GenMD5 aktiv
+        if (jRadioButtonGenOwnPW.isSelected()) { //Wenn RadioButton GenMD5 aktiv
             if (!jTextFieldEnterPW.getText().isEmpty() && !listModel.contains(jTextFieldEnterPW.getText())) { //Wenn TextFeldEnterPW NICHT leer und wenn Inhalt nicht schon in Liste vorhanden.
-                addToList(new Password(jTextFieldEnterPW.getText()));
+                //TODO unterscheidung zwischen MD5 und SHA-1 oder auch garkeine
+                Password GenOwnpw = new Password(jTextFieldEnterPW.getText());
+                addToList(GenOwnpw.getPassword());
+                if (jCheckBoxGenHash.isSelected()) {
+                    if (jComboBoxAlg.getSelectedIndex() == 0) {
+                        GenOwnpw.setMD5();
+                        addToList(GenOwnpw.getMD5());
+                    }
+                    if (jComboBoxAlg.getSelectedIndex() == 1) {
+                        GenOwnpw.setSHA1();
+                        addToList(GenOwnpw.getSHA1());
+                    }
+                }
                 SwingUtilities.invokeLater(new Runnable() {
                     @Override
                     public void run() {
@@ -523,8 +562,20 @@ public class PasswordGenerator extends JFrame implements Runnable {
 //                    } catch (InterruptedException ex) {
 //                        JOptionPane.showMessageDialog(new JFrame("InterruptedException!"), ex.getMessage()); //erzeugt ein fenster mit inhalt der fehlermeldung, kann auftreten wenn beim warten auf einen thread, dieser unterbrochen wird.
 //                    }
+                    Password Genpw = new Password(getChars().toCharArray(), jSliderPasswordLength.getValue());
+                    addToList(Genpw.getPassword());
+                    if (jCheckBoxGenHash.isSelected()) {
+                        if (jComboBoxAlg.getSelectedIndex() == 0) {
+                            Genpw.setMD5();
+                            addToList(Genpw.getMD5());
+                        }
+                        if (jComboBoxAlg.getSelectedIndex() == 1) {
+                            Genpw.setSHA1();
+                            addToList(Genpw.getSHA1());
+                        }
+                    }
                     jSpinnerCountOf.setValue((Integer.parseInt(jSpinnerCountOf.getValue().toString())) - 1); //zählt die anzahl zu generierenden passwörter um einen runter.
-                    addToList(new Password(chars.toCharArray(), jSliderPasswordLength.getValue()));
+                    //TODO unterscheidung zwischen MD5 und SHA-1 oder auch garkeine
                     SwingUtilities.invokeLater(new Runnable() {
                         @Override
                         public void run() {
@@ -532,39 +583,57 @@ public class PasswordGenerator extends JFrame implements Runnable {
                         }
                     });
                 }
-                jSpinnerCountOf.setValue(1); //setzt den zähler für die anzahl zu generierenden passwörter wieder auf 1
+                jSpinnerCountOf.setValue(1); //setzt die anzahl zu generierenden passwörter zurück auf 1.
             }
         }
     }
 
     /**
-     * @author Kevin Weis Creates a new worker that refresh some elements of the
-     * GUI window.
+     *
+     * @return (as String) returns alls chars of choice
      */
-    private class WorkerStatus implements Runnable {
-        @Override
-        public void run() {
-            jSpinnerCountOf.setValue((Integer.parseInt(jSpinnerCountOf.getValue().toString())) - 1); //zählt die anzahl zu generierenden passwörter um einen runter.
-//            jProgressBar.setValue(jProgressBar.getValue() + 1);//  * 100 / total));
-            SwingUtilities.invokeLater(new Runnable() {
-                @Override
-                public void run() {
-                    // Remember to make pbar final variable.
-                    jProgressBar.setValue(jProgressBar.getValue() + 1);
-                }
-            });
-        }
+    protected String getChars() {
+        return this.chars;
     }
 
     /**
-     * @author Kevin Weis Creates a new worker that generates a password from
-     * the call "Password" and will add this password and MD5 to the lost.
+     *
+     * @return (as int) JSliderPasswordLength Value
      */
-    private class WorkerPassword implements Runnable {
-        @Override
-        public void run() {
-            addToList(new Password(chars.toCharArray(), jSliderPasswordLength.getValue()));
-        }
+    protected int getJSliderPasswordLength() {
+        return this.jSliderPasswordLength.getValue();
+    }
+
+    /**
+     *
+     * @param count (as int) to set the value.
+     */
+    protected void setJSpinnerCountOf(int count) {
+        this.jSpinnerCountOf.setValue(count);
+    }
+
+    /**
+     *
+     * @return (as int) JSpinnerCountOf Value
+     */
+    protected int getJSpinnerCountOf() {
+        return Integer.parseInt(this.jSpinnerCountOf.getValue().toString());
+    }
+
+    /**
+     *
+     * @return (as int) jProgressBar Value
+     */
+    protected int getJProgressBar() {
+        return this.jProgressBar.getValue();
+    }
+
+    /**
+     *
+     * @param count (as int) to set value.
+     */
+    protected void setJProgressBar(int count) {
+        this.jProgressBar.setValue(count);
     }
 
     /**
@@ -606,9 +675,8 @@ public class PasswordGenerator extends JFrame implements Runnable {
             }
         });// </editor-fold>  
     }
-    protected Password normalPassword; //deklariert die variable normalPassword vom Typ Password
     protected static PasswordGenerator PasswordGui;
-    protected String chars = "";
+    private String chars = "";
     private int total; //die anzahl zu generierenden passwöreter (nich nicht beötigt)
     private DefaultListModel<String> listModel; // deklariert die Variable listModel vom typ DefaultListModel<String>
     private String numbers = "0123456789";
@@ -623,20 +691,21 @@ public class PasswordGenerator extends JFrame implements Runnable {
     private javax.swing.JButton jButtonGenerate;
     private javax.swing.JButton jButtonImport;
     private javax.swing.JCheckBox jCheckBoxAZ;
+    private javax.swing.JCheckBox jCheckBoxGenHash;
     private javax.swing.JCheckBox jCheckBoxNum;
     private javax.swing.JCheckBox jCheckBoxSpezial;
     private javax.swing.JCheckBox jCheckBoxaz;
+    private javax.swing.JComboBox jComboBoxAlg;
     private javax.swing.JLabel jLabelHint;
     private javax.swing.JLabel jLabelPWCount;
     private javax.swing.JLabel jLabelSliderInt;
     private javax.swing.JList jListOut;
     private final javax.swing.JProgressBar jProgressBar = new javax.swing.JProgressBar();
-    private javax.swing.JRadioButton jRadioButtonGenMD5;
+    private javax.swing.JRadioButton jRadioButtonGenOwnPW;
     private javax.swing.JRadioButton jRadioButtonGenPW;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JSlider jSliderPasswordLength;
     private javax.swing.JSpinner jSpinnerCountOf;
     private javax.swing.JTextField jTextFieldEnterPW;
     // End of variables declaration//GEN-END:variables
-    private static final Logger LOG = Logger.getLogger(PasswordGenerator.class.getName());
 }
