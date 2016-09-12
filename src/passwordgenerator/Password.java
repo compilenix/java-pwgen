@@ -4,6 +4,7 @@ import java.math.BigInteger;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Random;
+import java.util.logging.Logger;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
@@ -16,12 +17,10 @@ import javax.swing.JOptionPane;
  * @author Kevin Weis
  */
 public class Password {
-
     private static int pwcount;
     private String md5;
     private String password;
     private char[] array;
-    
 
     /**
      * Constructor 1: Set a known password and a MD5 of it will be generated.
@@ -30,7 +29,7 @@ public class Password {
      */
     public Password(String password) {
         this.password = password;
-        this.md5 = makeMD5(password);
+        this.md5 = makeMD5(password.getBytes());
         pwcount++;
     }
 
@@ -45,7 +44,7 @@ public class Password {
     public Password(char[] choice, int length) {
         this.array = choice;
         this.password = makeRandomString(length);
-        this.md5 = makeMD5(password);
+        this.md5 = makeMD5(password.getBytes());
         pwcount++;
     }
 
@@ -56,7 +55,7 @@ public class Password {
      */
     public void setPassword(String password) {
         this.password = password;
-        this.md5 = makeMD5(password);
+        this.md5 = makeMD5(password.getBytes());
     }
 
     /**
@@ -72,12 +71,15 @@ public class Password {
     public String getPassword() {
         return this.password;
     }
+
     static int getCount() {
         return pwcount;
     }
+
     static void clearCount() {
         pwcount = 0;
     }
+
     /**
      * @return Returns a random generated string
      * @param length (as int) the length of the generated password.
@@ -93,22 +95,22 @@ public class Password {
     }
 
     /**
-     * @param clear (as String) the clear text password to be hashed.
+     * @param data (as byte array) bytes of the clear text password to be hashed.
      * @return Returns the hashed password (MD5).
      */
-    private String makeMD5(String clear) {
-        MessageDigest m = null;
+    private String makeMD5(byte[] data) {
+        String clear = null;
         try {
-            m = MessageDigest.getInstance("MD5");
+            MessageDigest m = MessageDigest.getInstance("MD5");
+            m.update(data, 0, data.length);
+            clear = new BigInteger(1, m.digest()).toString(16);
         } catch (NoSuchAlgorithmException ex) {
             JOptionPane.showMessageDialog(new JFrame("NoSuchAlgorithmException!"), ex.getMessage());
         }
-        byte[] data = clear.getBytes();
-        m.update(data, 0, data.length);
-        clear = new BigInteger(1, m.digest()).toString(16);
         while (clear.length() < 32) {
             clear = "0" + clear;
         }
         return clear;
     }
+    private static final Logger LOG = Logger.getLogger(Password.class.getName());
 }

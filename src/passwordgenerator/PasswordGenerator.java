@@ -1,6 +1,12 @@
 package passwordgenerator;
 
-import javax.swing.*;
+import java.util.logging.Logger;
+import javax.swing.DefaultListModel;
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
+import javax.swing.SpinnerModel;
+import javax.swing.SpinnerNumberModel;
+import javax.swing.SwingUtilities;
 
 /**
  * This program can generate a MD5 Hash from a known String or generate a
@@ -10,7 +16,6 @@ import javax.swing.*;
  * @version 2012-04-26
  */
 public class PasswordGenerator extends JFrame implements Runnable {
-
     private static final long serialVersionUID = 1L;
 
     /**
@@ -480,20 +485,16 @@ public class PasswordGenerator extends JFrame implements Runnable {
     private void generate() {
         total = Integer.parseInt(jSpinnerCountOf.getValue().toString()); //setzt total mit der anzahl zu generierender passwörter
         jProgressBar.setValue(0); //setzt den fortschritsbalken zurrück
-        jProgressBar.setMaximum(Integer.parseInt(jSpinnerCountOf.getValue().toString())); //setzt das maximum des fortschrittbalkens auf die anzahl zu generierender passwörter
+        jProgressBar.setMaximum(total); //setzt das maximum des fortschrittbalkens auf die anzahl zu generierender passwörter
         if (jRadioButtonGenMD5.isSelected()) { //Wenn RadioButton GenMD5 aktiv
             if (!jTextFieldEnterPW.getText().isEmpty() && !listModel.contains(jTextFieldEnterPW.getText())) { //Wenn TextFeldEnterPW NICHT leer und wenn Inhalt nicht schon in Liste vorhanden.
-                Thread passwordworker = new Thread(new WorkerPassword()); //neuer worker zum passwordgenerieren und hinzufügen
                 addToList(new Password(jTextFieldEnterPW.getText()));
-                Thread statusworker = new Thread(new WorkerStatus()); //neueer worker zum aktualisieren einiger GUI Elemente und des zählers für diese Schleife
-                passwordworker.start(); //startet den passwordworker
-                try {
-                    passwordworker.join(); //hier wird gewartet bis der passwordworker fertig ist
-                    statusworker.start(); //startet den statusworker
-                    statusworker.join(); //hier wird gewartet bis der statusworker fetig ist
-                } catch (InterruptedException ex) {
-                    JOptionPane.showMessageDialog(new JFrame("InterruptedException!"), ex.getMessage()); //erzeugt ein fenster mit inhalt der fehlermeldung, kann auftreten wenn beim warten auf einen thread, dieser unterbrochen wird.
-                }
+                SwingUtilities.invokeLater(new Runnable() {
+                    @Override
+                    public void run() {
+                        jProgressBar.setValue(jProgressBar.getValue() + 1);
+                    }
+                });
             }
             jTextFieldEnterPW.setText(null);
         }
@@ -510,35 +511,42 @@ public class PasswordGenerator extends JFrame implements Runnable {
             if (jCheckBoxSpezial.isSelected()) { //Wenn ChechBox Sonderzeichen aktiv
                 chars += special;
             } // füge zur Zeichenauswahl die Zeichen !\"#$%&'()*+,-./:;<=>?@ hinzu
-            if (!chars.equals("")) { //macht nur weiter wenn mindestens ei n zeichensatz (checkboxen) aktiv ist
+            if (!chars.isEmpty()) { //macht nur weiter wenn mindestens ei n zeichensatz (checkboxen) aktiv ist
                 while (Integer.parseInt(jSpinnerCountOf.getValue().toString()) >= 1) { //vergleich ob die anzahl zu generierenden passwoörtern großer oder gleich 1 ist.
-                    Thread passwordworker = new Thread(new WorkerPassword()); //neuer worker zum passwordgenerieren und hinzufügen
-                    Thread statusworker = new Thread(new WorkerStatus()); //neueer worker zum aktualisieren einiger GUI Elemente und des zählers für diese Schleife
-                    passwordworker.start(); //startet den passwordworker
-                    try {
-                        passwordworker.join(); //hier wird gewartet bis der passwordworker fertig ist
-                        statusworker.start(); //startet den statusworker
-                        statusworker.join(); //hier wird gewartet bis der statusworker fetig ist
-                    } catch (InterruptedException ex) {
-                        JOptionPane.showMessageDialog(new JFrame("InterruptedException!"), ex.getMessage()); //erzeugt ein fenster mit inhalt der fehlermeldung, kann auftreten wenn beim warten auf einen thread, dieser unterbrochen wird.
-                    }
+//                    Thread passwordworker = new Thread(new WorkerPassword()); //neuer worker zum passwordgenerieren und hinzufügen
+//                    Thread statusworker = new Thread(new WorkerStatus()); //neueer worker zum aktualisieren einiger GUI Elemente und des zählers für diese Schleife
+//                    passwordworker.start(); //startet den passwordworker
+//                    try {
+//                        passwordworker.join(); //hier wird gewartet bis der passwordworker fertig ist
+//                        statusworker.start(); //startet den statusworker
+//                        statusworker.join(); //hier wird gewartet bis der statusworker fetig ist
+//                    } catch (InterruptedException ex) {
+//                        JOptionPane.showMessageDialog(new JFrame("InterruptedException!"), ex.getMessage()); //erzeugt ein fenster mit inhalt der fehlermeldung, kann auftreten wenn beim warten auf einen thread, dieser unterbrochen wird.
+//                    }
+                    jSpinnerCountOf.setValue((Integer.parseInt(jSpinnerCountOf.getValue().toString())) - 1); //zählt die anzahl zu generierenden passwörter um einen runter.
+                    addToList(new Password(chars.toCharArray(), jSliderPasswordLength.getValue()));
+                    SwingUtilities.invokeLater(new Runnable() {
+                        @Override
+                        public void run() {
+                            jProgressBar.setValue(jProgressBar.getValue() + 1);
+                        }
+                    });
                 }
                 jSpinnerCountOf.setValue(1); //setzt den zähler für die anzahl zu generierenden passwörter wieder auf 1
             }
         }
     }
+
     /**
      * @author Kevin Weis Creates a new worker that refresh some elements of the
      * GUI window.
      */
     private class WorkerStatus implements Runnable {
-
         @Override
         public void run() {
             jSpinnerCountOf.setValue((Integer.parseInt(jSpinnerCountOf.getValue().toString())) - 1); //zählt die anzahl zu generierenden passwörter um einen runter.
 //            jProgressBar.setValue(jProgressBar.getValue() + 1);//  * 100 / total));
             SwingUtilities.invokeLater(new Runnable() {
-
                 @Override
                 public void run() {
                     // Remember to make pbar final variable.
@@ -553,7 +561,6 @@ public class PasswordGenerator extends JFrame implements Runnable {
      * the call "Password" and will add this password and MD5 to the lost.
      */
     private class WorkerPassword implements Runnable {
-
         @Override
         public void run() {
             addToList(new Password(chars.toCharArray(), jSliderPasswordLength.getValue()));
@@ -564,7 +571,6 @@ public class PasswordGenerator extends JFrame implements Runnable {
      * @param args No Arguments run this program...
      */
     public static void main(String args[]) {
-        // <editor-fold defaultstate="collapsed" desc="GUI MIT extra Thread">
         try {
             for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
                 if ("Nimbus".equals(info.getName())) {
@@ -581,24 +587,24 @@ public class PasswordGenerator extends JFrame implements Runnable {
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
             JOptionPane.showMessageDialog(new JFrame("UnsupportedLookAndFeelException!"), ex.getMessage());
         }
-        PasswordGui = new PasswordGenerator();
-        Thread PwGen = new Thread(PasswordGui); //erstellt ein neues objekt der GUI (als Thread)
-        PwGen.start(); //startet die GUI (den Thread)
-        //</editor-fold> 
+        //<editor-fold defaultstate="collapsed" desc="GUI MIT extra Thread">
+//        PasswordGui = new PasswordGenerator();
+//        Thread PwGen = new Thread(PasswordGui); //erstellt ein neues objekt der GUI (als Thread)
+//        PwGen.start(); //startet die GUI (den Thread)//</editor-fold>
         // <editor-fold defaultstate="collapsed" desc="GUI OHNE extra Thread"> 
-        //        /*
-        //         * Create and display the form
-        //         */
-        //        java.awt.EventQueue.invokeLater(new Runnable() {
-        //
-        //            @Override
-        //            /**
-        //             * create a new object of the extended frame (PasswordGenerator)
-        //             */
-        //            public void run() {
-        //                new PasswordGenerator().setVisible(true);
-        //            }
-        //        });// </editor-fold>  
+        /*
+         * Create and display the form
+         */
+        java.awt.EventQueue.invokeLater(new Runnable() {
+            @Override
+            /**
+             * create a new object of the extended frame (PasswordGenerator)
+             */
+            public void run() {
+                PasswordGui = new PasswordGenerator();
+                PasswordGui.setVisible(true);
+            }
+        });// </editor-fold>  
     }
     protected Password normalPassword; //deklariert die variable normalPassword vom Typ Password
     protected static PasswordGenerator PasswordGui;
@@ -632,4 +638,5 @@ public class PasswordGenerator extends JFrame implements Runnable {
     private javax.swing.JSpinner jSpinnerCountOf;
     private javax.swing.JTextField jTextFieldEnterPW;
     // End of variables declaration//GEN-END:variables
+    private static final Logger LOG = Logger.getLogger(PasswordGenerator.class.getName());
 }

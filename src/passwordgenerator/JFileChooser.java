@@ -8,6 +8,7 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
+import java.util.logging.Logger;
 import javax.swing.DefaultListModel;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
@@ -144,4 +145,5 @@ public class JFileChooser extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(new JFrame("IOException!"), ex.getMessage());
         }
     }
+    private static final Logger LOG = Logger.getLogger(JFileChooser.class.getName());
 }
