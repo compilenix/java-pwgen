@@ -15,6 +15,7 @@ import javax.swing.JOptionPane;
 import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.SwingConstants;
 import javax.swing.SwingWorker;
+import javax.swing.filechooser.FileNameExtensionFilter;
 
 /**
  * This JFrame download a file from the web and include a progressbar.<br/>
@@ -123,12 +124,18 @@ public class JFrameDownloadUpdate extends javax.swing.JFrame {
 
 	private void saveUrl() {
 		JFileChooser jFileChooser = new JFileChooser();
+		jFileChooser.setDragEnabled(true);
+		jFileChooser.setFileFilter(new FileNameExtensionFilter("Executable Jar File (.jar)", "jar"));
 		if (file != null) {
 			jFileChooser.setSelectedFile(this.file);
 		}
 		if (jFileChooser.showSaveDialog(this) == JFileChooser.APPROVE_OPTION) {
 			try {
 				File selectedFile = jFileChooser.getSelectedFile();
+				if (!selectedFile.getPath().toLowerCase().endsWith(
+							".jar")) {
+						selectedFile = new File(selectedFile.getPath() + ".jar");
+					}
 				jLabelStatus.setText("Connecting to Server...");
 				URLConnection con = url.openConnection();
 				con.connect();

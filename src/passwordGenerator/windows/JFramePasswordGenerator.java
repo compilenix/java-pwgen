@@ -5,6 +5,7 @@ import static passwordGenerator.FileIO.lineWrite;
 import static passwordGenerator.FileIO.write;
 
 import java.awt.Component;
+import java.awt.Rectangle;
 import java.awt.Toolkit;
 import java.awt.datatransfer.StringSelection;
 import java.awt.event.ActionEvent;
@@ -34,6 +35,7 @@ import javax.swing.JSeparator;
 import javax.swing.JTable;
 import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.SwingWorker;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.table.DefaultTableModel;
 
 import passwordGenerator.Language;
@@ -45,7 +47,7 @@ import passwordGenerator.Password;
  * <p/>
  * 
  * @author Kevin Weis
- * @version 2012-09-02
+ * @version 2012.10.23
  */
 public class JFramePasswordGenerator extends JFrame {
 	private static final long serialVersionUID = -5730437296736291058L;
@@ -54,10 +56,6 @@ public class JFramePasswordGenerator extends JFrame {
 	 * Constructor: It will create the Frame and set all to default.
 	 */
 	public JFramePasswordGenerator() {
-		init();
-	}
-
-	private void init() {
 		buttonGroupChars = new javax.swing.ButtonGroup();
 		buttonGroupLang = new javax.swing.ButtonGroup();
 		jButtonClear = new javax.swing.JButton();
@@ -77,7 +75,6 @@ public class JFramePasswordGenerator extends JFrame {
 		jLabelSliderInt = new javax.swing.JLabel();
 		jMenuBar = new javax.swing.JMenuBar();
 		jMenuChangeLanguage = new javax.swing.JMenu();
-		jMenuEdit = new javax.swing.JMenu();
 		jMenuFile = new javax.swing.JMenu();
 		jMenuFileMenuItemExit = new javax.swing.JMenuItem();
 		jMenuHelp = new javax.swing.JMenu();
@@ -191,7 +188,6 @@ public class JFramePasswordGenerator extends JFrame {
 					jProgressBar.setVisible(false);
 					jButtonSelect.setVisible(true);
 					jMenuFile.setVisible(true);
-					jMenuEdit.setVisible(true);
 					jMenuView.setVisible(true);
 				}
 			}
@@ -330,7 +326,7 @@ public class JFramePasswordGenerator extends JFrame {
 			public void actionPerformed(java.awt.event.ActionEvent evt) {
 				// TODO Import...
 				fc = new JFileChooser();
-				int showOpenDialog = fc.showOpenDialog(null);
+				int showOpenDialog = fc.showOpenDialog(getPasswordGui());
 				if (showOpenDialog == JFileChooser.APPROVE_OPTION) {
 					@SuppressWarnings("unused")
 					File file = fc.getSelectedFile();
@@ -421,13 +417,9 @@ public class JFramePasswordGenerator extends JFrame {
 
 		jMenuBar.add(jMenuFile);
 
-		jMenuEdit.setText(currentLanguage.MenuBarEdit);
+		jMenuChangeLanguage.setText(currentLanguage.MenuBarViewChangeLanguage);
 
-		jMenuChangeLanguage.setText(currentLanguage.MenuBarEditChangeLanguage);
-
-		jMenuEdit.add(jMenuChangeLanguage);
-
-		jRadioButtonMenuItemEnglish = new JRadioButtonMenuItem(currentLanguage.MenuBarEditChangeLanguageEN);
+		jRadioButtonMenuItemEnglish = new JRadioButtonMenuItem(currentLanguage.MenuBarViewChangeLanguageEN);
 		this.jRadioButtonMenuItemEnglish.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent evt) {
 				Main.currentLanguage = new Language(Language.ENGLISH);
@@ -440,7 +432,7 @@ public class JFramePasswordGenerator extends JFrame {
 		jMenuChangeLanguage.add(jRadioButtonMenuItemEnglish);
 		buttonGroupLang.add(jRadioButtonMenuItemEnglish);
 
-		jRadioButtonMenuItemGerman = new JRadioButtonMenuItem(currentLanguage.MenuBarEditChangeLanguageGER);
+		jRadioButtonMenuItemGerman = new JRadioButtonMenuItem(currentLanguage.MenuBarViewChangeLanguageGER);
 		this.jRadioButtonMenuItemGerman.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent evt) {
 				Main.currentLanguage = new Language(Language.GERMAN);
@@ -465,6 +457,7 @@ public class JFramePasswordGenerator extends JFrame {
 
 		this.jMenuView = new JMenu(currentLanguage.MenuBarView);
 		this.jMenuBar.add(this.jMenuView);
+		this.jMenuView.add(this.jMenuChangeLanguage);
 
 		this.jMenuWindowStyle = new JMenu(currentLanguage.MenuBarViewWindowStyle);
 		this.jMenuView.add(this.jMenuWindowStyle);
@@ -483,8 +476,6 @@ public class JFramePasswordGenerator extends JFrame {
 			});
 			this.jMenuWindowStyle.add(item);
 		}
-
-		jMenuBar.add(jMenuEdit);
 
 		jMenuHelp.setText(currentLanguage.MenuBarHelp);
 
@@ -510,6 +501,24 @@ public class JFramePasswordGenerator extends JFrame {
 				new JFrameNews().setVisible(true);
 			}
 		});
+
+		this.mntmCommandline = new JMenuItem(Main.currentLanguage.MenuBarHelpCommandline);
+		this.mntmCommandline.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent evt) {
+				new JFrameCommandlineHelp().setVisible(true);
+			}
+		});
+		this.mntmCommandline.setName("mntmCommandline");
+		this.jMenuHelp.add(this.mntmCommandline);
+
+		this.mntmChangeLog = new JMenuItem("Change Log");
+		this.mntmChangeLog.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent evt) {
+				new JFrameChangeLog().setVisible(true);
+			}
+		});
+		this.mntmChangeLog.setName("mntmChangeLog");
+		this.jMenuHelp.add(this.mntmChangeLog);
 		jMenuHelp.add(mntmNews);
 		jMenuHelp.add(jMenuItemAbout);
 
@@ -726,12 +735,13 @@ public class JFramePasswordGenerator extends JFrame {
 		setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 		setTitle("Password Generator V" + Main.version);
 		setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
-		setMinimumSize(new java.awt.Dimension(525, 310));
-		setPreferredSize(new java.awt.Dimension(600, 500));
 		java.awt.Dimension screenSize = java.awt.Toolkit.getDefaultToolkit().getScreenSize();
 		java.awt.Dimension DefaultDimension = new java.awt.Dimension(600, 550);// original 330px x 550px
+		setMinimumSize(new java.awt.Dimension(525, 310));
+		setPreferredSize(DefaultDimension);
 		setBounds(
-				(screenSize.width - DefaultDimension.width) / 2, (screenSize.height - DefaultDimension.height) / 2, 600, 550);
+				(screenSize.width - DefaultDimension.width) / 2, (screenSize.height - DefaultDimension.height) / 2, DefaultDimension.width, DefaultDimension.height);
+		currentBounds = getBounds();
 		jTable.setAutoResizeMode(JTable.AUTO_RESIZE_SUBSEQUENT_COLUMNS);
 		clearHintText();
 		jTextFieldEnterOwnPW.setEnabled(false);
@@ -748,8 +758,10 @@ public class JFramePasswordGenerator extends JFrame {
 	}
 
 	private void reloadFrame() {
+		currentBounds = getBounds();
 		dispose();
 		PasswordGui = new JFramePasswordGenerator();
+		PasswordGui.setBounds(currentBounds);
 		PasswordGui.setVisible(true);
 		for (int i = 0; i < Password.getCount(); i++) {
 			PasswordGui.tableModel.addRow(new Object[] { tableModel.getValueAt(
@@ -760,43 +772,83 @@ public class JFramePasswordGenerator extends JFrame {
 					i, 4).toString(), tableModel.getValueAt(
 					i, 5).toString(), tableModel.getValueAt(
 					i, 6).toString() });
+			// pause(1);
 		}
+		pause(75);
 		PasswordGui.jSpinnerCountOf.setValue(jSpinnerCountOf.getValue());
+		pause(75);
 		PasswordGui.fc = fc;
 		PasswordGui.refreshPWCountLabel();
+		pause(75);
 		PasswordGui.jCheckBoxMD2.setSelected(jCheckBoxMD2.isSelected());
+		pause(75);
 		PasswordGui.jCheckBoxMD5.setSelected(jCheckBoxMD5.isSelected());
+		pause(75);
 		PasswordGui.jCheckBoxSHA1.setSelected(jCheckBoxSHA1.isSelected());
+		pause(75);
 		PasswordGui.jCheckBoxSHA256.setSelected(jCheckBoxSHA256.isSelected());
+		pause(75);
 		PasswordGui.jCheckBoxSHA384.setSelected(jCheckBoxSHA384.isSelected());
+		pause(75);
 		PasswordGui.jCheckBoxSHA512.setSelected(jCheckBoxSHA512.isSelected());
+		pause(75);
 		PasswordGui.jSliderPasswordLength.setValue(jSliderPasswordLength.getValue());
+		pause(75);
 		PasswordGui.jTextFieldEnterOwnPW.setText(jTextFieldEnterOwnPW.getText());
+		pause(75);
 		if (jRadioButtonGenOwnPW.isSelected()) {
 			PasswordGui.jRadioButtonGenOwnPW.setSelected(true);
+			pause(75);
 			PasswordGui.jTextFieldEnterOwnPW.setEnabled(true);
+			pause(75);
 			PasswordGui.jCheckBoxNum.setEnabled(false);
+			pause(75);
 			PasswordGui.jCheckBoxaz.setEnabled(false);
+			pause(75);
 			PasswordGui.jCheckBoxAZ.setEnabled(false);
+			pause(75);
 			PasswordGui.jCheckBoxSpezial.setEnabled(false);
+			pause(75);
 			PasswordGui.jSliderPasswordLength.setEnabled(false);
+			pause(75);
 			PasswordGui.jLabelSliderInt.setEnabled(false);
+			pause(75);
 			PasswordGui.jSpinnerCountOf.setEnabled(false);
+			pause(75);
 		} else if (jRadioButtonGenPW.isSelected()) {
 			PasswordGui.jRadioButtonGenPW.setSelected(true);
+			pause(75);
 			PasswordGui.jTextFieldEnterOwnPW.setEnabled(false);
+			pause(75);
 			PasswordGui.jCheckBoxNum.setEnabled(true);
+			pause(75);
 			PasswordGui.jCheckBoxaz.setEnabled(true);
+			pause(75);
 			PasswordGui.jCheckBoxAZ.setEnabled(true);
+			pause(75);
 			PasswordGui.jCheckBoxSpezial.setEnabled(true);
+			pause(75);
 			PasswordGui.jSliderPasswordLength.setEnabled(true);
+			pause(75);
 			PasswordGui.jLabelSliderInt.setEnabled(true);
+			pause(75);
 			PasswordGui.jSpinnerCountOf.setEnabled(true);
+			pause(75);
 		}
 		PasswordGui.jCheckBoxNum.setSelected(jCheckBoxNum.isSelected());
+		pause(75);
 		PasswordGui.jCheckBoxaz.setSelected(jCheckBoxaz.isSelected());
+		pause(75);
 		PasswordGui.jCheckBoxAZ.setSelected(jCheckBoxAZ.isSelected());
+		pause(75);
 		PasswordGui.jCheckBoxSpezial.setSelected(jCheckBoxSpezial.isSelected());
+	}
+
+	private void pause(long millis) {
+		try {
+			Thread.sleep(millis);
+		} catch (InterruptedException e) {
+		}
 	}
 
 	/**
@@ -1053,16 +1105,16 @@ public class JFramePasswordGenerator extends JFrame {
 					jSpinnerCountOf.setValue(1);
 				}
 				if (jCheckBoxNum.isSelected()) {
-					chars += numbers;
+					chars += Password.Numbers;
 				}
 				if (jCheckBoxaz.isSelected()) {
-					chars += lowAlphabet;
+					chars += Password.AlphabetLOW;
 				}
 				if (jCheckBoxAZ.isSelected()) {
-					chars += upAlphabet;
+					chars += Password.AlphabetUP;
 				}
 				if (jCheckBoxSpezial.isSelected()) {
-					chars += special; // !\"#$%&'()*+,-./:;<=>?@
+					chars += Password.Special; // !\"#$%&'()*+,-./:;<=>?@
 				}
 				if (Integer.parseInt(jSpinnerCountOf.getValue().toString()) >= 1000) {
 					jLabelPleaseWait.setVisible(true);
@@ -1077,7 +1129,6 @@ public class JFramePasswordGenerator extends JFrame {
 					jProgressBar.setMinimum(0);
 					jProgressBar.setMaximum(count);
 					jMenuFile.setVisible(false);
-					jMenuEdit.setVisible(false);
 					jMenuView.setVisible(false);
 				}
 				if (!chars.isEmpty()) {
@@ -1143,7 +1194,6 @@ public class JFramePasswordGenerator extends JFrame {
 			jProgressBar.setVisible(false);
 			jButtonSelect.setVisible(true);
 			jMenuFile.setVisible(true);
-			jMenuEdit.setVisible(true);
 			jMenuView.setVisible(true);
 		} else {
 			JOptionPane.showMessageDialog(
@@ -1156,14 +1206,11 @@ public class JFramePasswordGenerator extends JFrame {
 	private URL updateURL;
 	private URL iconUrl = JFramePasswordGenerator.class.getResource("res/Password.png");
 	private SwingWorker<Void, Void> worker;
-	private String upAlphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-	private String special = "!\"#$%&'()*+,-./:;<=>?@";
-	private String numbers = "0123456789";
-	private String lowAlphabet = "abcdefghijklmnopqrstuvwxyz";
 	private String chars = "";
 	private JFileChooser fc;
 	private DefaultTableModel tableModel;
 	private Language currentLanguage;
+	private Rectangle currentBounds;
 
 	private JPopupMenu popupMenujTable;
 	private JRadioButtonMenuItem jRadioButtonMenuItemGerman;
@@ -1182,7 +1229,6 @@ public class JFramePasswordGenerator extends JFrame {
 	private javax.swing.JMenuBar jMenuBar;
 	private javax.swing.JMenu jMenuHelp;
 	private javax.swing.JMenu jMenuFile;
-	private javax.swing.JMenu jMenuEdit;
 	private javax.swing.JMenu jMenuChangeLanguage;
 	private javax.swing.JLabel jLabelSliderInt;
 	private javax.swing.JLabel jLabelPWCount;
@@ -1215,6 +1261,8 @@ public class JFramePasswordGenerator extends JFrame {
 	private JCheckBox jCheckBoxMD5;
 	private JMenu jMenuView;
 	private JMenu jMenuWindowStyle;
+	private JMenuItem mntmCommandline;
+	private JMenuItem mntmChangeLog;
 
 	// End of variables declaration
 
@@ -1230,7 +1278,6 @@ public class JFramePasswordGenerator extends JFrame {
 				jButtonDelete.setVisible(false);
 				jButtonSelect.setVisible(false);
 				jMenuFile.setVisible(false);
-				jMenuEdit.setVisible(false);
 				jMenuView.setVisible(false);
 				// Vector<Password> pws = Password.getAllPasswords();
 				// for (int i = 1; !pws.isEmpty(); i++) {
@@ -1255,18 +1302,22 @@ public class JFramePasswordGenerator extends JFrame {
 			jButtonGenerate.setEnabled(true);
 			jButtonSelect.setVisible(true);
 			jMenuFile.setVisible(true);
-			jMenuEdit.setVisible(true);
 			jMenuView.setVisible(true);
 			return null;
 		}
 	}
 
 	private class workerExport extends SwingWorker<Void, Void> {
+		int count = 0;
+		File file;
 
 		@Override
 		public Void doInBackground() {
 			fc = new JFileChooser();
-			int count = Password.getCount();
+			fc.setDragEnabled(true);
+			fc.setFileFilter(new FileNameExtensionFilter("Text (.txt)", "txt"));
+			fc.setSelectedFile(new File("passwords"));
+			count = Password.getCount();
 			if (count != 0) {
 				if (count > 5000) {
 					jLabelPleaseWait.setVisible(true);
@@ -1279,115 +1330,85 @@ public class JFramePasswordGenerator extends JFrame {
 					jProgressBar.setMinimum(0);
 					jProgressBar.setMaximum(count);
 					jMenuFile.setVisible(false);
-					jMenuEdit.setVisible(false);
 					jMenuView.setVisible(false);
 				}
 				int showSaveDialog = fc.showSaveDialog(rootPane);
 				if (showSaveDialog == JFileChooser.APPROVE_OPTION) {
-					File file = fc.getSelectedFile();
+					file = fc.getSelectedFile();
+					if (!file.getPath().toLowerCase().endsWith(
+							".txt")) {
+						file = new File(file.getPath() + ".txt");
+					}
 					if (file != null) {
-						String line;
 						if (file.exists()) {
 							int showConfirmDialog = JOptionPane.showConfirmDialog(
 									getPasswordGui(), currentLanguage.MessageFileExists, currentLanguage.MessageFileExistsTitle, JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE);
 							if (showConfirmDialog == JOptionPane.YES_OPTION) {
 								file.delete();
+								export();
 							} else if (showConfirmDialog == JOptionPane.NO_OPTION) {
 								lineWrite("");
 								write(file);
-							} else {
-								kill();
+								export();
 							}
+						} else {
+							export();
 						}
-						// ListIterator<Password> pwListIter = Password.getAllPasswords().listIterator();
-						// Password pwtmp;
-						// for (int i = 1; i <= count; i++) {
-						// pwtmp = pwListIter.next();
-						// line = pwtmp.getPassword();
-						// if (pwtmp.getSHA1() != null) {
-						// line += "	" + "SHA-1:" + "	" + pwtmp.getSHA1();
-						// }
-						// if (pwtmp.getSHA256() != null) {
-						// line += "	" + "SHA-256:" + "	" + pwtmp.getSHA256();
-						// }
-						// if (pwtmp.getSHA384() != null) {
-						// line += "	" + "SHA-384:" + "	" + pwtmp.getSHA384();
-						// }
-						// if (pwtmp.getSHA512() != null) {
-						// line += "	" + "SHA-512:" + "	" + pwtmp.getSHA512();
-						// }
-						// if (pwtmp.getMD2() != null) {
-						// line += "	" + "MD2:" + "	" + pwtmp.getMD2();
-						// }
-						// if (pwtmp.getMD5() != null) {
-						// line += "	" + "MD5:" + "	" + pwtmp.getMD5();
-						// }
-						for (int i = 0; i < count; i++) {
-							line = tableModel.getValueAt(
-									i, 0).toString();
-							if (!tableModel.getValueAt(
-									i, 1).toString().isEmpty()) {
-								line += "	" + "SHA-1:" + "	" + tableModel.getValueAt(
-										i, 1).toString();
-							}
-							if (!tableModel.getValueAt(
-									i, 2).toString().isEmpty()) {
-								line += "	" + "SHA-256:" + "	" + tableModel.getValueAt(
-										i, 2).toString();
-							}
-							if (!tableModel.getValueAt(
-									i, 3).toString().isEmpty()) {
-								line += "	" + "SHA-384:" + "	" + tableModel.getValueAt(
-										i, 3).toString();
-							}
-							if (!tableModel.getValueAt(
-									i, 4).toString().isEmpty()) {
-								line += "	" + "SHA-512:" + "	" + tableModel.getValueAt(
-										i, 4).toString();
-							}
-							if (!tableModel.getValueAt(
-									i, 5).toString().isEmpty()) {
-								line += "	" + "MD2:" + "	" + tableModel.getValueAt(
-										i, 5).toString();
-							}
-							if (!tableModel.getValueAt(
-									i, 6).toString().isEmpty()) {
-								line += "	" + "MD5:" + "	" + tableModel.getValueAt(
-										i, 6).toString();
-							}
-							lineWrite(line);
-							jProgressBar.setValue(jProgressBar.getValue() + 1);
-						}
-						write(file);
-						dialogWritten(file);
 					}
 				}
 			}
+
 			jLabelPleaseWait.setVisible(false);
 			jProgressBar.setVisible(false);
 			jButtonExport.setVisible(true);
 			jButtonDelete.setVisible(true);
 			jButtonSelect.setVisible(true);
 			jMenuFile.setVisible(true);
-			jMenuEdit.setVisible(true);
 			jMenuView.setVisible(true);
 			// jButtonImport.setVisible(false);
 			return null;
 		}
 
-		@SuppressWarnings("deprecation")
-		private void kill() {
-			jLabelPleaseWait.setVisible(false);
-			jProgressBar.setVisible(false);
-			jButtonExport.setVisible(true);
-			jButtonDelete.setVisible(true);
-			jButtonSelect.setVisible(true);
-			jMenuFile.setVisible(true);
-			jMenuEdit.setVisible(true);
-			jMenuView.setVisible(true);
-			// jButtonImport.setVisible(false);
-
-			Thread.currentThread().destroy();
+		private void export() {
+			String line;
+			for (int i = 0; i < count; i++) {
+				line = tableModel.getValueAt(
+						i, 0).toString();
+				if (!tableModel.getValueAt(
+						i, 1).toString().isEmpty()) {
+					line += "	" + "SHA-1:" + "	" + tableModel.getValueAt(
+							i, 1).toString();
+				}
+				if (!tableModel.getValueAt(
+						i, 2).toString().isEmpty()) {
+					line += "	" + "SHA-256:" + "	" + tableModel.getValueAt(
+							i, 2).toString();
+				}
+				if (!tableModel.getValueAt(
+						i, 3).toString().isEmpty()) {
+					line += "	" + "SHA-384:" + "	" + tableModel.getValueAt(
+							i, 3).toString();
+				}
+				if (!tableModel.getValueAt(
+						i, 4).toString().isEmpty()) {
+					line += "	" + "SHA-512:" + "	" + tableModel.getValueAt(
+							i, 4).toString();
+				}
+				if (!tableModel.getValueAt(
+						i, 5).toString().isEmpty()) {
+					line += "	" + "MD2:" + "	" + tableModel.getValueAt(
+							i, 5).toString();
+				}
+				if (!tableModel.getValueAt(
+						i, 6).toString().isEmpty()) {
+					line += "	" + "MD5:" + "	" + tableModel.getValueAt(
+							i, 6).toString();
+				}
+				lineWrite(line);
+				jProgressBar.setValue(jProgressBar.getValue() + 1);
+			}
+			write(file);
+			dialogWritten(file);
 		}
 	}
 
@@ -1443,7 +1464,6 @@ public class JFramePasswordGenerator extends JFrame {
 					jButtonSelect.setVisible(false);
 					jButtonDelete.setVisible(false);
 					jMenuFile.setVisible(false);
-					jMenuEdit.setVisible(false);
 					jMenuView.setVisible(false);
 					// for (int i = 0; i < rows.length; i++) {
 					// Password.remove(tableModel.getValueAt(rows[0], 0).toString());
@@ -1462,7 +1482,6 @@ public class JFramePasswordGenerator extends JFrame {
 					jButtonGenerate.setEnabled(true);
 					jButtonSelect.setVisible(true);
 					jMenuFile.setVisible(true);
-					jMenuEdit.setVisible(true);
 					jMenuView.setVisible(true);
 				}
 			}

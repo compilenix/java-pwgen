@@ -9,7 +9,7 @@ import javax.swing.JOptionPane;
 import passwordGenerator.windows.JFramePasswordGenerator;
 
 /**
- * A object instance of this class "Password" has:<br/>
+ * A object instance of this class "Password" can hold:<br/>
  * - a Password (as String)<br/>
  * - a MD2 Hash (as String)<br/>
  * - a MD5 Hash (as String)<br/>
@@ -20,10 +20,19 @@ import passwordGenerator.windows.JFramePasswordGenerator;
  * - the choice of the containing (as char array) characters for a generated plain text password.<br/>
  * <p/>
  * 
- * @version 2.4.2
+ * @version 2012.09.17
  * @author Kevin Weis
  */
 public class Password {
+	/** abcdefghijklmnopqrstuvwxyz */
+	public static final String AlphabetLOW = "abcdefghijklmnopqrstuvwxyz";
+	/** ABCDEFGHIJKLMNOPQRSTUVWXYZ */
+	public static final String AlphabetUP = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+	/** \"#$%&'()*+,-./:;<=>?@! */
+	public static final String Special = "!\"#$%&'()*+,-./:;<=>?@";
+	/** 0123456789 */
+	public static final String Numbers = "0123456789";
+
 	private char[] array;
 	private static int pwcount;
 	private String password;
@@ -58,7 +67,7 @@ public class Password {
 	 * <p/>
 	 * 
 	 * @param choice
-	 *            (as char array) a choice (Checkboxes) of the containing characters.
+	 *            (as char array) the choice of the containing characters.
 	 * @param length
 	 *            (as int) the length of the generated password.
 	 */

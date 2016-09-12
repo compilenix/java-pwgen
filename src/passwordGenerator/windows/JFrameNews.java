@@ -35,7 +35,7 @@ import passwordGenerator.Main;
  * <p/>
  * 
  * @author Kevin Weis
- * @version 2012-08-26
+ * @version 2012.08.26
  */
 public class JFrameNews extends JFrame {
 
@@ -105,6 +105,14 @@ public class JFrameNews extends JFrame {
 		});
 		this.buttonReload.setIcon(new ImageIcon(JFrameNews.class.getResource("res/reload.png")));
 		this.buttonReload.setName("buttonReload");
+
+		this.jButtonPointless = new JButton(Main.currentLanguage.WindowNewsButtonPointless);
+		this.jButtonPointless.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent evt) {
+				System.out.println("asdf");
+			}
+		});
+		this.jButtonPointless.setName("jButtonPointless");
 		GroupLayout gl_contentPane = new GroupLayout(contentPane);
 		gl_contentPane.setHorizontalGroup(gl_contentPane.createParallelGroup(
 				Alignment.LEADING).addComponent(
@@ -115,7 +123,9 @@ public class JFrameNews extends JFrame {
 						ComponentPlacement.RELATED).addComponent(
 						this.buttonReload, GroupLayout.PREFERRED_SIZE, 33, GroupLayout.PREFERRED_SIZE).addGap(
 						92).addComponent(
-						this.jLabelStatus, GroupLayout.DEFAULT_SIZE, 419, Short.MAX_VALUE)).addComponent(
+						this.jLabelStatus, GroupLayout.DEFAULT_SIZE, 367, Short.MAX_VALUE).addPreferredGap(
+						ComponentPlacement.RELATED).addComponent(
+						this.jButtonPointless)).addComponent(
 				scrollPane, GroupLayout.DEFAULT_SIZE, 678, Short.MAX_VALUE));
 		gl_contentPane.setVerticalGroup(gl_contentPane.createParallelGroup(
 				Alignment.LEADING).addGroup(
@@ -130,7 +140,8 @@ public class JFrameNews extends JFrame {
 								Alignment.BASELINE).addComponent(
 								btnOk).addComponent(
 								this.jLabelStatus).addComponent(
-								this.buttonReload, GroupLayout.PREFERRED_SIZE, 23, GroupLayout.PREFERRED_SIZE))));
+								this.buttonReload, GroupLayout.PREFERRED_SIZE, 23, GroupLayout.PREFERRED_SIZE).addComponent(
+								this.jButtonPointless))));
 
 		textArea = new JTextArea();
 		scrollPane.setViewportView(textArea);
@@ -191,6 +202,12 @@ public class JFrameNews extends JFrame {
 			jLabelStatus.setText(ex.getClass().getSimpleName());
 			JOptionPane.showMessageDialog(
 					JFramePasswordGenerator.getPasswordGui(), currentLanguage.MessageCantConnectToServer, ex.getClass().getSimpleName(), JOptionPane.ERROR_MESSAGE);
+			jLabelStatus.setText("Finnished");
+			try {
+				Thread.sleep(3000);
+			} catch (InterruptedException ex1) {
+			}
+			// jProgressBar.setVisible(false);
 		}
 		jLabelStatus.setText("");
 		buttonReload.setEnabled(true);
@@ -211,6 +228,7 @@ public class JFrameNews extends JFrame {
 	private SwingWorker<Void, Void> worker;
 	private JPanel contentPane;
 	private JButton buttonReload;
+	private JButton jButtonPointless;
 
 	private class WorkerDownload extends SwingWorker<Void, Void> {
 

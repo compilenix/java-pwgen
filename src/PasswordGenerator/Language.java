@@ -1,11 +1,12 @@
 package passwordGenerator;
 
 import java.io.File;
+import passwordGenerator.Main;
 
 /**
  * to set/get the displayed language.<br/>
  * 
- * @version 2012-09-02
+ * @version 2012.09.30
  * @author Kevin Weis
  */
 public class Language {
@@ -59,7 +60,7 @@ public class Language {
 			HintButtonImport = "Import all elements from a text file (UTF-8) into the table";
 			HintButtonGenerate = "Generate...";
 			HintCheckBoxLowerCase = "Includes characters from \"a\" to \"z\" (lowercase)";
-			HintCheckBoxNumbers = "Includes numbers from \"0\" to \"9\"";
+			HintCheckBoxNumbers = "Includes Numbers from \"0\" to \"9\"";
 			HintCheckBoxSpecial = "Includes spezial characters (!\"#$%&'()*+,-./:;<=>?@)";
 			HintCheckBoxUpperCase = "Includes characters from \"A\" to \"Z\" (UPPERCASE)";
 			HintRadioButtonGeneratePassword = "Generate random password(s)";
@@ -67,16 +68,16 @@ public class Language {
 			HintSlider = "Set length of generated password";
 			HintTextFieldEnterOwnPW = "Type a password";
 			LabelWait = "Please wait!";
-			MenuBarEdit = "Edit";
-			MenuBarEditChangeLanguage = "Change Language";
-			MenuBarEditChangeLanguageEN = "English";
-			MenuBarEditChangeLanguageGER = "German";
+			MenuBarViewChangeLanguage = "Change Language";
+			MenuBarViewChangeLanguageEN = "English";
+			MenuBarViewChangeLanguageGER = "German";
 			MenuBarFile = "File";
 			MenuBarFileExit = "Exit";
 			MenuBarFileExport = ButtonExport + "...";
 			MenuBarFileImport = ButtonImport + "...";
 			MenuBarHelp = "Help";
 			MenuBarHelpAbout = "About";
+			MenuBarHelpCommandline = "Commandline";
 			MenuBarHelpCheckUpdate = "Check for updates";
 			MenuBarHelpNews = "News";
 			MenuBarView = "View";
@@ -105,8 +106,10 @@ public class Language {
 			WindowAboutAuthor = "Author";
 			WindowAboutHomepage = "Homepage";
 			WindowAboutTitle = "About";
+			WindowAboutOKButton = "Don´t hit me!";
 			WindowNewsHomepage = "Homepage";
 			WindowNewsTitle = "News";
+			WindowNewsButtonPointless = "Pointless Button";
 			break;
 		case GERMAN:
 			CURRENT_LANG = GERMAN;
@@ -133,16 +136,16 @@ public class Language {
 			HintSlider = "Lege fest wieviele Zeichen lang jedes generierte Passwort sein soll";
 			HintTextFieldEnterOwnPW = "Tippe hier dein eigenes Passwort";
 			LabelWait = "Bitte warten!";
-			MenuBarEdit = "Bearbeiten";
-			MenuBarEditChangeLanguage = "Sprache ädern";
-			MenuBarEditChangeLanguageEN = "Englisch";
-			MenuBarEditChangeLanguageGER = "Deutsch";
+			MenuBarViewChangeLanguage = "Sprache ädern";
+			MenuBarViewChangeLanguageEN = "Englisch";
+			MenuBarViewChangeLanguageGER = "Deutsch";
 			MenuBarFile = "Datei";
 			MenuBarFileExit = "Beenden";
 			MenuBarFileExport = ButtonExport + "...";
 			MenuBarFileImport = ButtonImport + "...";
 			MenuBarHelp = "Hilfe";
 			MenuBarHelpAbout = "Über";
+			MenuBarHelpCommandline = "Kommandozeile";
 			MenuBarHelpCheckUpdate = "Prüfe auf Updates";
 			MenuBarHelpNews = "Neues";
 			MenuBarView = "Ansicht";
@@ -171,8 +174,10 @@ public class Language {
 			WindowAboutAuthor = "Entwickler";
 			WindowAboutHomepage = "Webseite";
 			WindowAboutTitle = "Über";
+			WindowAboutOKButton = "Ja, amen!";
 			WindowNewsHomepage = "Webseite";
 			WindowNewsTitle = "Neues";
+			WindowNewsButtonPointless = "Sinnloser Knopf";
 			break;
 		default:
 			break;
@@ -224,7 +229,7 @@ public class Language {
 	 */
 	public String CheckBoxNumbers;
 	/**
-	 * Title from the Checkbox special chars (!\"#$%&'()*+,-./:;<=>?@)
+	 * Title from the Checkbox Special chars (!\"#$%&'()*+,-./:;<=>?@)
 	 */
 	public String CheckBoxSpezial;
 	/**
@@ -288,22 +293,6 @@ public class Language {
 	 */
 	public String LabelWait;
 	/**
-	 * Text from the Menu Bar Edit
-	 */
-	public String MenuBarEdit;
-	/**
-	 * Text from the Menu Bar Edit Change Language
-	 */
-	public String MenuBarEditChangeLanguage;
-	/**
-	 * Text from the Menu Bar Change Language English
-	 */
-	public String MenuBarEditChangeLanguageEN;
-	/**
-	 * Text from the Menu Bar Change Language German
-	 */
-	public String MenuBarEditChangeLanguageGER;
-	/**
 	 * Text from the Menu Bar File
 	 */
 	public String MenuBarFile;
@@ -328,6 +317,10 @@ public class Language {
 	 */
 	public String MenuBarHelpAbout;
 	/**
+	 * Text from the Menu Bar Help commandline
+	 */
+	public String MenuBarHelpCommandline;
+	/**
 	 * Text from the Menu Bar Check for Updates
 	 */
 	public String MenuBarHelpCheckUpdate;
@@ -339,6 +332,18 @@ public class Language {
 	 * Text from the Menu Bar View
 	 */
 	public String MenuBarView;
+	/**
+	 * Text from the Menu Bar Edit Change Language
+	 */
+	public String MenuBarViewChangeLanguage;
+	/**
+	 * Text from the Menu Bar Change Language English
+	 */
+	public String MenuBarViewChangeLanguageEN;
+	/**
+	 * Text from the Menu Bar Change Language German
+	 */
+	public String MenuBarViewChangeLanguageGER;
 	/**
 	 * Text from the Menu Bar View Window Style
 	 */
@@ -445,6 +450,10 @@ public class Language {
 	 */
 	public String WindowAboutTitle;
 	/**
+	 * Text from the OK button at the About Window
+	 */
+	public String WindowAboutOKButton;
+	/**
 	 * Text from the Window News - Homepage
 	 */
 	public String WindowNewsHomepage;
@@ -452,5 +461,9 @@ public class Language {
 	 * Text from the News Window - Window Title
 	 */
 	public String WindowNewsTitle;
+	/**
+	 * Text from the Pointless button at the News Window
+	 */
+	public String WindowNewsButtonPointless;
 
 }
