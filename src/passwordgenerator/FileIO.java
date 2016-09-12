@@ -1,33 +1,24 @@
 package passwordgenerator;
 
-import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileReader;
 import java.io.FileWriter;
-import java.io.IOException;
-import javax.swing.DefaultListModel;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 
 /**
- * this class can do:<br/> - shows a file open dialog<br/> - shows a file save
- * and save as dialog<br/> - write into a textfile<br/> - create a new emtx file
- * if not exist<br/> - shows a wirtten done dialog<br/> - can write the values
- * of a defaultlistmodel out into a textfile<br/> - can read from a textfile
- * into a defaultlistmodel.<br/>
+ * this class can do:<br/> 
+ * - shows a file open dialog<br/> 
+ * - shows a file save dialog<br/>
+ * - shows a wirtten done dialog<br/>
+ * - can write a line (as String) out into a textfile<br/>
+ * - can appand a line (as String) out into a textfile<br/>
+ * - can appand (with a tab bevore) a line (as String) out into a textfile<br/>
  * <p/>
- * @version 2.3b4
+ * @version 2.4
  * @author Kevin Weis
  */
 public final class FileIO {
-
-    private static JFileChooser fc = new JFileChooser();
-    /**
-     * - if true: tells the writer that the next line it will write... overwride
-     * the file
-     */
-    public static boolean firstLine = true;
 
     /**
      * shows a file open dialog.<br/>
@@ -40,7 +31,8 @@ public final class FileIO {
     }
 
     /**
-     * shows a file save and save as dialog.<br/>
+     * - shows a file save dialog.<br/>
+     * - create a new file if not exist<br/>
      * <p/>
      * @return (as File) the selected file.
      */
@@ -55,85 +47,126 @@ public final class FileIO {
      * @param file (as File) the file what what have been written.
      */
     public static void dialogWritten(File file) {
-        JOptionPane.showMessageDialog(null, "Data has been written into " + file.getName() + "at" + file.getAbsolutePath(), "Finished!", 1);
+        JOptionPane.showMessageDialog(null, "Data has been written at " + file.getAbsolutePath(), "Finished!", 1);
     }
 
     /**
-     * to write a string into a file. File will be created if not exists.<br/>
+     * @return returns if the next line will overwrite the file(if it exists)
+     */
+    public static boolean isFirstLine() {
+        return firstLine;
+    }
+
+    /**
+     * To write a string into a file.<br/> 
+     * File will be created if not exists.<br/> 
+     * File will be overwritten if exists!!!<br/>
      * <p/>
      * @param file (as File) the file to write into.
      * @param zeile (as String) the content to write.
      */
-    private static void WriteLine(File file, String zeile) {
-        if (!firstLine) {
-            try (BufferedWriter out = new BufferedWriter(new FileWriter(file, true))) {
+    public static void lineWrite(File file, String zeile) {
+        if (!isFirstLine()) {
+            BufferedWriter out = null;
+            try {
                 if (!zeile.isEmpty()) {
+                    out = new BufferedWriter(new FileWriter(file, true));
                     file.createNewFile();
-                    out.write(zeile);
                     out.newLine();
+                    out.write(zeile);
                 }
-            } catch (IOException ex) {
-                JOptionPane.showMessageDialog(null, ex.getMessage(), ex.getClass().getSimpleName(), 0);
-            }
-        }
-        if (firstLine) {
-            try (BufferedWriter writer = new BufferedWriter(new FileWriter(file))) {
-                file.createNewFile();
-                writer.write(zeile);
-                writer.newLine();
             } catch (Exception ex) {
                 JOptionPane.showMessageDialog(null, ex.getMessage(), ex.getClass().getSimpleName(), 0);
             } finally {
-                firstLine = false;
+                try {
+                    out.close();
+                } catch (Exception ex) {
+                    JOptionPane.showMessageDialog(null, ex.getMessage(), ex.getClass().getSimpleName(), 0);
+                }
+            }
+        }
+        if (isFirstLine()) {
+            BufferedWriter writer = null;
+            try {
+                writer = new BufferedWriter(new FileWriter(file));
+                file.createNewFile();
+                writer.write(zeile);
+            } catch (Exception ex) {
+                JOptionPane.showMessageDialog(null, ex.getMessage(), ex.getClass().getSimpleName(), 0);
+            } finally {
+                try {
+                    writer.close();
+                    setFirstLine(false);
+                } catch (Exception ex) {
+                    JOptionPane.showMessageDialog(null, ex.getMessage(), ex.getClass().getSimpleName(), 0);
+                }
             }
         }
     }
 
     /**
-     * to read a file into a DefaultListModel(String).
-     * <p/>
-     * @param file the file to read from.
-     * @return returns (as List(ArrayList)) the content.
-     * @deprecated not jet been tested !!!
+     * @param aFirstLine (as Boolean) if true, next written line will overwrite the file(if exists).
      */
-    @SuppressWarnings("unchecked")
-    public static DefaultListModel<String> ReadDefaultListModel(File file) {
-        String zeile;
-        DefaultListModel list = new DefaultListModel<>();
-        try (BufferedReader in = new BufferedReader(new FileReader(file))) {
-            while (!(zeile = in.readLine()).isEmpty()) {
-                list.addElement(zeile);
+    public static void setFirstLine(boolean aFirstLine) {
+        firstLine = aFirstLine;
+    }
+
+    /**
+     * Appand a string to a textfile but first add a space (tab).<br/> 
+     * File will be created if not exists.<br/>
+     *
+     * @param file (as File) the file to write into.
+     * @param text (as String) the content to write.
+     */
+    public static void lineAppandTab(File file, String text) {
+        BufferedWriter out = null;
+        try {
+            if (!text.isEmpty()) {
+                out = new BufferedWriter(new FileWriter(file, true));
+                file.createNewFile();
+                out.append("    ");
+                out.append(text);
             }
-        } catch (IOException ex) {
+        } catch (Exception ex) {
             JOptionPane.showMessageDialog(null, ex.getMessage(), ex.getClass().getSimpleName(), 0);
-        } catch (NullPointerException ex) {
-            /*
-             * hier nix machen... wurde ja auch nichts ausgewählt.
-             */
-        }
-        return list;
-    }
-
-    /**
-     * ask via filechooser where to write into and write the data.<br/>
-     * <p/>
-     * @param listModel (as DefaultListModel(String)) each line in this list
-     * will be written.
-     */
-    public static void writeDefaultListModel(DefaultListModel<String> listModel) {
-        writeDefaultListModel(listModel, dialogSave());
-    }
-
-    /**
-     * @param listModel the DefaultListModel to write.
-     * @param file the file to write into (will be created if not already
-     * exists.
-     */
-    public static void writeDefaultListModel(DefaultListModel<String> listModel, File file) {
-        if (file != null) {
-            for (int i = 0; i < listModel.getSize(); i++) {
-                WriteLine(file, listModel.getElementAt(i));
+        } finally {
+            try {
+                out.close();
+            } catch (Exception ex) {
+                JOptionPane.showMessageDialog(null, ex.getMessage(), ex.getClass().getSimpleName(), 0);
             }
         }
     }
+
+    /**
+     * Appand a string to a textfile.<br/> 
+     * File will be created if not exists.<br/>
+     *
+     * @param file (as File) the file to write into.
+     * @param text (as String) the content to write.
+     */
+    public static void lineAppand(File file, String text) {
+        BufferedWriter out = null;
+        try {
+            if (!text.isEmpty()) {
+                out = new BufferedWriter(new FileWriter(file, true));
+                file.createNewFile();
+                out.append(text);
+            }
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(null, ex.getMessage(), ex.getClass().getSimpleName(), 0);
+        } finally {
+            try {
+                out.close();
+            } catch (Exception ex) {
+                JOptionPane.showMessageDialog(null, ex.getMessage(), ex.getClass().getSimpleName(), 0);
+            }
+        }
+    }
+    
+    private static JFileChooser fc = new JFileChooser();
+    /**
+     * - if true: tells the writer that the next line it will write... overwride the file
+     */
+    private static boolean firstLine;
 }

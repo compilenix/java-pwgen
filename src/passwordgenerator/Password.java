@@ -56,42 +56,42 @@ public class Password {
     /**
      * @return returns the count of total created password objects.
      */
-    static int getCount() {
+    final static int getCount() {
         return pwcount;
     }
     
     /**
      * @return returns the count of total created password objects.
      */
-    static void setCount(int count) {
+    final static void setCount(int count) {
         pwcount = count;
     }
 
     /**
      * @return Returns the MD5 Hashed password.
      */
-    public String getMD5() {
+    final public String getMD5() {
         return this.md5;
     }
 
     /**
      * @return Returns the clear text password.
      */
-    public String getPassword() {
+    final public String getPassword() {
         return this.toString();
     }
 
     /**
      * @return Returns the SHA-1 Hashed password.
      */
-    public String getSHA1() {
+    final public String getSHA1() {
         return this.sha1;
     }
 
     /**
      * @return Returns the SHA-256 Hashed password.
      */
-    public String getSHA256() {
+    final public String getSHA256() {
         return this.sha256;
     }
     
@@ -107,7 +107,7 @@ public class Password {
      * <p/>
      * @param password (as String) The password to set.
      */
-    public void setPassword(String password) {
+    final public void setPassword(String password) {
         this.password = password;
     }
     
@@ -136,7 +136,7 @@ public class Password {
     /**
      * reset the count of total created password objects.
      */
-    static void resetCount() {
+    final static void resetCount() {
         pwcount = 0;
     }
 
