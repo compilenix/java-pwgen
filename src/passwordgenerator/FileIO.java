@@ -7,6 +7,8 @@ import java.util.LinkedList;
 
 import javax.swing.JOptionPane;
 
+import passwordGenerator.windows.JFramePasswordGenerator;
+
 /**
  * this class can do:<br/>
  * - shows a file open dialog<br/>
@@ -17,7 +19,7 @@ import javax.swing.JOptionPane;
  * - can append (with a tab before) a line (as String) out into a text file<br/>
  * <p/>
  * 
- * @version 2.4.1
+ * @version 2012-08-25
  * @author Kevin Weis
  */
 public final class FileIO {
@@ -31,7 +33,7 @@ public final class FileIO {
 	 */
 	public static void dialogWritten(File file) {
 		JOptionPane.showMessageDialog(
-				null, "Data has been written at " + file.getAbsolutePath(), "Finished!", 1);
+				JFramePasswordGenerator.getPasswordGui(), "Data has been written at " + file.getAbsolutePath(), "Finished!", 1);
 	}
 
 	/**
@@ -69,13 +71,13 @@ public final class FileIO {
 			}
 		} catch (Exception ex) {
 			JOptionPane.showMessageDialog(
-					null, ex.getMessage(), ex.getClass().getSimpleName(), 0);
+					JFramePasswordGenerator.getPasswordGui(), ex.getMessage(), ex.getClass().getSimpleName(), JOptionPane.ERROR_MESSAGE);
 		} finally {
 			try {
 				out.close();
 			} catch (Exception ex) {
 				JOptionPane.showMessageDialog(
-						null, ex.getMessage(), ex.getClass().getSimpleName(), 0);
+						JFramePasswordGenerator.getPasswordGui(), ex.getMessage(), ex.getClass().getSimpleName(), JOptionPane.ERROR_MESSAGE);
 			}
 		}
 	}
@@ -121,13 +123,13 @@ public final class FileIO {
 			}
 		} catch (Exception ex) {
 			JOptionPane.showMessageDialog(
-					null, ex.getMessage(), ex.getClass().getSimpleName(), 0);
+					JFramePasswordGenerator.getPasswordGui(), ex.getMessage(), ex.getClass().getSimpleName(), JOptionPane.ERROR_MESSAGE);
 		} finally {
 			try {
 				out.close();
 			} catch (Exception ex) {
 				JOptionPane.showMessageDialog(
-						null, ex.getMessage(), ex.getClass().getSimpleName(), 0);
+						JFramePasswordGenerator.getPasswordGui(), ex.getMessage(), ex.getClass().getSimpleName(), JOptionPane.ERROR_MESSAGE);
 			}
 		}
 	}

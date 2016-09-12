@@ -6,6 +6,8 @@ import java.util.Random;
 
 import javax.swing.JOptionPane;
 
+import passwordGenerator.windows.JFramePasswordGenerator;
+
 /**
  * A object instance of this class "Password" has:<br/>
  * - a Password (as String)<br/>
@@ -69,14 +71,15 @@ public class Password {
 	/**
 	 * @return returns the count of total created password objects.
 	 */
-	final static int getCount() {
+	public final static int getCount() {
 		return pwcount;
 	}
 
 	/**
-	 * @return returns the count of total created password objects.
+	 * @param count
+	 *            set the total count of created password objects.
 	 */
-	final static void setCount(int count) {
+	public final static void setCount(int count) {
 		pwcount = count;
 	}
 
@@ -193,7 +196,7 @@ public class Password {
 	/**
 	 * reset the count of total created password objects.
 	 */
-	final static void resetCount() {
+	public final static void resetCount() {
 		pwcount = 0;
 	}
 
@@ -227,7 +230,7 @@ public class Password {
 					16).toUpperCase();
 		} catch (Exception ex) {
 			JOptionPane.showMessageDialog(
-					null, ex.getMessage(), ex.getClass().getSimpleName(), 0);
+					JFramePasswordGenerator.getPasswordGui(), ex.getMessage(), ex.getClass().getSimpleName(), 0);
 		}
 		while (clear.length() < 32) {
 			clear = "0" + clear;
@@ -250,7 +253,7 @@ public class Password {
 					16).toUpperCase();
 		} catch (Exception ex) {
 			JOptionPane.showMessageDialog(
-					null, ex.getMessage(), ex.getClass().getSimpleName(), 0);
+					JFramePasswordGenerator.getPasswordGui(), ex.getMessage(), ex.getClass().getSimpleName(), 0);
 		}
 		while (clear.length() < 32) {
 			clear = "0" + clear;
@@ -273,7 +276,7 @@ public class Password {
 					16).toUpperCase();
 		} catch (Exception ex) {
 			JOptionPane.showMessageDialog(
-					null, ex.getMessage(), ex.getClass().getSimpleName(), 0);
+					JFramePasswordGenerator.getPasswordGui(), ex.getMessage(), ex.getClass().getSimpleName(), 0);
 		}
 		while (clear.length() < 40) {
 			clear = "0" + clear;
@@ -296,7 +299,7 @@ public class Password {
 					16).toUpperCase();
 		} catch (Exception ex) {
 			JOptionPane.showMessageDialog(
-					null, ex.getMessage(), ex.getClass().getSimpleName(), 0);
+					JFramePasswordGenerator.getPasswordGui(), ex.getMessage(), ex.getClass().getSimpleName(), 0);
 		}
 		while (clear.length() < 64) {
 			clear = "0" + clear;
@@ -319,7 +322,7 @@ public class Password {
 					16).toUpperCase();
 		} catch (Exception ex) {
 			JOptionPane.showMessageDialog(
-					null, ex.getMessage(), ex.getClass().getSimpleName(), 0);
+					JFramePasswordGenerator.getPasswordGui(), ex.getMessage(), ex.getClass().getSimpleName(), 0);
 		}
 		while (clear.length() < 96) {
 			clear = "0" + clear;
@@ -342,7 +345,7 @@ public class Password {
 					16).toUpperCase();
 		} catch (Exception ex) {
 			JOptionPane.showMessageDialog(
-					null, ex.getMessage(), ex.getClass().getSimpleName(), 0);
+					JFramePasswordGenerator.getPasswordGui(), ex.getMessage(), ex.getClass().getSimpleName(), 0);
 		}
 		while (clear.length() < 128) {
 			clear = "0" + clear;

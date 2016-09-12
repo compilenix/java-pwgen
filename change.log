@@ -1,3 +1,26 @@
+Version: 2.4.3
+Release: 03.09.2012
+Author: Kevin Weis
+
+new:
+- switch between german an english
+- copy multiple lines with hashes (if selected)
+- generate multiple diffrent hashes of one password at one line
+- negation of password counter (passwords to generate) if user set a negative count
+- reload button at the news-window
+- export via menubar + hotkey
+- automatic selection of window-design (LookAndFeel)
+     Linux & Unix = Nimbus
+     Windows = Windows
+     Other = Nimbus
+- new menu at the menubar "View" to select a other window-design (LookAndFeel)
+
+
+modified:
+- BugFix: no Windows/Popups will shown by using the OpenJDK/JRE (Unix)
+- BugFix: UnknownHostException if there is no internet
+
+------------------------------------------------------------
 Version: 2.4.2
 Release: 20.07.2012
 Author: Kevin Weis
