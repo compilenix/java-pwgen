@@ -20,7 +20,7 @@ import passwordGenerator.windows.JFramePasswordGenerator;
  * - the choice of the containing (as char array) characters for a generated plain text password.<br/>
  * <p/>
  * 
- * @version 2012.09.17
+ * @version 2013-10-08
  * @author Kevin Weis
  */
 public class Password {
@@ -54,8 +54,7 @@ public class Password {
 	 * Constructor 2: Create a Password Object, set the cleartext Password and count +1.
 	 * <p/>
 	 * 
-	 * @param password
-	 *            (as String) The password to set.
+	 * @param password (as String) The password to set.
 	 */
 	public Password(String password) {
 		this.password = password;
@@ -66,10 +65,8 @@ public class Password {
 	 * Constructor 3: A password will be generated from a known length, a choice (Checkboxes) of the containing characters and count +1.
 	 * <p/>
 	 * 
-	 * @param choice
-	 *            (as char array) the choice of the containing characters.
-	 * @param length
-	 *            (as int) the length of the generated password.
+	 * @param choice (as char array) the choice of the containing characters.
+	 * @param length (as int) the length of the generated password.
 	 */
 	public Password(char[] choice, int length) {
 		this.array = choice;
@@ -85,8 +82,7 @@ public class Password {
 	}
 
 	/**
-	 * @param count
-	 *            set the total count of created password objects.
+	 * @param count set the total count of created password objects.
 	 */
 	public final static void setCount(int count) {
 		pwcount = count;
@@ -128,7 +124,7 @@ public class Password {
 	}
 
 	/**
-	 * @return Returns the SHA-256 Hashed password.
+	 * @return Returns the SHA-384 Hashed password.
 	 */
 	final public String getSHA384() {
 		return this.sha384;
@@ -140,58 +136,69 @@ public class Password {
 	final public String getSHA512() {
 		return this.sha512;
 	}
-
-	/**
-	 * generate a MD2 Hashed password.
-	 */
-	public void setMD2() {
-		this.md2 = makeMD2(this.toString().getBytes());
-	}
-
-	/**
-	 * generate a MD5 Hashed password.
-	 */
-	public void setMD5() {
-		this.md5 = makeMD5(this.toString().getBytes());
-	}
-
+	
 	/**
 	 * Set a known password and a MD5 of it will be generated.<br/>
 	 * <p/>
 	 * 
-	 * @param password
-	 *            (as String) The password to set.
+	 * @param password (as String) The password to set.
 	 */
 	final public void setPassword(String password) {
 		this.password = password;
 	}
 
 	/**
+	 * generate a MD2 Hashed password.
+	 * @return Returns the MD2 Hashed password.
+	 */
+	public String setMD2() {
+		this.md2 = makeMD2(this.toString().getBytes());
+		return this.md2;
+	}
+
+	/**
+	 * generate a MD5 Hashed password.
+	 * @return Returns the MD5 Hashed password.
+	 */
+	public String setMD5() {
+		this.md5 = makeMD5(this.toString().getBytes());
+		return this.md5;
+	}
+
+	/**
 	 * generate a SHA-1 Hashed password.
+	 * @return Returns the SHA-1 Hashed password.
 	 */
-	public void setSHA1() {
+	public String setSHA1() {
 		this.sha1 = makeSHA1(this.toString().getBytes());
+		return this.sha1;
 	}
 
 	/**
 	 * generate a SHA-256 Hashed password.
+	 * @return Returns the SHA-256 Hashed password.
 	 */
-	public void setSHA256() {
+	public String setSHA256() {
 		this.sha256 = makeSHA256(this.toString().getBytes());
+		return this.sha256;
 	}
 
 	/**
-	 * generate a SHA-256 Hashed password.
+	 * generate a SHA-384 Hashed password.
+	 * @return Returns the SHA-384 Hashed password.
 	 */
-	public void setSHA384() {
+	public String setSHA384() {
 		this.sha384 = makeSHA384(this.toString().getBytes());
+		return this.sha384;
 	}
 
 	/**
 	 * generate a SHA-512 Hashed password.
+	 * @return Returns the SHA-512 Hashed password.
 	 */
-	public void setSHA512() {
+	public String setSHA512() {
 		this.sha512 = makeSHA512(this.toString().getBytes());
+		return this.sha512;
 	}
 
 	/**
@@ -211,8 +218,7 @@ public class Password {
 
 	/**
 	 * @return Returns a random generated string.
-	 * @param length
-	 *            (as int) the length of the generated password.
+	 * @param length (as int) the length of the generated password.
 	 */
 	private String makeRandomString(int length) {
 		String out = "";
@@ -223,142 +229,120 @@ public class Password {
 		}
 		return out;
 	}
+	
+	/**
+	 * @param data Data to be hased
+	 * @param algo Available algorithms: SHA1, SHA256, SHA384, SHA512, MD2, MD5
+	 * @return The Hash (base 16)
+	 */
+	public static String calculcateHash(byte[] data, String algo) {
+		String clear = null;
+		try {
+			MessageDigest m = MessageDigest.getInstance(algo);
+			m.update(data, 0, data.length);
+			clear = new BigInteger(1, m.digest()).toString(16);
+		} catch (Exception ex) {
+			JOptionPane.showMessageDialog(JFramePasswordGenerator.getPasswordGui(), ex.getMessage(), ex.getClass().getSimpleName(), 0);
+		}
+		while (clear.length() < 32) {
+			clear = "0" + clear;
+		}
+		return clear;
+	}
+	
+	/**
+	 * @param data Data to be hased
+	 * @param algo Available algorithms: SHA1, SHA256, SHA384, SHA512, MD2, MD5
+	 * @return The Hash (base 16)
+	 * @throws Exception Undefined algorithm
+	 */
+	public static String calculcateHash(byte[] data, int algo) throws Exception {
+		String clear = null;
+		String StrAlgo = null;
+		
+		switch (algo) {
+		case 0:
+			StrAlgo = "SHA-1";
+			break;
+		case 1:
+			StrAlgo = "SHA-256";
+			break;
+		case 2:
+			StrAlgo = "SHA-384";
+			break;
+		case 3:
+			StrAlgo = "SHA-512";
+			break;
+		case 4:
+			StrAlgo = "MD2";
+			break;
+		case 5:
+			StrAlgo = "MD5";
+			break;
+		}
+		
+		if (StrAlgo == null) {
+			throw new Exception("Undefined algorithm index");
+		}
+		
+		try {
+			MessageDigest m = MessageDigest.getInstance(StrAlgo);
+			m.update(data, 0, data.length);
+			clear = new BigInteger(1, m.digest()).toString(16);
+		} catch (Exception ex) {
+			JOptionPane.showMessageDialog(JFramePasswordGenerator.getPasswordGui(), ex.getMessage(), ex.getClass().getSimpleName(), 0);
+		}
+		while (clear.length() < 32) {
+			clear = "0" + clear;
+		}
+		return clear;
+	}
 
 	/**
-	 * @param data
-	 *            (as byte array) bytes of the clear text password to be hashed.
+	 * @param data (as byte array) bytes of the clear text password to be hashed.
 	 * @return Returns the hashed password (MD2).
 	 */
 	private String makeMD2(byte[] data) {
-		String clear = null;
-		try {
-			MessageDigest m = MessageDigest.getInstance("MD2");
-			m.update(
-					data, 0, data.length);
-			clear = new BigInteger(1, m.digest()).toString(
-					16).toUpperCase();
-		} catch (Exception ex) {
-			JOptionPane.showMessageDialog(
-					JFramePasswordGenerator.getPasswordGui(), ex.getMessage(), ex.getClass().getSimpleName(), 0);
-		}
-		while (clear.length() < 32) {
-			clear = "0" + clear;
-		}
-		return clear;
+		return calculcateHash(data, "MD2");
 	}
 
 	/**
-	 * @param data
-	 *            (as byte array) bytes of the clear text password to be hashed.
+	 * @param data (as byte array) bytes of the clear text password to be hashed.
 	 * @return Returns the hashed password (MD5).
 	 */
 	private String makeMD5(byte[] data) {
-		String clear = null;
-		try {
-			MessageDigest m = MessageDigest.getInstance("MD5");
-			m.update(
-					data, 0, data.length);
-			clear = new BigInteger(1, m.digest()).toString(
-					16).toUpperCase();
-		} catch (Exception ex) {
-			JOptionPane.showMessageDialog(
-					JFramePasswordGenerator.getPasswordGui(), ex.getMessage(), ex.getClass().getSimpleName(), 0);
-		}
-		while (clear.length() < 32) {
-			clear = "0" + clear;
-		}
-		return clear;
+		return calculcateHash(data, "MD5");
 	}
 
 	/**
-	 * @param data
-	 *            (as byte array) bytes of the clear text password to be hashed.
+	 * @param data (as byte array) bytes of the clear text password to be hashed.
 	 * @return Returns the hashed password (SHA-1).
 	 */
 	private String makeSHA1(byte[] data) {
-		String clear = null;
-		try {
-			MessageDigest m = MessageDigest.getInstance("SHA-1");
-			m.update(
-					data, 0, data.length);
-			clear = new BigInteger(1, m.digest()).toString(
-					16).toUpperCase();
-		} catch (Exception ex) {
-			JOptionPane.showMessageDialog(
-					JFramePasswordGenerator.getPasswordGui(), ex.getMessage(), ex.getClass().getSimpleName(), 0);
-		}
-		while (clear.length() < 40) {
-			clear = "0" + clear;
-		}
-		return clear;
+		return calculcateHash(data, "SHA-1");
 	}
 
 	/**
-	 * @param data
-	 *            (as byte array) bytes of the clear text password to be hashed.
+	 * @param data (as byte array) bytes of the clear text password to be hashed.
 	 * @return Returns the hashed password (SHA-256).
 	 */
 	private String makeSHA256(byte[] data) {
-		String clear = null;
-		try {
-			MessageDigest m = MessageDigest.getInstance("SHA-256");
-			m.update(
-					data, 0, data.length);
-			clear = new BigInteger(1, m.digest()).toString(
-					16).toUpperCase();
-		} catch (Exception ex) {
-			JOptionPane.showMessageDialog(
-					JFramePasswordGenerator.getPasswordGui(), ex.getMessage(), ex.getClass().getSimpleName(), 0);
-		}
-		while (clear.length() < 64) {
-			clear = "0" + clear;
-		}
-		return clear;
+		return calculcateHash(data, "SHA-256");
 	}
 
 	/**
-	 * @param data
-	 *            (as byte array) bytes of the clear text password to be hashed.
-	 * @return Returns the hashed password (SHA-256).
+	 * @param data (as byte array) bytes of the clear text password to be hashed.
+	 * @return Returns the hashed password (SHA-384).
 	 */
 	private String makeSHA384(byte[] data) {
-		String clear = null;
-		try {
-			MessageDigest m = MessageDigest.getInstance("SHA-384");
-			m.update(
-					data, 0, data.length);
-			clear = new BigInteger(1, m.digest()).toString(
-					16).toUpperCase();
-		} catch (Exception ex) {
-			JOptionPane.showMessageDialog(
-					JFramePasswordGenerator.getPasswordGui(), ex.getMessage(), ex.getClass().getSimpleName(), 0);
-		}
-		while (clear.length() < 96) {
-			clear = "0" + clear;
-		}
-		return clear;
+		return calculcateHash(data, "SHA-384");
 	}
 
 	/**
-	 * @param data
-	 *            (as byte array) bytes of the clear text password to be hashed.
+	 * @param data (as byte array) bytes of the clear text password to be hashed.
 	 * @return Returns the hashed password (SHA-512).
 	 */
 	private String makeSHA512(byte[] data) {
-		String clear = null;
-		try {
-			MessageDigest m = MessageDigest.getInstance("SHA-512");
-			m.update(
-					data, 0, data.length);
-			clear = new BigInteger(1, m.digest()).toString(
-					16).toUpperCase();
-		} catch (Exception ex) {
-			JOptionPane.showMessageDialog(
-					JFramePasswordGenerator.getPasswordGui(), ex.getMessage(), ex.getClass().getSimpleName(), 0);
-		}
-		while (clear.length() < 128) {
-			clear = "0" + clear;
-		}
-		return clear;
+		return calculcateHash(data, "SHA-512");
 	}
 }

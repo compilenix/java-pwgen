@@ -1,23 +1,22 @@
 package passwordGenerator.windows;
 
 import java.awt.Toolkit;
+import java.awt.event.InputEvent;
+import java.awt.event.KeyEvent;
 
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.JFrame;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
 import javax.swing.JPanel;
+import javax.swing.JRadioButtonMenuItem;
+import javax.swing.KeyStroke;
 import javax.swing.border.EmptyBorder;
 
 import passwordGenerator.Language;
 import passwordGenerator.Main;
-import javax.swing.JMenuBar;
-import javax.swing.JMenu;
-import javax.swing.JMenuItem;
-import java.awt.Button;
-import javax.swing.KeyStroke;
-import java.awt.event.KeyEvent;
-import java.awt.event.InputEvent;
-import javax.swing.JRadioButtonMenuItem;
 
 /**
  * Author Kevin Weis<br>
@@ -29,6 +28,7 @@ import javax.swing.JRadioButtonMenuItem;
 public class JFrameMain extends JFrame {
 	private static final long serialVersionUID = 3064390125678139335L;
 	private JPanel contentPane;
+	@SuppressWarnings("unused")
 	private Language currentLanguage;
 	private JMenuBar menuBar;
 	private JMenu mnFile;

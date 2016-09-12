@@ -23,19 +23,15 @@ if (!(Test-Path "bin")) {
 Write-Host "kopiere resouces..."
 Copy-Item -Path "src\*" -Destination "bin\" -Recurse -Force -Verbose
 Write-Host "kopieren abgeschlossen." -ForegroundColor Green
-Get-ChildItem "src\*.java"
 cmd /c "dir /s /B ""src\*.java"" > sources.txt"
 #Get-ChildItem -Recurse -Include *.java src | where {!$_PSIsContainer} | foreach-object -process { $_.FullName } >sources.txt #sortiert für javac falsch -.-
 Write-Host "kompiliere..."
-cmd /c "javac -verbose -source $javaVersion -target $javaVersion -d bin\ -g -nowarn @sources.txt"
-Write-Host  "cmd /c ""javac -verbose -source $javaVersion -target $javaVersion -d bin\ -g -nowarn @sources.txt"""
+cmd /c "javac -verbose -encoding UTF-8 -source $javaVersion -target $javaVersion -d bin\ -g -nowarn @sources.txt"
+Write-Host  "cmd /c ""javac -verbose -encoding UTF-8 -source $javaVersion -target $javaVersion -d bin\ -g -nowarn @sources.txt"""
 Write-Host "kompilieren abgeschlossen." -ForegroundColor Green
 Write-Host "aufräumen..." -ForegroundColor Green
-cd bin
-Remove-Item "*.java" -Recurse -Verbose
-cd ../src
-Remove-Item "*.class" -Recurse -Verbose
-cd ..
+gci .\bin -include *.java -Recurse -Force | Remove-Item -Recurse -Force -Verbose
+gci .\src -include *.class -Recurse -Force | Remove-Item -Recurse -Force -Verbose
 Remove-Item "sources.txt" -Verbose
 if (!$1) {
 Write-Host "fertig."

@@ -1,11 +1,12 @@
 package passwordGenerator;
 
-import passwordGenerator.windows.JFrameMain;
+import java.text.DecimalFormat;
+
 import passwordGenerator.windows.JFramePasswordGenerator;
 
 /**
  * @author Kevin Weis
- * @version 04.02.2013
+ * @version 2013.09.14
  * <p>
  * Handling commandline args or/and shows the GUI<br/>
  * <p>
@@ -133,16 +134,16 @@ public final class Main {
 					ex1.printStackTrace();
 				}
 			}
-			// } else if (os.indexOf("nix") >= 0 || os.indexOf("nux") >= 0) {
-			// try {
-			// setLookAndFeel("GTK+");
-			// } catch (Exception ex) {
-			// try {
-			// setLookAndFeel("Nimbus");
-			// } catch (Exception ex1) {
-			// ex1.printStackTrace();
-			// }
-			// }
+		} else if (os.indexOf("nix") >= 0 || os.indexOf("nux") >= 0) {
+			try {
+				setLookAndFeel("GTK+");
+			} catch (Exception ex) {
+				try {
+					setLookAndFeel("Nimbus");
+				} catch (Exception ex1) {
+					ex1.printStackTrace();
+				}
+			}
 		} else {
 			try {
 				setLookAndFeel("Nimbus");
@@ -153,7 +154,7 @@ public final class Main {
 		if (args.length == 0) {
 //			JFramePasswordGenerator.setPasswordGui(new JFramePasswordGenerator());
 //			JFramePasswordGenerator.getPasswordGui().setVisible(true);
-			mainFrame = new JFrameMain();
+			mainFrame = new JFramePasswordGenerator();
 			mainFrame.setVisible(true);
 		} else {
 			printHelp();
@@ -175,26 +176,6 @@ public final class Main {
 	}
 
 	private static void printHelp() {
-		// System.out.println("Usage:");
-		// System.out.println("The first number is the count of how much passwords will be generated");
-		// System.out.println("The second number is how long each password");
-		// System.out.println();
-		// System.out.println("--no-gui  -S         Get a default password");
-		// System.out.println("--help               Prints this help");
-		// System.out.println("-n                   Set numbers");
-		// System.out.println("-a                   Set all lowercase");
-		// System.out.println("-A                   Set all UPPERCASE");
-		// System.out.println("-s                   Set spezial chars");
-		// System.out.println("--MD2    PASSWORD  Get the MD2-Hash of the password");
-		// System.out.println("--MD5    PASSWORD  Get the MD5-Hash of the password");
-		// System.out.println("--SHA1   PASSWORD  Get the SHA1-Hash of the password");
-		// System.out.println("--SHA256 PASSWORD  Get the SHA256-Hash of the password");
-		// System.out.println("--SHA384 PASSWORD  Get the SHA384-Hash of the password");
-		// System.out.println("--SHA512 PASSWORD  Get the SHA512-Hash of the password");
-		// System.out.println();
-		// System.out.println("To use multiple charsets use this: -Aans (or simular)");
-		// System.out.println("java -jar PassworGenerator.jar 3 6 -an");
-		// System.out.println("java -jar PassworGenerator.jar --sha256 PASSWORD");
 		System.out
 				.print("Usage:\r\nThe first number is the count of how much passwords will be generated\r\nThe second number is how long each password\r\n\r\n--no-gui  -S         Get a default password\r\n--help               Prints this help\r\n-n                   Set numbers\r\n-a                   Set all lowercase\r\n-A                   Set all UPPERCASE\r\n-s                   Set spezial chars\r\n--MD2    PASSWORD  Get the MD2-Hash of the password\r\n--MD5    PASSWORD  Get the MD5-Hash of the password\r\n--SHA1   PASSWORD  Get the SHA1-Hash of the password\r\n--SHA256 PASSWORD  Get the SHA256-Hash of the password\r\n--SHA384 PASSWORD  Get the SHA384-Hash of the password\r\n--SHA512 PASSWORD  Get the SHA512-Hash of the password\r\n\r\nTo use multiple charsets use this: -Aans (or simular)\r\njava -jar PassworGenerator.jar 3 6 -an\r\njava -jar PassworGenerator.jar --sha256 PASSWORD\r\n");
 		System.exit(1);
@@ -203,7 +184,7 @@ public final class Main {
 	/**
 	 * contains the current version of this application (hard coded).
 	 */
-	public static final String version = "2.4.5";
+	public static final String version = "2.4.6";
 	/**
 	 * contains the version of the current latest application version. IMPORTANT: to use this you must verify the version
 	 * 
@@ -219,10 +200,19 @@ public final class Main {
 	 */
 	public static final String title = "PasswordGenerator";
 	/**
+	 * contains the supported Hash Algorithms
+	 */
+	public static enum HashAlgos { SHA1, SHA256, SHA384, SHA512, MD2, MD5 }
+	/**
 	 * holds the current language
 	 */
 	public static Language currentLanguage = new Language(Language.ENGLISH);
-	protected static JFrameMain mainFrame;
+	/**
+	 * Decimal separator, of the current locale.
+	 */
+	public static String DecimalSeparator = String.valueOf((((DecimalFormat) DecimalFormat.getInstance()).getDecimalFormatSymbols())
+			.getGroupingSeparator());
+	protected static JFramePasswordGenerator mainFrame;
 
 	private static class Worker extends Thread {
 		public Worker(char[] ch, int pwlen, int pwcnt) {

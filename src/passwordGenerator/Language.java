@@ -1,7 +1,5 @@
 package passwordGenerator;
 
-import java.io.File;
-import passwordGenerator.Main;
 
 /**
  * to set/get the displayed language.<br/>
@@ -28,13 +26,6 @@ public class Language {
 			break;
 		}
 	}
-
-	/**
-	 * @param xmlLanguageFile not jet been implemented
-	 */
-	public Language(File xmlLanguageFile) {
-		// TODO implement xml loading structure
-	}
 	
 	/**
 	 * @see Language
@@ -48,11 +39,14 @@ public class Language {
 			ButtonCancel = "Cancel";
 			ButtonClear = "Clear";
 			ButtonExport = "Export";
+			ButtonExportPopupMenuItemAsCsv = "As CSV (UTF-8)";
 			ButtonExportPopupMenuItemAsText = "As Text (UTF-8)";
 			ButtonDeleteSelected = "Delete Selected Element(s)";
 			ButtonGenerate = "Generate";
 			ButtonImport = "Import";
 			ButtonSelectAll = "Select All";
+			ButtonWindowToolsMultiHashCalculate = "Calculcate";
+			ButtonWindowToolsMultiHashClear = "Clear";
 			CheckBoxNumbers = "Numbers";
 			CheckBoxSpezial = "Special";
 			HintButtonClear = "Reset table!";
@@ -82,6 +76,8 @@ public class Language {
 			MenuBarHelpNews = "News";
 			MenuBarView = "View";
 			MenuBarViewWindowStyle = "Window-Style";
+			MenuBarTools = "Tools";
+			MenuBarToolsMultiHash = "Multi Hash";
 			MessageCantConnectToServer = "Can not connect to server, please verify your internet connection!";
 			MessageFileExists = "The file already exists... you want to overwrite it?\nchoosing no, appand it.";
 			MessageFileExistsTitle = "Save";
@@ -106,37 +102,41 @@ public class Language {
 			WindowAboutAuthor = "Author";
 			WindowAboutHomepage = "Homepage";
 			WindowAboutTitle = "About";
-			WindowAboutOKButton = "Don´t hit me!";
+			WindowAboutOKButton = "Don`t hit me!";
 			WindowNewsHomepage = "Homepage";
 			WindowNewsTitle = "News";
 			WindowNewsButtonPointless = "Pointless Button";
+			WindowToolsMultiHashResult = "Result";
 			break;
 		case GERMAN:
 			CURRENT_LANG = GERMAN;
 			ButtonCancel = "Abbrechen";
 			ButtonClear = "Leeren";
-			ButtonDeleteSelected = "Entferne selektierte Einträge";
+			ButtonDeleteSelected = "Entferne selektierte EintrÃ¤ge";
 			ButtonExport = "Exportieren";
+			ButtonExportPopupMenuItemAsCsv = "Als CSV (UTF-8)";
 			ButtonExportPopupMenuItemAsText = "Als Text (UTF-8)";
 			ButtonGenerate = "Erstellen";
 			ButtonImport = "Importieren";
-			ButtonSelectAll = "Alle Einträge auswählen";
+			ButtonSelectAll = "Alle EintrÃ¤ge auswÃ¤hlen";
+			ButtonWindowToolsMultiHashCalculate = "Berechne";
+			ButtonWindowToolsMultiHashClear = "Leeren";
 			CheckBoxNumbers = "Zahlen";
 			CheckBoxSpezial = "Spezial";
-			HintButtonClear = "Tabelle zurücksetzen!";
+			HintButtonClear = "Tabelle zurÃ¼cksetzen!";
 			HintButtonExport = "Exportiere alle Elemente der Tabelle in eine Textdatei (UTF-8)";
 			HintButtonImport = "Importiere alle Elemente einer Textdatei (UTF-8) in die Tabelle";
 			HintButtonGenerate = "Generieren...";
 			HintCheckBoxLowerCase = "Beinhaltet alle Zeichen von \"a\" bis \"z\" (Kleinbuchstaben)";
 			HintCheckBoxNumbers = "Beinhaltet alle Zeichen von \"0\" bis \"9\"";
 			HintCheckBoxSpecial = "Beinhaltet einige Sonderzeichen (!\"#$%&'()*+,-./:;<=>?@)";
-			HintCheckBoxUpperCase = "Beinhaltet alle Zeichen von \"A\" bis \"Z\" (Großbuchstaben)";
-			HintRadioButtonGeneratePassword = "Generiere zufällige Passworte";
-			HintRadioButtonOwnPW = "Füge eigene Passworte der Liste hinzu (optional mit Prüfsumme)";
+			HintCheckBoxUpperCase = "Beinhaltet alle Zeichen von \"A\" bis \"Z\" (GroÃŸbuchstaben)";
+			HintRadioButtonGeneratePassword = "Generiere zufÃ¤llige Passworte";
+			HintRadioButtonOwnPW = "FÃ¼ge eigene Passworte der Tabelle hinzu (optional mit PrÃ¼fsumme)";
 			HintSlider = "Lege fest wieviele Zeichen lang jedes generierte Passwort sein soll";
 			HintTextFieldEnterOwnPW = "Tippe hier dein eigenes Passwort";
 			LabelWait = "Bitte warten!";
-			MenuBarViewChangeLanguage = "Sprache ädern";
+			MenuBarViewChangeLanguage = "Sprache Ã¤dern";
 			MenuBarViewChangeLanguageEN = "Englisch";
 			MenuBarViewChangeLanguageGER = "Deutsch";
 			MenuBarFile = "Datei";
@@ -144,28 +144,30 @@ public class Language {
 			MenuBarFileExport = ButtonExport + "...";
 			MenuBarFileImport = ButtonImport + "...";
 			MenuBarHelp = "Hilfe";
-			MenuBarHelpAbout = "Über";
+			MenuBarHelpAbout = "Ãœber";
 			MenuBarHelpCommandline = "Kommandozeile";
-			MenuBarHelpCheckUpdate = "Prüfe auf Updates";
+			MenuBarHelpCheckUpdate = "PrÃ¼fe auf Updates";
 			MenuBarHelpNews = "Neues";
 			MenuBarView = "Ansicht";
 			MenuBarViewWindowStyle = "Fenster-Design";
-			MessageCantConnectToServer = "Es kann keine Verbindung zu dem Server hergestellt werden,\nbitte überprüfen sie Ihre Internetverbindung";
-			MessageFileExists = "Die gewählte Datei existiert bereits... wollen Sie diese Überschreiben?\nWenn Sie \"nein\" wählen wird die Datei erweitert.";
+			MenuBarTools = "Tools";
+			MenuBarToolsMultiHash = "Multi Hash";
+			MessageCantConnectToServer = "Es kann keine Verbindung zu dem Server hergestellt werden,\nbitte Ã¼berprÃ¼fen sie Ihre Internetverbindung";
+			MessageFileExists = "Die gewÃ¤hlte Datei existiert bereits... wollen Sie diese Ã¼berschreiben?\nWenn Sie \"nein\" wÃ¤hlen wird die Datei erweitert.";
 			MessageFileExistsTitle = "Speichern";
-			MessageImportGenerateHash = "Wollen Sie auch Prüfsummen der importieren Passworte generieren lassen?";
-			MessageImportGenerateHashTitle = "Prüfsummen generieren";
-			MessageNegativeCount = "Ohh... Sie haben einen negativen Wert der zu generierenden Passwörter gewählt...\nIch werde für Sie den Wert invertiert setzen";
+			MessageImportGenerateHash = "Wollen Sie auch PrÃ¼fsummen der importieren Passworte generieren lassen?";
+			MessageImportGenerateHashTitle = "PrÃ¼fsummen generieren";
+			MessageNegativeCount = "Ohh... Sie haben einen negativen Wert der zu generierenden PasswÃ¶rter gewÃ¤hlt...\nIch werde fÃ¼r Sie den Wert invertiert setzen";
 			MessageNegativeCountTitle = "Negativer Wert!";
 			MessageUpdateNeedToUpdate = "Bitte Speichere die Neue Version dieses Programmes!!!\n\nIhre momentane Version ist:\n" + Main.version + "\nDie Neue Version ist:\n" + Main.newVersion + "\n\nWollen Sie die neue Version herunterladen?";
 			MessageUpdateNeedToUpdateTitle = "Check for update";
 			MessageUpdateUpToDate = "Deine Version dieses Programmes ist bereis aktuell, ein Update ist nicht erforderlich...";
-			MessageUpdateUpToDateTitle = "Prüfe auf Updates...";
-			MessageToMuchPasswords = "Ohh... Sie haben zuu viele zu generierende Passworte gewählt... Ich setze den Wert für Sie auf das Maximun (2.000.000)";
+			MessageUpdateUpToDateTitle = "PrÃ¼fe auf Updates...";
+			MessageToMuchPasswords = "Ohh... Sie haben zuu viele zu generierende Passworte gewÃ¤hlt... Ich setze den Wert fÃ¼r Sie auf das Maximun (2.000.000)";
 			MessageToMuchPasswordsTitle = "Zuuuuuuuuu viele Passworte!";
-			MessageToMuchOverAllPasswords = "Ohh... zuu viele Passwörter.\nWürden Sie noch mehr Passwörte der hunzufügen könnte die JAVA VM evtl. instabil werden!";
+			MessageToMuchOverAllPasswords = "Ohh... zuu viele PasswÃ¶rter.\nWÃ¼rden Sie noch mehr PasswÃ¶rte der hunzufÃ¼gen kÃ¶nnte die JAVA VM evtl. instabil werden!";
 			MessageToMuchOverAllPasswordsTitle = "Zuu viele...";
-			MessageZero = "Ohh... Ihre Wahl ist... Null./n/nIch setze den Wert für Sie wieder auf 1";
+			MessageZero = "Ohh... Ihre Wahl ist... Null./n/nIch setze den Wert fÃ¼r Sie wieder auf 1";
 			MessageZeroTitle = "Zero count!";
 			PasswordCounter = "Anzahl Passworte";
 			RadioButtonGeneratePassword = "Gen. Passwort";
@@ -173,11 +175,12 @@ public class Language {
 			TablePopupMenuItemCopy = "Kopieren";
 			WindowAboutAuthor = "Entwickler";
 			WindowAboutHomepage = "Webseite";
-			WindowAboutTitle = "Über";
+			WindowAboutTitle = "Ãœber";
 			WindowAboutOKButton = "Ja, amen!";
 			WindowNewsHomepage = "Webseite";
 			WindowNewsTitle = "Neues";
 			WindowNewsButtonPointless = "Sinnloser Knopf";
+			WindowToolsMultiHashResult = "Ergebnis";
 			break;
 		default:
 			break;
@@ -212,6 +215,10 @@ public class Language {
 	 * Text from the ExportButton
 	 */
 	public String ButtonExport;
+	/**
+	 * Text from the context menu button export as CSV (UTF-8)
+	 */
+	public String ButtonExportPopupMenuItemAsCsv;
 	/**
 	 * Text from the context menu button export as Text (UTF-8)
 	 */
@@ -256,6 +263,14 @@ public class Language {
 	 * Text from the Hint of the SelectAllButton
 	 */
 	public String ButtonSelectAll;
+	/**
+	 * Text from the Calculate button at the Multi Hash Window
+	 */
+	public String ButtonWindowToolsMultiHashCalculate;
+	/**
+	 * Text from the Clear button at the Multi Hash Window
+	 */
+	public String ButtonWindowToolsMultiHashClear;
 	/**
 	 * Text from the Hint of the LowercaseCheckBox
 	 */
@@ -348,6 +363,14 @@ public class Language {
 	 * Text from the Menu Bar View Window Style
 	 */
 	public String MenuBarViewWindowStyle;
+	/**
+	 * Text from the Menu Bar View Tools
+	 */
+	public String MenuBarTools;
+	/**
+	 * Text from the Menu Bar View Tools Multihash
+	 */
+	public String MenuBarToolsMultiHash;
 	/**
 	 * Text from the MessageDialog can not connect to server
 	 */
@@ -465,5 +488,9 @@ public class Language {
 	 * Text from the Pointless button at the News Window
 	 */
 	public String WindowNewsButtonPointless;
+	/**
+	 * Text from the Result text field at the Multi Hash Window
+	 */
+	public String WindowToolsMultiHashResult;
 
 }

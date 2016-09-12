@@ -36,7 +36,7 @@ import passwordGenerator.Main;
  * <p/>
  * 
  * @author Kevin Weis
- * @version 2012-11-20
+ * @version 2013-10-08
  */
 public class JFrameChangeLog extends JFrame {
 	private static final long serialVersionUID = 8038568184370743981L;
@@ -46,12 +46,10 @@ public class JFrameChangeLog extends JFrame {
 	 */
 	public JFrameChangeLog() {
 		currentLanguage = Main.currentLanguage;
-		setIconImage(Toolkit.getDefaultToolkit().getImage(
-				JFrameChangeLog.class.getResource("res/Password.png")));
+		setIconImage(Toolkit.getDefaultToolkit().getImage(JFrameChangeLog.class.getResource("res/Password.png")));
 		setTitle(Main.titlePrefix + "Change Log");
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-		setBounds(
-				100, 100, 600, 534);
+		setBounds(100, 100, 600, 534);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
@@ -60,14 +58,14 @@ public class JFrameChangeLog extends JFrame {
 		lblNews.setFont(new Font("Dialog", Font.BOLD, 24));
 		lblNews.setHorizontalAlignment(SwingConstants.CENTER);
 
-		JLabel lblHomepage = new JLabel("<HTML>" + currentLanguage.WindowAboutHomepage + ":    <FONT color=\"#000099\"><U>http://sourceforge.net/p/java-pwgen/</U></FONT></HTML>");
+		JLabel lblHomepage = new JLabel("<HTML>" + currentLanguage.WindowAboutHomepage
+				+ ":    <FONT color=\"#000099\"><U>http://sourceforge.net/p/java-pwgen/</U></FONT></HTML>");
 		lblHomepage.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent evt) {
 				if (Desktop.isDesktopSupported()) {
 					try {
-						Desktop.getDesktop().browse(
-								new URI("http://sourceforge.net/projects/java-pwgen/"));
+						Desktop.getDesktop().browse(new URI("http://sourceforge.net/projects/java-pwgen/"));
 					} catch (Exception ex) {
 						ex.printStackTrace();
 					}
@@ -104,37 +102,38 @@ public class JFrameChangeLog extends JFrame {
 		this.jProgressBar.setName("jProgressBar");
 		this.jProgressBar.setVisible(false);
 		GroupLayout gl_contentPane = new GroupLayout(contentPane);
-		gl_contentPane.setHorizontalGroup(gl_contentPane.createParallelGroup(
-				Alignment.LEADING).addComponent(
-				lblNews, GroupLayout.DEFAULT_SIZE, 678, Short.MAX_VALUE).addComponent(
-				lblHomepage, GroupLayout.DEFAULT_SIZE, 678, Short.MAX_VALUE).addGroup(
-				gl_contentPane.createSequentialGroup().addComponent(
-						btnOk, GroupLayout.PREFERRED_SIZE, 88, GroupLayout.PREFERRED_SIZE).addPreferredGap(
-						ComponentPlacement.RELATED).addComponent(
-						this.buttonReload, GroupLayout.PREFERRED_SIZE, 33, GroupLayout.PREFERRED_SIZE).addGap(
-						47).addComponent(
-						this.jLabelStatus, GroupLayout.PREFERRED_SIZE, 176, GroupLayout.PREFERRED_SIZE).addGap(
-						18).addComponent(
-						this.jProgressBar, GroupLayout.DEFAULT_SIZE, 310, Short.MAX_VALUE).addGap(
-						0)).addComponent(
-				scrollPane, GroupLayout.DEFAULT_SIZE, 678, Short.MAX_VALUE));
-		gl_contentPane.setVerticalGroup(gl_contentPane.createParallelGroup(
-				Alignment.LEADING).addGroup(
-				gl_contentPane.createSequentialGroup().addComponent(
-						lblNews, GroupLayout.PREFERRED_SIZE, 30, GroupLayout.PREFERRED_SIZE).addPreferredGap(
-						ComponentPlacement.RELATED).addComponent(
-						lblHomepage, GroupLayout.PREFERRED_SIZE, 23, GroupLayout.PREFERRED_SIZE).addPreferredGap(
-						ComponentPlacement.RELATED).addComponent(
-						scrollPane, GroupLayout.DEFAULT_SIZE, 412, Short.MAX_VALUE).addPreferredGap(
-						ComponentPlacement.RELATED).addGroup(
-						gl_contentPane.createParallelGroup(
-								Alignment.LEADING, false).addComponent(
-								this.jProgressBar, GroupLayout.PREFERRED_SIZE, 23, GroupLayout.PREFERRED_SIZE).addGroup(
-								gl_contentPane.createParallelGroup(
-										Alignment.BASELINE, false).addComponent(
-										btnOk).addComponent(
-										this.jLabelStatus).addComponent(
-										this.buttonReload, GroupLayout.PREFERRED_SIZE, 23, GroupLayout.PREFERRED_SIZE)))));
+		gl_contentPane.setHorizontalGroup(gl_contentPane
+				.createParallelGroup(Alignment.LEADING)
+				.addComponent(lblNews, GroupLayout.DEFAULT_SIZE, 678, Short.MAX_VALUE)
+				.addComponent(lblHomepage, GroupLayout.DEFAULT_SIZE, 678, Short.MAX_VALUE)
+				.addGroup(
+						gl_contentPane.createSequentialGroup().addComponent(btnOk, GroupLayout.PREFERRED_SIZE, 88, GroupLayout.PREFERRED_SIZE)
+								.addPreferredGap(ComponentPlacement.RELATED)
+								.addComponent(this.buttonReload, GroupLayout.PREFERRED_SIZE, 33, GroupLayout.PREFERRED_SIZE).addGap(47)
+								.addComponent(this.jLabelStatus, GroupLayout.PREFERRED_SIZE, 176, GroupLayout.PREFERRED_SIZE).addGap(18)
+								.addComponent(this.jProgressBar, GroupLayout.DEFAULT_SIZE, 310, Short.MAX_VALUE).addGap(0))
+				.addComponent(scrollPane, GroupLayout.DEFAULT_SIZE, 678, Short.MAX_VALUE));
+		gl_contentPane.setVerticalGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
+				.addGroup(
+						gl_contentPane
+								.createSequentialGroup()
+								.addComponent(lblNews, GroupLayout.PREFERRED_SIZE, 30, GroupLayout.PREFERRED_SIZE)
+								.addPreferredGap(ComponentPlacement.RELATED)
+								.addComponent(lblHomepage, GroupLayout.PREFERRED_SIZE, 23, GroupLayout.PREFERRED_SIZE)
+								.addPreferredGap(ComponentPlacement.RELATED)
+								.addComponent(scrollPane, GroupLayout.DEFAULT_SIZE, 412, Short.MAX_VALUE)
+								.addPreferredGap(ComponentPlacement.RELATED)
+								.addGroup(
+										gl_contentPane
+												.createParallelGroup(Alignment.LEADING, false)
+												.addComponent(this.jProgressBar, GroupLayout.PREFERRED_SIZE, 23, GroupLayout.PREFERRED_SIZE)
+												.addGroup(
+														gl_contentPane
+																.createParallelGroup(Alignment.BASELINE, false)
+																.addComponent(btnOk)
+																.addComponent(this.jLabelStatus)
+																.addComponent(this.buttonReload, GroupLayout.PREFERRED_SIZE, 23,
+																		GroupLayout.PREFERRED_SIZE)))));
 
 		textArea = new JTextArea();
 		scrollPane.setViewportView(textArea);
@@ -143,15 +142,15 @@ public class JFrameChangeLog extends JFrame {
 		contentPane.setLayout(gl_contentPane);
 		java.awt.Dimension screenSize = java.awt.Toolkit.getDefaultToolkit().getScreenSize();
 		java.awt.Dimension DefaultDimension = new java.awt.Dimension(700, 550);
-		setBounds(
-				(screenSize.width - DefaultDimension.width) / 2, (screenSize.height - DefaultDimension.height) / 2, DefaultDimension.width, DefaultDimension.height);
+		setBounds((screenSize.width - DefaultDimension.width) / 2, (screenSize.height - DefaultDimension.height) / 2, DefaultDimension.width,
+				DefaultDimension.height);
 		setMinimumSize(new java.awt.Dimension(250, 100));
 		setPreferredSize(DefaultDimension);
 		try {
 			urlChangeLog = new URL("https://dl.dropbox.com/u/27159788/PasswordGenerator/change.log");
 		} catch (Exception ex) {
-			JOptionPane.showMessageDialog(
-					JFramePasswordGenerator.getPasswordGui(), currentLanguage.MessageCantConnectToServer, ex.getClass().getSimpleName(), 0);
+			JOptionPane.showMessageDialog(JFramePasswordGenerator.getPasswordGui(), currentLanguage.MessageCantConnectToServer, ex.getClass()
+					.getSimpleName(), 0);
 			ex.printStackTrace();
 		}
 		workerLoad = new WorkerDownload();
@@ -187,15 +186,11 @@ public class JFrameChangeLog extends JFrame {
 			Thread.sleep(500);
 		} catch (Exception ex) {
 			jLabelStatus.setText(ex.getClass().getSimpleName());
-			JOptionPane.showMessageDialog(
-					JFramePasswordGenerator.getPasswordGui(), currentLanguage.MessageCantConnectToServer, ex.getClass().getSimpleName(), JOptionPane.ERROR_MESSAGE);
+			JOptionPane.showMessageDialog(JFramePasswordGenerator.getPasswordGui(), currentLanguage.MessageCantConnectToServer, ex.getClass()
+					.getSimpleName(), JOptionPane.ERROR_MESSAGE);
 			jLabelStatus.setText("Finnished");
 		}
-		// workerFader = new Fader(this.jProgressBar);
-		// workerFader.execute();
-		// while (!workerFader.isDone()) {
 		try {
-			// Thread.sleep(50);
 			Thread.sleep(1500L);
 		} catch (InterruptedException e) {
 		}
@@ -203,7 +198,6 @@ public class JFrameChangeLog extends JFrame {
 
 		jProgressBar.setVisible(false);
 		try {
-			// Thread.sleep(50);
 			Thread.sleep(1000L);
 		} catch (InterruptedException e) {
 		}
@@ -218,7 +212,6 @@ public class JFrameChangeLog extends JFrame {
 		return frame;
 	}
 
-	// private Fader workerFader;
 	private static JFrame frame;
 	private Language currentLanguage;
 	private JTextArea textArea;
@@ -237,30 +230,4 @@ public class JFrameChangeLog extends JFrame {
 			return null;
 		}
 	}
-
-	// private class Fader extends SwingWorker<Void, Void> {
-	// private Color c;
-	//
-	// Fader(JProgressBar progrssbar) {
-	// c = jProgressBar.getBackground();
-	// }
-	//
-	// @Override
-	// protected Void doInBackground() throws Exception {
-	// int alpha = jProgressBar.getGraphics().getColor().getAlpha() - 5;
-	// while (alpha > 0) {
-	// alpha -= 5;
-	// jProgressBar.getGraphics().setColor(
-	// new Color(c.getRed(), c.getGreen(), c.getBlue(), alpha));
-	// jProgressBar.repaint();
-	// try {
-	// Thread.sleep(25);
-	// } catch (InterruptedException ex) {
-	// // Logger.getLogger(Fader.class.getName()).log(Level.SEVERE, null, ex);
-	// }
-	// }
-	// notifyAll();
-	// return null;
-	// }
-	// }
 }

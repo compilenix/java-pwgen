@@ -19,6 +19,7 @@ import java.io.InputStreamReader;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.UnknownHostException;
+import java.text.DecimalFormat;
 import java.util.Properties;
 
 import javax.swing.GroupLayout;
@@ -47,10 +48,9 @@ import passwordGenerator.Password;
  * <p/>
  * 
  * @author Kevin Weis
- * @version 04.02.2013
+ * @version 2013-10-08
  */
 public class JFramePasswordGenerator extends JFrame {
-	private static final long serialVersionUID = -5730437296736291058L;
 
 	/**
 	 * Constructor: It will create the Frame and set all to default.
@@ -394,7 +394,7 @@ public class JFramePasswordGenerator extends JFrame {
 		jMenuFileMenuItemExport = new JMenuItem(currentLanguage.MenuBarFileExport);
 		jMenuFileMenuItemExport.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent evt) {
-				worker = new workerExport();
+				worker = new workerExportTxt();
 				worker.execute();
 			}
 		});
@@ -506,6 +506,19 @@ public class JFramePasswordGenerator extends JFrame {
 				new JFrameChangeLog().setVisible(true);
 			}
 		});
+
+		this.jMenuTools = new JMenu();
+		this.jMenuTools.setText(currentLanguage.MenuBarTools);
+		this.jMenuBar.add(this.jMenuTools);
+
+		this.jMenuToolsMultiHash = new JMenuItem();
+		this.jMenuToolsMultiHash.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				new JFrameMultiHash().setVisible(true);
+			}
+		});
+		this.jMenuToolsMultiHash.setText(currentLanguage.MenuBarToolsMultiHash);
+		this.jMenuTools.add(this.jMenuToolsMultiHash);
 		this.mntmChangeLog.setName("mntmChangeLog");
 		this.jMenuHelp.add(this.mntmChangeLog);
 		jMenuHelp.add(mntmNews);
@@ -664,11 +677,20 @@ public class JFramePasswordGenerator extends JFrame {
 		jButtonExportPopupMenuItemAsText = new JMenuItem(currentLanguage.ButtonExportPopupMenuItemAsText);
 		jButtonExportPopupMenuItemAsText.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent evt) {
-				worker = new workerExport();
+				worker = new workerExportTxt();
 				worker.execute();
 			}
 		});
 		popupMenuExport.add(jButtonExportPopupMenuItemAsText);
+
+		this.jButtonExportPopupMenuItemAsCsv = new JMenuItem(currentLanguage.ButtonExportPopupMenuItemAsCsv);
+		this.jButtonExportPopupMenuItemAsCsv.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				worker = new workerExportCsv();
+				worker.execute();
+			}
+		});
+		this.popupMenuExport.add(this.jButtonExportPopupMenuItemAsCsv);
 		popupMenujTable = new JPopupMenu();
 		addPopup(jTable, popupMenujTable);
 
@@ -676,6 +698,7 @@ public class JFramePasswordGenerator extends JFrame {
 		jTablePopupMenuItemCopy = new JMenuItem(currentLanguage.TablePopupMenuItemCopy);
 		jTablePopupMenuItemCopy.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent evt) {
+				@SuppressWarnings("unused")
 				String line = "";
 				String content = "";
 				int[] selected = jTable.getSelectedRows();
@@ -699,7 +722,7 @@ public class JFramePasswordGenerator extends JFrame {
 					if (!tableModel.getValueAt(selected[i], 6).toString().isEmpty()) {
 						line += "	" + "MD5:" + "	" + tableModel.getValueAt(selected[i], 6).toString();
 					}
-					//content += line + "\n";
+					// content += line + "\n";
 				}
 				Toolkit.getDefaultToolkit().getSystemClipboard().setContents(new StringSelection(content.toString()), null);
 			}
@@ -1005,7 +1028,7 @@ public class JFramePasswordGenerator extends JFrame {
 	}
 
 	private void refreshPWCountLabel() {
-		jLabelPWCount.setText(Integer.toString(Password.getCount()));
+		jLabelPWCount.setText(new DecimalFormat("###" + Main.DecimalSeparator + "###").format(Password.getCount()));
 	}
 
 	/**
@@ -1226,6 +1249,9 @@ public class JFramePasswordGenerator extends JFrame {
 	private JMenu jMenuWindowStyle;
 	private JMenuItem mntmCommandline;
 	private JMenuItem mntmChangeLog;
+	private JMenuItem jButtonExportPopupMenuItemAsCsv;
+	private JMenu jMenuTools;
+	private JMenuItem jMenuToolsMultiHash;
 
 	// End of variables declaration
 
@@ -1242,12 +1268,6 @@ public class JFramePasswordGenerator extends JFrame {
 				jButtonSelect.setVisible(false);
 				jMenuFile.setVisible(false);
 				jMenuView.setVisible(false);
-				// Vector<Password> pws = Password.getAllPasswords();
-				// for (int i = 1; !pws.isEmpty(); i++) {
-				// tableModel.removeRow(0);
-				// Password.remove(i);
-				// refreshPWCountLabel();
-				// }
 				for (int i = 0; i < count; i++) {
 					tableModel.removeRow(0);
 					Password.setCount(Password.getCount() - 1);
@@ -1270,7 +1290,113 @@ public class JFramePasswordGenerator extends JFrame {
 		}
 	}
 
-	private class workerExport extends SwingWorker<Void, Void> {
+	private class workerExportCsv extends SwingWorker<Void, Void> {
+		int count = 0;
+		File file;
+
+		@Override
+		public Void doInBackground() {
+			fc = new JFileChooser();
+			fc.setDragEnabled(true);
+			fc.setFileFilter(new FileNameExtensionFilter("CSV (.csv)", "csv"));
+			fc.setSelectedFile(new File("passwords"));
+			count = Password.getCount();
+			if (count != 0) {
+				if (count > 5000) {
+					jLabelPleaseWait.setVisible(true);
+					jButtonExport.setVisible(false);
+					jButtonImport.setVisible(false);
+					jButtonDelete.setVisible(false);
+					jButtonSelect.setVisible(false);
+					jProgressBar.setVisible(true);
+					jProgressBar.setValue(0);
+					jProgressBar.setMinimum(0);
+					jProgressBar.setMaximum(count);
+					jMenuFile.setVisible(false);
+					jMenuView.setVisible(false);
+				}
+				int showSaveDialog = fc.showSaveDialog(rootPane);
+				if (showSaveDialog == JFileChooser.APPROVE_OPTION) {
+					file = fc.getSelectedFile();
+					if (!file.getPath().toLowerCase().endsWith(".csv")) {
+						file = new File(file.getPath() + ".csv");
+					}
+					if (file != null) {
+						if (file.exists()) {
+							int showConfirmDialog = JOptionPane.showConfirmDialog(getPasswordGui(), currentLanguage.MessageFileExists,
+									currentLanguage.MessageFileExistsTitle, JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE);
+							if (showConfirmDialog == JOptionPane.YES_OPTION) {
+								file.delete();
+								export();
+							} else if (showConfirmDialog == JOptionPane.NO_OPTION) {
+								lineWrite("");
+								write(file);
+								export();
+							}
+						} else {
+							export();
+						}
+					}
+				}
+			}
+
+			jLabelPleaseWait.setVisible(false);
+			jProgressBar.setVisible(false);
+			jButtonExport.setVisible(true);
+			jButtonDelete.setVisible(true);
+			jButtonSelect.setVisible(true);
+			jMenuFile.setVisible(true);
+			jMenuView.setVisible(true);
+			return null;
+		}
+
+		private void export() {
+			String line;
+
+			line = "Password,SHA1,SHA-256,SHA-384,SHA-512,MD2,MD5";
+			lineWrite(line);
+			line = "";
+			for (int i = 0; i < count; i++) {
+				line = tableModel.getValueAt(i, 0).toString();
+				if (!tableModel.getValueAt(i, 1).toString().isEmpty()) {
+					line += "," + tableModel.getValueAt(i, 1).toString();
+				} else {
+					line += ",";
+				}
+				if (!tableModel.getValueAt(i, 2).toString().isEmpty()) {
+					line += "," + tableModel.getValueAt(i, 2).toString();
+				} else {
+					line += ",";
+				}
+				if (!tableModel.getValueAt(i, 3).toString().isEmpty()) {
+					line += "," + tableModel.getValueAt(i, 3).toString();
+				} else {
+					line += ",";
+				}
+				if (!tableModel.getValueAt(i, 4).toString().isEmpty()) {
+					line += "," + tableModel.getValueAt(i, 4).toString();
+				} else {
+					line += ",";
+				}
+				if (!tableModel.getValueAt(i, 5).toString().isEmpty()) {
+					line += "," + tableModel.getValueAt(i, 5).toString();
+				} else {
+					line += ",";
+				}
+				if (!tableModel.getValueAt(i, 6).toString().isEmpty()) {
+					line += "," + tableModel.getValueAt(i, 6).toString();
+				} else {
+					line += ",";
+				}
+				lineWrite(line);
+				jProgressBar.setValue(jProgressBar.getValue() + 1);
+			}
+			write(file);
+			dialogWritten(file);
+		}
+	}
+
+	private class workerExportTxt extends SwingWorker<Void, Void> {
 		int count = 0;
 		File file;
 
@@ -1413,11 +1539,6 @@ public class JFramePasswordGenerator extends JFrame {
 					jButtonDelete.setVisible(false);
 					jMenuFile.setVisible(false);
 					jMenuView.setVisible(false);
-					// for (int i = 0; i < rows.length; i++) {
-					// Password.remove(tableModel.getValueAt(rows[0], 0).toString());
-					// tableModel.removeRow(rows[0]);
-					// refreshPWCountLabel();
-					// }
 					for (int i = 0; i < rows.length; i++) {
 						tableModel.removeRow(rows[0]);
 						Password.setCount(Password.getCount() - 1);
