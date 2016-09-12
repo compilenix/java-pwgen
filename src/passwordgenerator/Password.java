@@ -4,6 +4,8 @@ import java.math.BigInteger;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Random;
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 
 /**
  * A object instance of this class "Password" has: - a Password (as String) - a
@@ -15,9 +17,11 @@ import java.util.Random;
  */
 public class Password {
 
+    private static int pwcount;
     private String md5;
     private String password;
     private char[] array;
+    
 
     /**
      * Constructor 1: Set a known password and a MD5 of it will be generated.
@@ -27,6 +31,7 @@ public class Password {
     public Password(String password) {
         this.password = password;
         this.md5 = makeMD5(password);
+        pwcount++;
     }
 
     /**
@@ -41,6 +46,7 @@ public class Password {
         this.array = choice;
         this.password = makeRandomString(length);
         this.md5 = makeMD5(password);
+        pwcount++;
     }
 
     /**
@@ -66,7 +72,12 @@ public class Password {
     public String getPassword() {
         return this.password;
     }
-
+    static int getCount() {
+        return pwcount;
+    }
+    static void clearCount() {
+        pwcount = 0;
+    }
     /**
      * @return Returns a random generated string
      * @param length (as int) the length of the generated password.
@@ -76,7 +87,7 @@ public class Password {
         Random random = new Random();
         for (int i = 0; i < length; i++) {
             int idx = random.nextInt(array.length);
-            out = out + array[idx];
+            out += array[idx];
         }
         return out;
     }
@@ -89,9 +100,8 @@ public class Password {
         MessageDigest m = null;
         try {
             m = MessageDigest.getInstance("MD5");
-        } catch (NoSuchAlgorithmException e) {
-            System.out.println("Exeption!!!" + e);
-            System.exit(1);
+        } catch (NoSuchAlgorithmException ex) {
+            JOptionPane.showMessageDialog(new JFrame("NoSuchAlgorithmException!"), ex.getMessage());
         }
         byte[] data = clear.getBytes();
         m.update(data, 0, data.length);
