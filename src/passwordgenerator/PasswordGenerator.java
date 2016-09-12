@@ -8,56 +8,19 @@ import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.SwingWorker;
 import javax.swing.table.DefaultTableModel;
+import static passwordgenerator.FileIO.*;
 
 /**
  * Here are the main logic operations... and the GUI.<br/>
  * <p/>
  * @author Kevin Weis
- * @version 2.4
+ * @version 2.4.1
  */
 public class PasswordGenerator extends JFrame {
-
     /**
      * Constructor: It will create the Frame and set all to default.
      */
     public PasswordGenerator() {
-        initComponents();// generiert das gesammte layout des fensters und die erforderlichen objekte wie buttons etc.
-        setIconImage(Toolkit.getDefaultToolkit().getImage(url));
-        java.awt.Dimension DefaultDimension = new java.awt.Dimension(550, 550);// original 330 zu 550
-        java.awt.Dimension screenSize = java.awt.Toolkit.getDefaultToolkit().getScreenSize();
-        setBounds((screenSize.width - DefaultDimension.width) / 2,
-                (screenSize.height - DefaultDimension.height) / 2,
-                DefaultDimension.width, DefaultDimension.height);
-        setSize(DefaultDimension.width, DefaultDimension.height);
-        jTable.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
-        jTextFieldEnterPW.setEnabled(false);
-        jLabelSliderInt.setText("12");
-        jProgressBar.setVisible(false);
-        jButtonImport.setVisible(false);
-        jComboBoxAlg.setEnabled(false);
-        jLabelPleaseWait.setVisible(false);
-        jSpinnerCountOf.setValue(1);
-        jButtonGenerate.requestFocus();
-    }
-
-    /**
-     * @return the PasswordGui.
-     */
-    public static PasswordGenerator getPasswordGui() {
-        return PasswordGui;
-    }
-
-    /**
-     * @param aPasswordGui the PasswordGui to set.
-     */
-    public static void setPasswordGui(PasswordGenerator aPasswordGui) {
-        PasswordGui = aPasswordGui;
-    }
-
-    @SuppressWarnings("unchecked")
-    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
-    private void initComponents() {
-
         buttonGroup1 = new javax.swing.ButtonGroup();
         jRadioButtonGenPW = new javax.swing.JRadioButton();
         jRadioButtonGenOwnPW = new javax.swing.JRadioButton();
@@ -86,10 +49,10 @@ public class PasswordGenerator extends JFrame {
         jButtonSelect = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setTitle("Password Generator V2.4"); // NOI18N
+        setTitle("Password Generator V2.4.1"); // NOI18N
         setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
         setMaximumSize(new java.awt.Dimension(1920, 1080));
-        setMinimumSize(new java.awt.Dimension(463, 500));
+        setMinimumSize(new java.awt.Dimension(465, 500));
         setPreferredSize(new java.awt.Dimension(330, 500));
 
         buttonGroup1.add(jRadioButtonGenPW);
@@ -97,75 +60,116 @@ public class PasswordGenerator extends JFrame {
         jRadioButtonGenPW.setText("Gen. Password");
         jRadioButtonGenPW.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
         jRadioButtonGenPW.addMouseListener(new java.awt.event.MouseAdapter() {
+            @Override
             public void mouseEntered(java.awt.event.MouseEvent evt) {
-                jRadioButtonGenPWMouseEntered(evt);
+                jLabelHint.setText("Generate a random password");
             }
+
+            @Override
             public void mouseExited(java.awt.event.MouseEvent evt) {
-                jRadioButtonGenPWMouseExited(evt);
+                clearLableHint();
             }
         });
         jRadioButtonGenPW.addActionListener(new java.awt.event.ActionListener() {
+            @Override
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jRadioButtonGenPWActionPerformed(evt);
+                if (jRadioButtonGenPW.isEnabled()) {
+                    jTextFieldEnterPW.setEnabled(false);
+                    jCheckBoxNum.setEnabled(true);
+                    jCheckBoxaz.setEnabled(true);
+                    jCheckBoxAZ.setEnabled(true);
+                    jCheckBoxSpezial.setEnabled(true);
+                    jSliderPasswordLength.setEnabled(true);
+                    jLabelSliderInt.setEnabled(true);
+                    jSpinnerCountOf.setEnabled(true);
+                }
             }
         });
 
         buttonGroup1.add(jRadioButtonGenOwnPW);
         jRadioButtonGenOwnPW.addMouseListener(new java.awt.event.MouseAdapter() {
+            @Override
             public void mouseEntered(java.awt.event.MouseEvent evt) {
-                jRadioButtonGenOwnPWMouseEntered(evt);
+                jLabelHint.setText("Add the password to the list and optional a hash of it");
             }
+
+            @Override
             public void mouseExited(java.awt.event.MouseEvent evt) {
-                jRadioButtonGenOwnPWMouseExited(evt);
+                clearLableHint();
             }
         });
         jRadioButtonGenOwnPW.addActionListener(new java.awt.event.ActionListener() {
+            @Override
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jRadioButtonGenOwnPWActionPerformed(evt);
+                if (jRadioButtonGenOwnPW.isEnabled()) {
+                    jTextFieldEnterPW.setEnabled(true);
+                    jCheckBoxNum.setEnabled(false);
+                    jCheckBoxaz.setEnabled(false);
+                    jCheckBoxAZ.setEnabled(false);
+                    jCheckBoxSpezial.setEnabled(false);
+                    jSliderPasswordLength.setEnabled(false);
+                    jLabelSliderInt.setEnabled(false);
+                    jSpinnerCountOf.setEnabled(false);
+                }
             }
         });
 
         jTextFieldEnterPW.addMouseListener(new java.awt.event.MouseAdapter() {
+            @Override
             public void mouseEntered(java.awt.event.MouseEvent evt) {
-                jTextFieldEnterPWMouseEntered(evt);
+                jLabelHint.setText("Type here the password");
             }
+
+            @Override
             public void mouseExited(java.awt.event.MouseEvent evt) {
-                jTextFieldEnterPWMouseExited(evt);
+                clearLableHint();
             }
         });
         jTextFieldEnterPW.addActionListener(new java.awt.event.ActionListener() {
+            @Override
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextFieldEnterPWActionPerformed(evt);
+                worker = new workerGenerate();
+                worker.execute();
             }
         });
 
         jButtonGenerate.setText("Generate");
         jButtonGenerate.addMouseListener(new java.awt.event.MouseAdapter() {
+            @Override
             public void mouseEntered(java.awt.event.MouseEvent evt) {
-                jButtonGenerateMouseEntered(evt);
+                jLabelHint.setText("Generate !!!");
             }
+
+            @Override
             public void mouseExited(java.awt.event.MouseEvent evt) {
-                jButtonGenerateMouseExited(evt);
+                jLabelHint.setText(" ");
             }
         });
         jButtonGenerate.addActionListener(new java.awt.event.ActionListener() {
+            @Override
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButtonGenerateActionPerformed(evt);
+                worker = new workerGenerate();
+                worker.execute();
             }
         });
 
         jButtonClear.setText("Clear");
         jButtonClear.addMouseListener(new java.awt.event.MouseAdapter() {
+            @Override
             public void mouseEntered(java.awt.event.MouseEvent evt) {
-                jButtonClearMouseEntered(evt);
+                jLabelHint.setText("Will reset the whole ouput list !");
             }
+
+            @Override
             public void mouseExited(java.awt.event.MouseEvent evt) {
-                jButtonClearMouseExited(evt);
+                clearLableHint();
             }
         });
         jButtonClear.addActionListener(new java.awt.event.ActionListener() {
+            @Override
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButtonClearActionPerformed(evt);
+                worker = new workerClear();
+                worker.execute();
             }
         });
 
@@ -178,65 +182,81 @@ public class PasswordGenerator extends JFrame {
         jSliderPasswordLength.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
         jSliderPasswordLength.setValueIsAdjusting(true);
         jSliderPasswordLength.addMouseListener(new java.awt.event.MouseAdapter() {
+            @Override
             public void mouseEntered(java.awt.event.MouseEvent evt) {
-                jSliderPasswordLengthMouseEntered(evt);
+                jLabelHint.setText("set length of generated password");
             }
+
+            @Override
             public void mouseExited(java.awt.event.MouseEvent evt) {
-                jSliderPasswordLengthMouseExited(evt);
+                clearLableHint();
             }
         });
         jSliderPasswordLength.addChangeListener(new javax.swing.event.ChangeListener() {
+            @Override
             public void stateChanged(javax.swing.event.ChangeEvent evt) {
-                jSliderPasswordLengthStateChanged(evt);
+                jLabelSliderInt.setText(Integer.toString(jSliderPasswordLength.getValue())); //sorgt für die aktuallisierung der anzeige des aktuellen wertes der zeichenlängenfestlegung
             }
         });
 
         jCheckBoxNum.setSelected(true);
         jCheckBoxNum.setText("Numbers");
         jCheckBoxNum.addMouseListener(new java.awt.event.MouseAdapter() {
+            @Override
             public void mouseEntered(java.awt.event.MouseEvent evt) {
-                jCheckBoxNumMouseEntered(evt);
+                jLabelHint.setText("Includes numbers from 0 to 9");
             }
+
+            @Override
             public void mouseExited(java.awt.event.MouseEvent evt) {
-                jCheckBoxNumMouseExited(evt);
+                clearLableHint();
             }
         });
 
         jCheckBoxaz.setSelected(true);
         jCheckBoxaz.setText("a-z");
         jCheckBoxaz.addMouseListener(new java.awt.event.MouseAdapter() {
+            @Override
             public void mouseEntered(java.awt.event.MouseEvent evt) {
-                jCheckBoxazMouseEntered(evt);
+                jLabelHint.setText("Includes characters from a to z (lowercase)");
             }
+
+            @Override
             public void mouseExited(java.awt.event.MouseEvent evt) {
-                jCheckBoxazMouseExited(evt);
+                clearLableHint();
             }
         });
 
         jCheckBoxAZ.setSelected(true);
         jCheckBoxAZ.setText("A-Z");
         jCheckBoxAZ.addMouseListener(new java.awt.event.MouseAdapter() {
+            @Override
             public void mouseEntered(java.awt.event.MouseEvent evt) {
-                jCheckBoxAZMouseEntered(evt);
+                jLabelHint.setText("Includes characters from A to Z (uppercase)");
             }
+
+            @Override
             public void mouseExited(java.awt.event.MouseEvent evt) {
-                jCheckBoxAZMouseExited(evt);
+                clearLableHint();
             }
         });
 
         jCheckBoxSpezial.setText("Spezial");
         jCheckBoxSpezial.addMouseListener(new java.awt.event.MouseAdapter() {
+            @Override
             public void mouseEntered(java.awt.event.MouseEvent evt) {
-                jCheckBoxSpezialMouseEntered(evt);
+                jLabelHint.setText("Includes spezial characters (!\"#$%&'()*+,-./:;<=>?@)");
             }
+
+            @Override
             public void mouseExited(java.awt.event.MouseEvent evt) {
-                jCheckBoxSpezialMouseExited(evt);
+                clearLableHint();
             }
         });
 
         jLabelSliderInt.setText("0");
 
-        jLabelHint.setText(" ");
+        clearLableHint();
 
         jLabelPWCount.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         jLabelPWCount.setText("0");
@@ -245,57 +265,80 @@ public class PasswordGenerator extends JFrame {
 
         jButtonExport.setText("Export");
         jButtonExport.addMouseListener(new java.awt.event.MouseAdapter() {
+            @Override
             public void mouseEntered(java.awt.event.MouseEvent evt) {
-                jButtonExportMouseEntered(evt);
+                jLabelHint.setText("Export all elements from the list into a text file");
             }
+
+            @Override
             public void mouseExited(java.awt.event.MouseEvent evt) {
-                jButtonExportMouseExited(evt);
+                clearLableHint();
             }
         });
         jButtonExport.addActionListener(new java.awt.event.ActionListener() {
+            @Override
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButtonExportActionPerformed(evt);
+                worker = new workerExport();
+                worker.execute();
             }
         });
 
         jButtonImport.setText("Import");
         jButtonImport.addMouseListener(new java.awt.event.MouseAdapter() {
+            @Override
             public void mouseEntered(java.awt.event.MouseEvent evt) {
-                jButtonImportMouseEntered(evt);
+                jLabelHint.setText("Import all elements from a text file into the list");
             }
+
+            @Override
             public void mouseExited(java.awt.event.MouseEvent evt) {
-                jButtonImportMouseExited(evt);
+                clearLableHint();
             }
         });
         jButtonImport.addActionListener(new java.awt.event.ActionListener() {
+            @Override
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButtonImportActionPerformed(evt);
+                //TODO Import...
+                File file = dialogOpen();
+                int showConfirmDialog = JOptionPane.showConfirmDialog(null, "You want to generate a hash of what you import?", "Generate hash", 0, 3);
             }
         });
 
-        jComboBoxAlg.setModel(new javax.swing.DefaultComboBoxModel<String>(new String[] { "SHA-1", "SHA-256", "MD5"}));
+        jComboBoxAlg.setModel(new javax.swing.DefaultComboBoxModel<String>(new String[] {"SHA-1", "SHA-256", "MD5"}));
         jComboBoxAlg.setSelectedIndex(0);
         jComboBoxAlg.addMouseListener(new java.awt.event.MouseAdapter() {
+            @Override
             public void mouseEntered(java.awt.event.MouseEvent evt) {
-                jComboBoxAlgMouseEntered(evt);
+                jLabelHint.setText("Choose what algorithm you want");
             }
+
+            @Override
             public void mouseExited(java.awt.event.MouseEvent evt) {
-                jComboBoxAlgMouseExited(evt);
+                clearLableHint();
             }
         });
 
         jCheckBoxGenHash.setText("Gen. Hash");
         jCheckBoxGenHash.addMouseListener(new java.awt.event.MouseAdapter() {
+            @Override
             public void mouseEntered(java.awt.event.MouseEvent evt) {
-                jCheckBoxGenHashMouseEntered(evt);
+                jLabelHint.setText("Calculate a hash of the password");
             }
+
+            @Override
             public void mouseExited(java.awt.event.MouseEvent evt) {
-                jCheckBoxGenHashMouseExited(evt);
+                clearLableHint();
             }
         });
         jCheckBoxGenHash.addActionListener(new java.awt.event.ActionListener() {
+            @Override
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jCheckBoxGenHashActionPerformed(evt);
+                if (jCheckBoxGenHash.isSelected()) {
+                    jComboBoxAlg.setEnabled(true);
+                }
+                if (!jCheckBoxGenHash.isSelected()) {
+                    jComboBoxAlg.setEnabled(false);
+                }
             }
         });
 
@@ -306,33 +349,43 @@ public class PasswordGenerator extends JFrame {
 
         jButtonDelete.setText("Delete Selected Element");
         jButtonDelete.addActionListener(new java.awt.event.ActionListener() {
+            @Override
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButtonDeleteActionPerformed(evt);
+                class workerDelete extends SwingWorker<Void, Void> {
+                    @Override
+                    public Void doInBackground() {
+                        if (Password.getCount() >= 1) {
+
+                            int[] rows = jTable.getSelectedRows();
+                            if (!(rows.length <= 0)) {
+                                jButtonClear.setEnabled(false);
+                                jButtonGenerate.setEnabled(false);
+                                jButtonExport.setVisible(false);
+                                jButtonSelect.setVisible(false);
+                                jButtonDelete.setVisible(false);
+                                for (int i = 0; i < rows.length; i++) {
+                                    tableModel.removeRow(rows[0]);
+                                    Password.setCount(Password.getCount() - 1);
+                                    jLabelPWCountSetText();
+                                }
+                                jLabelPleaseWait.setVisible(false);
+                                jButtonExport.setVisible(true);
+                                jButtonDelete.setVisible(true);
+                                jButtonClear.setEnabled(true);
+                                jButtonGenerate.setEnabled(true);
+                                jButtonSelect.setVisible(true);
+                            }
+                        }
+                        return null;
+                    }
+                }
+                worker = new workerDelete();
+                worker.execute();
             }
         });
 
-        jTable.setModel(tableModel = new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-
-            },
-            new String [] {
-                "Password", "Hash"
-            }
-        ) {
-            Class[] types = new Class [] {
-                java.lang.String.class, java.lang.String.class
-            };
-            boolean[] canEdit = new boolean [] {
-                true, false
-            };
-
-            public Class getColumnClass(int columnIndex) {
-                return types [columnIndex];
-            }
-
-            public boolean isCellEditable(int rowIndex, int columnIndex) {
-                return canEdit [columnIndex];
-            }
+        jTable.setModel(tableModel = new javax.swing.table.DefaultTableModel(new Object[][] {},new String[] {"Password", "Hash"}) {
+            boolean canEdit = false;
         });
         jTable.setColumnSelectionAllowed(true);
         jScrollPane.setViewportView(jTable);
@@ -346,8 +399,9 @@ public class PasswordGenerator extends JFrame {
 
         jButtonSelect.setText("Select All");
         jButtonSelect.addActionListener(new java.awt.event.ActionListener() {
+            @Override
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButtonSelectActionPerformed(evt);
+                jTable.selectAll();
             }
         });
 
@@ -457,224 +511,41 @@ public class PasswordGenerator extends JFrame {
                     .addComponent(jLabelPWCount))
                 .addContainerGap())
         );
-
+        setIconImage(Toolkit.getDefaultToolkit().getImage(url));
+        java.awt.Dimension DefaultDimension = new java.awt.Dimension(550, 550);// original 330 zu 550
         java.awt.Dimension screenSize = java.awt.Toolkit.getDefaultToolkit().getScreenSize();
-        setBounds((screenSize.width-709)/2, (screenSize.height-557)/2, 709, 557);
-    }// </editor-fold>//GEN-END:initComponents
-    private void jButtonClearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonClearActionPerformed
-        worker = new workerClear();
-        worker.execute();
-    }//GEN-LAST:event_jButtonClearActionPerformed
-    private void jButtonGenerateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonGenerateActionPerformed
-        worker = new workerGenerate();
-        worker.execute();
-    }//GEN-LAST:event_jButtonGenerateActionPerformed
+        setBounds((screenSize.width - DefaultDimension.width) / 2,
+                  (screenSize.height - DefaultDimension.height) / 2,
+                  DefaultDimension.width, DefaultDimension.height);
+        setSize(DefaultDimension.width, DefaultDimension.height);
+        jTable.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
+        jTextFieldEnterPW.setEnabled(false);
+        jLabelSliderInt.setText("12");
+        jProgressBar.setVisible(false);
+        jButtonImport.setVisible(false);
+        jComboBoxAlg.setEnabled(false);
+        jLabelPleaseWait.setVisible(false);
+        jSpinnerCountOf.setValue(1);
+        jButtonGenerate.requestFocus();
+    }
 
-    private void jSliderPasswordLengthStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jSliderPasswordLengthStateChanged
-        jLabelSliderInt.setText(Integer.toString(jSliderPasswordLength.getValue())); //sorgt für die aktuallisierung der anzeige des aktuellen wertes der zeichenlängenfestlegung
-    }//GEN-LAST:event_jSliderPasswordLengthStateChanged
+    /**
+     * @return the PasswordGui.
+     */
+    public static PasswordGenerator getPasswordGui() {
+        return PasswordGui;
+    }
 
-    private void jRadioButtonGenPWMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jRadioButtonGenPWMouseEntered
-        jLabelHint.setText("Generate a random password");
-    }//GEN-LAST:event_jRadioButtonGenPWMouseEntered
+    /**
+     * @param aPasswordGui the PasswordGui to set.
+     */
+    public static void setPasswordGui(PasswordGenerator aPasswordGui) {
+        PasswordGui = aPasswordGui;
+    }
 
-    private void jRadioButtonGenPWMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jRadioButtonGenPWMouseExited
+    private void clearLableHint() {
         jLabelHint.setText(" ");
-    }//GEN-LAST:event_jRadioButtonGenPWMouseExited
-
-    private void jTextFieldEnterPWMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTextFieldEnterPWMouseEntered
-        jLabelHint.setText("Type here the password");
-    }//GEN-LAST:event_jTextFieldEnterPWMouseEntered
-
-    private void jTextFieldEnterPWMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTextFieldEnterPWMouseExited
-        jLabelHint.setText(" ");
-    }//GEN-LAST:event_jTextFieldEnterPWMouseExited
-
-    private void jButtonGenerateMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButtonGenerateMouseEntered
-        jLabelHint.setText("Generate !!!");
-    }//GEN-LAST:event_jButtonGenerateMouseEntered
-
-    private void jButtonGenerateMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButtonGenerateMouseExited
-        jLabelHint.setText(" ");
-    }//GEN-LAST:event_jButtonGenerateMouseExited
-
-    private void jButtonClearMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButtonClearMouseEntered
-        jLabelHint.setText("Will reset the whole ouput list !");
-    }//GEN-LAST:event_jButtonClearMouseEntered
-
-    private void jButtonClearMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButtonClearMouseExited
-        jLabelHint.setText(" ");
-    }//GEN-LAST:event_jButtonClearMouseExited
-
-    private void jSliderPasswordLengthMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jSliderPasswordLengthMouseEntered
-        jLabelHint.setText("set length of generated password");
-    }//GEN-LAST:event_jSliderPasswordLengthMouseEntered
-
-    private void jSliderPasswordLengthMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jSliderPasswordLengthMouseExited
-        jLabelHint.setText(" ");
-    }//GEN-LAST:event_jSliderPasswordLengthMouseExited
-
-    private void jCheckBoxNumMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jCheckBoxNumMouseEntered
-        jLabelHint.setText("Includes numbers from 0 to 9");
-    }//GEN-LAST:event_jCheckBoxNumMouseEntered
-
-    private void jCheckBoxNumMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jCheckBoxNumMouseExited
-        jLabelHint.setText(" ");
-    }//GEN-LAST:event_jCheckBoxNumMouseExited
-
-    private void jCheckBoxazMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jCheckBoxazMouseEntered
-        jLabelHint.setText("Includes characters from a to z (lowercase)");
-    }//GEN-LAST:event_jCheckBoxazMouseEntered
-
-    private void jCheckBoxazMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jCheckBoxazMouseExited
-        jLabelHint.setText(" ");
-    }//GEN-LAST:event_jCheckBoxazMouseExited
-
-    private void jCheckBoxAZMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jCheckBoxAZMouseEntered
-        jLabelHint.setText("Includes characters from A to Z (uppercase)");
-    }//GEN-LAST:event_jCheckBoxAZMouseEntered
-
-    private void jCheckBoxAZMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jCheckBoxAZMouseExited
-        jLabelHint.setText(" ");
-    }//GEN-LAST:event_jCheckBoxAZMouseExited
-
-    private void jCheckBoxSpezialMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jCheckBoxSpezialMouseEntered
-        jLabelHint.setText("Includes spezial characters (!\"#$%&'()*+,-./:;<=>?@)");
-    }//GEN-LAST:event_jCheckBoxSpezialMouseEntered
-
-    private void jCheckBoxSpezialMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jCheckBoxSpezialMouseExited
-        jLabelHint.setText(" ");
-    }//GEN-LAST:event_jCheckBoxSpezialMouseExited
-
-    private void jButtonExportActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonExportActionPerformed
-        worker = new workerExport();
-        worker.execute();
-    }//GEN-LAST:event_jButtonExportActionPerformed
-
-    @SuppressWarnings("unchecked")
-    private void jButtonImportActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonImportActionPerformed
-        //TODO Import...
-        File file = FileIO.dialogOpen();
-        int showConfirmDialog = JOptionPane.showConfirmDialog(null, "You want to generate a hash of what you import?", "Generate hash", 0, 3);
-    }//GEN-LAST:event_jButtonImportActionPerformed
-
-    private void jTextFieldEnterPWActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextFieldEnterPWActionPerformed
-        worker = new workerGenerate();
-        worker.execute();
-    }//GEN-LAST:event_jTextFieldEnterPWActionPerformed
-
-    private void jButtonExportMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButtonExportMouseEntered
-        jLabelHint.setText("Export all elements from the list into a text file");
-    }//GEN-LAST:event_jButtonExportMouseEntered
-
-    private void jButtonExportMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButtonExportMouseExited
-        jLabelHint.setText(" ");
-    }//GEN-LAST:event_jButtonExportMouseExited
-
-    private void jButtonImportMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButtonImportMouseEntered
-        jLabelHint.setText("Import all elements from a text file into the list");
-    }//GEN-LAST:event_jButtonImportMouseEntered
-
-    private void jButtonImportMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButtonImportMouseExited
-        jLabelHint.setText(" ");
-    }//GEN-LAST:event_jButtonImportMouseExited
-
-    private void jRadioButtonGenPWActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButtonGenPWActionPerformed
-        if (jRadioButtonGenPW.isEnabled()) {
-            jTextFieldEnterPW.setEnabled(false);
-            jCheckBoxNum.setEnabled(true);
-            jCheckBoxaz.setEnabled(true);
-            jCheckBoxAZ.setEnabled(true);
-            jCheckBoxSpezial.setEnabled(true);
-            jSliderPasswordLength.setEnabled(true);
-            jLabelSliderInt.setEnabled(true);
-            jSpinnerCountOf.setEnabled(true);
-        }
-    }//GEN-LAST:event_jRadioButtonGenPWActionPerformed
-
-    private void jRadioButtonGenOwnPWActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButtonGenOwnPWActionPerformed
-        if (jRadioButtonGenOwnPW.isEnabled()) {
-            jTextFieldEnterPW.setEnabled(true);
-            jCheckBoxNum.setEnabled(false);
-            jCheckBoxaz.setEnabled(false);
-            jCheckBoxAZ.setEnabled(false);
-            jCheckBoxSpezial.setEnabled(false);
-            jSliderPasswordLength.setEnabled(false);
-            jLabelSliderInt.setEnabled(false);
-            jSpinnerCountOf.setEnabled(false);
-        }
-    }//GEN-LAST:event_jRadioButtonGenOwnPWActionPerformed
-
-    private void jRadioButtonGenOwnPWMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jRadioButtonGenOwnPWMouseEntered
-        jLabelHint.setText("Add the password to the list and optional a hash of it");
-    }//GEN-LAST:event_jRadioButtonGenOwnPWMouseEntered
-
-    private void jRadioButtonGenOwnPWMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jRadioButtonGenOwnPWMouseExited
-        jLabelHint.setText(" ");
-    }//GEN-LAST:event_jRadioButtonGenOwnPWMouseExited
-
-    private void jCheckBoxGenHashActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBoxGenHashActionPerformed
-        if (jCheckBoxGenHash.isSelected()) {
-            jComboBoxAlg.setEnabled(true);
-        }
-        if (!jCheckBoxGenHash.isSelected()) {
-            jComboBoxAlg.setEnabled(false);
-        }
-    }//GEN-LAST:event_jCheckBoxGenHashActionPerformed
-
-    private void jCheckBoxGenHashMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jCheckBoxGenHashMouseEntered
-        jLabelHint.setText("Calculate a hash of the password");
-    }//GEN-LAST:event_jCheckBoxGenHashMouseEntered
-
-    private void jCheckBoxGenHashMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jCheckBoxGenHashMouseExited
-        jLabelHint.setText(" ");
-    }//GEN-LAST:event_jCheckBoxGenHashMouseExited
-
-    private void jComboBoxAlgMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jComboBoxAlgMouseEntered
-        jLabelHint.setText("Choose what algorithm you want");
-    }//GEN-LAST:event_jComboBoxAlgMouseEntered
-
-    private void jComboBoxAlgMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jComboBoxAlgMouseExited
-        jLabelHint.setText(" ");
-    }//GEN-LAST:event_jComboBoxAlgMouseExited
-
-    private void jButtonDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonDeleteActionPerformed
-        class workerDelete extends SwingWorker<Void, Void> {
-
-            @Override
-            public Void doInBackground() {
-                if (Password.getCount() >= 1) {
-
-                    int[] rows = jTable.getSelectedRows();
-                    if (!(rows.length <= 0)) {
-                        jButtonClear.setEnabled(false);
-                        jButtonGenerate.setEnabled(false);
-                        jButtonExport.setVisible(false);
-                        jButtonSelect.setVisible(false);
-                        jButtonDelete.setVisible(false);
-                        for (int i = 0; i < rows.length; i++) {
-                            tableModel.removeRow(rows[0]);
-                            Password.setCount(Password.getCount() - 1);
-                            jLabelPWCountSetText();
-                        }
-                        jLabelPleaseWait.setVisible(false);
-                        jButtonExport.setVisible(true);
-                        jButtonDelete.setVisible(true);
-                        jButtonClear.setEnabled(true);
-                        jButtonGenerate.setEnabled(true);
-                        jButtonSelect.setVisible(true);
-                    }
-                }
-                return null;
-            }
-        }
-        worker = new workerDelete();
-        worker.execute();
-    }//GEN-LAST:event_jButtonDeleteActionPerformed
-
-    private void jButtonSelectActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonSelectActionPerformed
-        jTable.selectAll();
-    }//GEN-LAST:event_jButtonSelectActionPerformed
+    }
 
     private void jLabelPWCountSetText() {
         jLabelPWCount.setText(Integer.toString(Password.getCount()));
@@ -724,22 +595,22 @@ public class PasswordGenerator extends JFrame {
                 if (jCheckBoxGenHash.isSelected()) {
                     if (jComboBoxAlg.getSelectedIndex() == 0) {
                         GenOwnpw.setSHA1();
-                        tableModel.addRow(new Object[]{GenOwnpw.getPassword(), GenOwnpw.getSHA1()});
+                        tableModel.addRow(new Object[] {GenOwnpw.getPassword(), GenOwnpw.getSHA1()});
                         jLabelPWCountSetText();
                     }
                     if (jComboBoxAlg.getSelectedIndex() == 1) {
                         GenOwnpw.setSHA256();
-                        tableModel.addRow(new Object[]{GenOwnpw.getPassword(), GenOwnpw.getSHA256()});
+                        tableModel.addRow(new Object[] {GenOwnpw.getPassword(), GenOwnpw.getSHA256()});
                         jLabelPWCountSetText();
                     }
                     if (jComboBoxAlg.getSelectedIndex() == 2) {
                         GenOwnpw.setMD5();
-                        tableModel.addRow(new Object[]{GenOwnpw.getPassword(), GenOwnpw.getMD5()});
+                        tableModel.addRow(new Object[] {GenOwnpw.getPassword(), GenOwnpw.getMD5()});
                         jLabelPWCountSetText();
                     }
                 }// jCheckBoxGenHash.isSelected()
                 if (!jCheckBoxGenHash.isSelected()) {
-                    tableModel.addRow(new Object[]{GenOwnpw.getPassword(), ""});
+                    tableModel.addRow(new Object[] {GenOwnpw.getPassword(), ""});
                     jLabelPWCountSetText();
                 }
             }// Wenn TextFeldEnterPW NICHT leer und wenn Inhalt nicht schon in der Liste vorhanden.
@@ -790,23 +661,23 @@ public class PasswordGenerator extends JFrame {
                         if (jCheckBoxGenHash.isSelected()) {
                             if (jComboBoxAlg.getSelectedIndex() == 0) {
                                 Genpw.setSHA1();
-                                tableModel.addRow(new Object[]{Genpw.getPassword(), Genpw.getSHA1()});
+                                tableModel.addRow(new Object[] {Genpw.getPassword(), Genpw.getSHA1()});
                                 jLabelPWCountSetText();
 
                             }
                             if (jComboBoxAlg.getSelectedIndex() == 1) {
                                 Genpw.setSHA256();
-                                tableModel.addRow(new Object[]{Genpw.getPassword(), Genpw.getSHA256()});
+                                tableModel.addRow(new Object[] {Genpw.getPassword(), Genpw.getSHA256()});
                                 jLabelPWCountSetText();
                             }
                             if (jComboBoxAlg.getSelectedIndex() == 2) {
                                 Genpw.setMD5();
-                                tableModel.addRow(new Object[]{Genpw.getPassword(), Genpw.getMD5()});
+                                tableModel.addRow(new Object[] {Genpw.getPassword(), Genpw.getMD5()});
                                 jLabelPWCountSetText();
                             }
                         }// jCheckBoxGenHash.isSelected()
                         if (!jCheckBoxGenHash.isSelected()) {
-                            tableModel.addRow(new Object[]{Genpw.getPassword(), ""});
+                            tableModel.addRow(new Object[] {Genpw.getPassword(), ""});
                             jLabelPWCountSetText();
                         }
                         Thread.sleep(0, 0);
@@ -837,7 +708,6 @@ public class PasswordGenerator extends JFrame {
     private String special = "!\"#$%&'()*+,-./:;<=>?@";
     private SwingWorker<Void, Void> worker;
     private URL url = PasswordGenerator.class.getResource("Password.png");
-    // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.ButtonGroup buttonGroup1;
     private javax.swing.JButton jButtonClear;
     private javax.swing.JButton jButtonDelete;
@@ -850,9 +720,6 @@ public class PasswordGenerator extends JFrame {
     private javax.swing.JCheckBox jCheckBoxNum;
     private javax.swing.JCheckBox jCheckBoxSpezial;
     private javax.swing.JCheckBox jCheckBoxaz;
-    /*
-    private javax.swing.JComboBox jComboBoxAlg;
-    */
     private javax.swing.JLabel jLabelHint;
     private javax.swing.JLabel jLabelPWCount;
     private javax.swing.JLabel jLabelPasswordCount;
@@ -866,11 +733,9 @@ public class PasswordGenerator extends JFrame {
     private javax.swing.JSpinner jSpinnerCountOf;
     private javax.swing.JTable jTable;
     private javax.swing.JTextField jTextFieldEnterPW;
-    // End of variables declaration//GEN-END:variables
     private javax.swing.JComboBox<String> jComboBoxAlg;
 
     private class workerClear extends SwingWorker<Void, Void> {
-
         @Override
         public Void doInBackground() {
             clear();
@@ -879,7 +744,6 @@ public class PasswordGenerator extends JFrame {
     }
 
     private class workerExport extends SwingWorker<Void, Void> {
-
         @Override
         public Void doInBackground() {
             int count = Password.getCount();
@@ -895,17 +759,28 @@ public class PasswordGenerator extends JFrame {
                     jProgressBar.setMinimum(0);
                     jProgressBar.setMaximum(count);
                 }
-                File file = FileIO.dialogSave();
+                File file = dialogSave();
                 if (file != null) {
-                    FileIO.setFirstLine(true);
-                    for (int i = 0; i < count; i++) {
-                        FileIO.lineWrite(file, tableModel.getValueAt(i, 0).toString());
-                        if (!tableModel.getValueAt(i, 1).toString().isEmpty()) {
-                            FileIO.lineAppandTab(file, tableModel.getValueAt(i, 1).toString());
+                    String line;
+                    if (file.exists()) {
+                        int showConfirmDialog = JOptionPane.showConfirmDialog(null, "the file already exists... you want to overwrite it?", "Save", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
+                        if (showConfirmDialog == JOptionPane.YES_OPTION) {
+                            file.delete();
+                        } else if (showConfirmDialog == JOptionPane.NO_OPTION) {
+                            lineWrite("");
+                            write(file);
                         }
+                    }
+                    for (int i = 0; i < count; i++) {
+                        line = tableModel.getValueAt(i, 0).toString();
+                        if (!tableModel.getValueAt(i, 1).toString().isEmpty()) {
+                            line += "	" + tableModel.getValueAt(i, 1).toString();
+                        }
+                        lineWrite(line);
                         jProgressBar.setValue(jProgressBar.getValue() + 1);
                     }
-                    FileIO.dialogWritten(file);
+                    write(file);
+                    dialogWritten(file);
                 }
                 jLabelPleaseWait.setVisible(false);
                 jProgressBar.setVisible(false);
@@ -919,7 +794,6 @@ public class PasswordGenerator extends JFrame {
     }
 
     private class workerGenerate extends SwingWorker<Void, Void> {
-
         @Override
         public Void doInBackground() {
             generate();
