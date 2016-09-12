@@ -1,6 +1,5 @@
 package passwordGenerator;
 
-
 /**
  * to set/get the displayed language.<br/>
  * 
@@ -11,6 +10,7 @@ public class Language {
 	/**
 	 * - ENG<br/>
 	 * - GER<br/>
+	 * 
 	 * @param Language (as int) set the language you want to use.
 	 */
 	public Language(int Language) {
@@ -26,11 +26,10 @@ public class Language {
 			break;
 		}
 	}
-	
+
 	/**
 	 * @see Language
-	 * @param language
-	 *            (as String) the 3 char log alias of the language you want to set.<br/>
+	 * @param language (as String) the 3 char log alias of the language you want to set.<br/>
 	 */
 	public void setLanguage(int language) {
 		switch (language) {
@@ -78,6 +77,8 @@ public class Language {
 			MenuBarViewWindowStyle = "Window-Style";
 			MenuBarTools = "Tools";
 			MenuBarToolsMultiHash = "Multi Hash";
+			MessageFileWritten_Part1 = "Data has been written at: ";
+			MessageFileWritten_Part2 = "";
 			MessageCantConnectToServer = "Can not connect to server, please verify your internet connection!";
 			MessageFileExists = "The file already exists... you want to overwrite it?\nchoosing no, appand it.";
 			MessageFileExistsTitle = "Save";
@@ -85,7 +86,8 @@ public class Language {
 			MessageImportGenerateHashTitle = "Generate hash(s)";
 			MessageNegativeCount = "Oh... you choosen a negative count ... I set it for you back to posetive";
 			MessageNegativeCountTitle = "Negative count!";
-			MessageUpdateNeedToUpdate = "Please update your version!!!\n\nYour version is:\n" + Main.version + "\nNew version is:\n" + Main.newVersion + "\n\ndo you want to download the last version?";
+			MessageUpdateNeedToUpdate = "Please update your version!!!\n\nYour version is:\n" + Main.version + "\nNew version is:\n"
+					+ Main.newVersion + "\n\ndo you want to download the last version?";
 			MessageUpdateNeedToUpdateTitle = "Check for update";
 			MessageUpdateUpToDate = "Your version is up to date, no need to update...";
 			MessageUpdateUpToDateTitle = "Check for Update...";
@@ -152,6 +154,8 @@ public class Language {
 			MenuBarViewWindowStyle = "Fenster-Design";
 			MenuBarTools = "Tools";
 			MenuBarToolsMultiHash = "Multi Hash";
+			MessageFileWritten_Part1 = "Daten wurden fertig nach: ";
+			MessageFileWritten_Part2 = " geschrieben.";
 			MessageCantConnectToServer = "Es kann keine Verbindung zu dem Server hergestellt werden,\nbitte überprüfen sie Ihre Internetverbindung";
 			MessageFileExists = "Die gewählte Datei existiert bereits... wollen Sie diese überschreiben?\nWenn Sie \"nein\" wählen wird die Datei erweitert.";
 			MessageFileExistsTitle = "Speichern";
@@ -159,7 +163,8 @@ public class Language {
 			MessageImportGenerateHashTitle = "Prüfsummen generieren";
 			MessageNegativeCount = "Ohh... Sie haben einen negativen Wert der zu generierenden Passwörter gewählt...\nIch werde für Sie den Wert invertiert setzen";
 			MessageNegativeCountTitle = "Negativer Wert!";
-			MessageUpdateNeedToUpdate = "Bitte Speichere die Neue Version dieses Programmes!!!\n\nIhre momentane Version ist:\n" + Main.version + "\nDie Neue Version ist:\n" + Main.newVersion + "\n\nWollen Sie die neue Version herunterladen?";
+			MessageUpdateNeedToUpdate = "Bitte Speichere die Neue Version dieses Programmes!!!\n\nIhre momentane Version ist:\n" + Main.version
+					+ "\nDie Neue Version ist:\n" + Main.newVersion + "\n\nWollen Sie die neue Version herunterladen?";
 			MessageUpdateNeedToUpdateTitle = "Check for update";
 			MessageUpdateUpToDate = "Deine Version dieses Programmes ist bereis aktuell, ein Update ist nicht erforderlich...";
 			MessageUpdateUpToDateTitle = "Prüfe auf Updates...";
@@ -372,6 +377,15 @@ public class Language {
 	 */
 	public String MenuBarToolsMultiHash;
 	/**
+	 * Text from the MessageDialog file was written to... Part one<br>
+	 * This Part should followed by the filename.
+	 */
+	public String MessageFileWritten_Part1;
+	/**
+	 * Text from the MessageDialog file was written to... Part two
+	 */
+	public String MessageFileWritten_Part2;
+	/**
 	 * Text from the MessageDialog can not connect to server
 	 */
 	public String MessageCantConnectToServer;
@@ -392,7 +406,8 @@ public class Language {
 	 */
 	public String MessageImportGenerateHashTitle;
 	/**
-	 * Text from the MessageDialog warning message because the user choosen a negative count of passwords to generate (program will negate the value to a positive number)
+	 * Text from the MessageDialog warning message because the user choosen a negative count of passwords to generate (program will negate the value
+	 * to a positive number)
 	 */
 	public String MessageNegativeCount;
 	/**
@@ -400,7 +415,8 @@ public class Language {
 	 */
 	public String MessageNegativeCountTitle;
 	/**
-	 * Text from the MessageDialog error because there are over all in the application too much passwords at the table (2.000.000) no additional passwords will be generated or added!
+	 * Text from the MessageDialog error because there are over all in the application too much passwords at the table (2.000.000) no additional
+	 * passwords will be generated or added!
 	 */
 	public String MessageToMuchOverAllPasswords;
 	/**
@@ -408,10 +424,13 @@ public class Language {
 	 */
 	public String MessageToMuchOverAllPasswordsTitle;
 	/**
-	 * Text from the MessageDialog tell the user that a new version of this application is available on the Internet and he/she is with dialog asked if to want to download the newer version<br>
-	 * <br>IMPORTANT!!!<br>
+	 * Text from the MessageDialog tell the user that a new version of this application is available on the Internet and he/she is with dialog asked
+	 * if to want to download the newer version<br>
+	 * <br>
+	 * IMPORTANT!!!<br>
 	 * use the variables "Main.version" for the current version<br>
-	 * and the "Main.newVersion" for the new version that is to be download by user<br><br>
+	 * and the "Main.newVersion" for the new version that is to be download by user<br>
+	 * <br>
 	 * if you implement on or booth of this variables use it like that:<br>
 	 * "YOUR TEXT" + Main.version + "YOUR TEXT" + Main.newVersion + "YOUR TEXT"<br>
 	 */
@@ -445,7 +464,7 @@ public class Language {
 	 */
 	public String MessageZeroTitle;
 	/**
-	 * Text from the Label next to the up/down spinner (count of passwords to generate) 
+	 * Text from the Label next to the up/down spinner (count of passwords to generate)
 	 */
 	public String PasswordCounter;
 	/**
@@ -453,7 +472,7 @@ public class Language {
 	 */
 	public String RadioButtonGeneratePassword;
 	/**
-	 * Text from the Table column "Password"  
+	 * Text from the Table column "Password"
 	 */
 	public String TablePassword;
 	/**

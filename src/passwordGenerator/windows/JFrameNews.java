@@ -51,12 +51,10 @@ public class JFrameNews extends JFrame {
 		currentLanguage = Main.currentLanguage;
 		// setAlwaysOnTop(true);
 		// setType(Type.NORMAL);
-		setIconImage(Toolkit.getDefaultToolkit().getImage(
-				JFrameNews.class.getResource("res/Password.png")));
+		setIconImage(Toolkit.getDefaultToolkit().getImage(JFrameNews.class.getResource("res/Password.png")));
 		setTitle(Main.titlePrefix + currentLanguage.WindowNewsTitle);
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-		setBounds(
-				100, 100, 600, 534);
+		setBounds(100, 100, 600, 534);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
@@ -65,14 +63,14 @@ public class JFrameNews extends JFrame {
 		lblNews.setFont(new Font("Dialog", Font.BOLD, 24));
 		lblNews.setHorizontalAlignment(SwingConstants.CENTER);
 
-		JLabel lblHomepage = new JLabel("<HTML>" + currentLanguage.WindowAboutHomepage + ":    <FONT color=\"#000099\"><U>http://sourceforge.net/p/java-pwgen/</U></FONT></HTML>");
+		JLabel lblHomepage = new JLabel("<HTML>" + currentLanguage.WindowAboutHomepage
+				+ ":    <FONT color=\"#000099\"><U>http://sourceforge.net/p/java-pwgen/</U></FONT></HTML>");
 		lblHomepage.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent evt) {
 				if (Desktop.isDesktopSupported()) {
 					try {
-						Desktop.getDesktop().browse(
-								new URI("http://sourceforge.net/projects/java-pwgen/"));
+						Desktop.getDesktop().browse(new URI("http://sourceforge.net/projects/java-pwgen/"));
 					} catch (Exception ex) {
 						ex.printStackTrace();
 					}
@@ -114,34 +112,30 @@ public class JFrameNews extends JFrame {
 		});
 		this.jButtonPointless.setName("jButtonPointless");
 		GroupLayout gl_contentPane = new GroupLayout(contentPane);
-		gl_contentPane.setHorizontalGroup(gl_contentPane.createParallelGroup(
-				Alignment.LEADING).addComponent(
-				lblNews, GroupLayout.DEFAULT_SIZE, 678, Short.MAX_VALUE).addComponent(
-				lblHomepage, GroupLayout.DEFAULT_SIZE, 678, Short.MAX_VALUE).addGroup(
-				gl_contentPane.createSequentialGroup().addComponent(
-						btnOk, GroupLayout.PREFERRED_SIZE, 88, GroupLayout.PREFERRED_SIZE).addPreferredGap(
-						ComponentPlacement.RELATED).addComponent(
-						this.buttonReload, GroupLayout.PREFERRED_SIZE, 33, GroupLayout.PREFERRED_SIZE).addGap(
-						92).addComponent(
-						this.jLabelStatus, GroupLayout.DEFAULT_SIZE, 367, Short.MAX_VALUE).addPreferredGap(
-						ComponentPlacement.RELATED).addComponent(
-						this.jButtonPointless)).addComponent(
-				scrollPane, GroupLayout.DEFAULT_SIZE, 678, Short.MAX_VALUE));
-		gl_contentPane.setVerticalGroup(gl_contentPane.createParallelGroup(
-				Alignment.LEADING).addGroup(
-				gl_contentPane.createSequentialGroup().addComponent(
-						lblNews, GroupLayout.PREFERRED_SIZE, 30, GroupLayout.PREFERRED_SIZE).addPreferredGap(
-						ComponentPlacement.RELATED).addComponent(
-						lblHomepage, GroupLayout.PREFERRED_SIZE, 23, GroupLayout.PREFERRED_SIZE).addPreferredGap(
-						ComponentPlacement.RELATED).addComponent(
-						scrollPane, GroupLayout.DEFAULT_SIZE, 412, Short.MAX_VALUE).addPreferredGap(
-						ComponentPlacement.RELATED).addGroup(
-						gl_contentPane.createParallelGroup(
-								Alignment.BASELINE).addComponent(
-								btnOk).addComponent(
-								this.jLabelStatus).addComponent(
-								this.buttonReload, GroupLayout.PREFERRED_SIZE, 23, GroupLayout.PREFERRED_SIZE).addComponent(
-								this.jButtonPointless))));
+		gl_contentPane.setHorizontalGroup(gl_contentPane
+				.createParallelGroup(Alignment.LEADING)
+				.addComponent(lblNews, GroupLayout.DEFAULT_SIZE, 678, Short.MAX_VALUE)
+				.addComponent(lblHomepage, GroupLayout.DEFAULT_SIZE, 678, Short.MAX_VALUE)
+				.addGroup(
+						gl_contentPane.createSequentialGroup().addComponent(btnOk, GroupLayout.PREFERRED_SIZE, 88, GroupLayout.PREFERRED_SIZE)
+								.addPreferredGap(ComponentPlacement.RELATED)
+								.addComponent(this.buttonReload, GroupLayout.PREFERRED_SIZE, 33, GroupLayout.PREFERRED_SIZE).addGap(92)
+								.addComponent(this.jLabelStatus, GroupLayout.DEFAULT_SIZE, 367, Short.MAX_VALUE)
+								.addPreferredGap(ComponentPlacement.RELATED).addComponent(this.jButtonPointless))
+				.addComponent(scrollPane, GroupLayout.DEFAULT_SIZE, 678, Short.MAX_VALUE));
+		gl_contentPane.setVerticalGroup(gl_contentPane.createParallelGroup(Alignment.LEADING).addGroup(
+				gl_contentPane
+						.createSequentialGroup()
+						.addComponent(lblNews, GroupLayout.PREFERRED_SIZE, 30, GroupLayout.PREFERRED_SIZE)
+						.addPreferredGap(ComponentPlacement.RELATED)
+						.addComponent(lblHomepage, GroupLayout.PREFERRED_SIZE, 23, GroupLayout.PREFERRED_SIZE)
+						.addPreferredGap(ComponentPlacement.RELATED)
+						.addComponent(scrollPane, GroupLayout.DEFAULT_SIZE, 412, Short.MAX_VALUE)
+						.addPreferredGap(ComponentPlacement.RELATED)
+						.addGroup(
+								gl_contentPane.createParallelGroup(Alignment.BASELINE).addComponent(btnOk).addComponent(this.jLabelStatus)
+										.addComponent(this.buttonReload, GroupLayout.PREFERRED_SIZE, 23, GroupLayout.PREFERRED_SIZE)
+										.addComponent(this.jButtonPointless))));
 
 		textArea = new JTextArea();
 		scrollPane.setViewportView(textArea);
@@ -150,8 +144,8 @@ public class JFrameNews extends JFrame {
 		contentPane.setLayout(gl_contentPane);
 		java.awt.Dimension screenSize = java.awt.Toolkit.getDefaultToolkit().getScreenSize();
 		java.awt.Dimension DefaultDimension = new java.awt.Dimension(700, 550);// original 330px x 550px
-		setBounds(
-				(screenSize.width - DefaultDimension.width) / 2, (screenSize.height - DefaultDimension.height) / 2, DefaultDimension.width, DefaultDimension.height);
+		setBounds((screenSize.width - DefaultDimension.width) / 2, (screenSize.height - DefaultDimension.height) / 2, DefaultDimension.width,
+				DefaultDimension.height);
 		setMinimumSize(new java.awt.Dimension(250, 100));
 		setPreferredSize(DefaultDimension);
 		try {
@@ -164,8 +158,8 @@ public class JFrameNews extends JFrame {
 				break;
 			}
 		} catch (Exception ex) {
-			JOptionPane.showMessageDialog(
-					JFramePasswordGenerator.getPasswordGui(), currentLanguage.MessageCantConnectToServer, ex.getClass().getSimpleName(), 0);
+			JOptionPane.showMessageDialog(JFramePasswordGenerator.GetPasswordGui(), currentLanguage.MessageCantConnectToServer, ex.getClass()
+					.getSimpleName(), 0);
 			ex.printStackTrace();
 		}
 		worker = new WorkerDownload();
@@ -200,8 +194,8 @@ public class JFrameNews extends JFrame {
 			Thread.sleep(3000);
 		} catch (Exception ex) {
 			jLabelStatus.setText(ex.getClass().getSimpleName());
-			JOptionPane.showMessageDialog(
-					JFramePasswordGenerator.getPasswordGui(), currentLanguage.MessageCantConnectToServer, ex.getClass().getSimpleName(), JOptionPane.ERROR_MESSAGE);
+			JOptionPane.showMessageDialog(JFramePasswordGenerator.GetPasswordGui(), currentLanguage.MessageCantConnectToServer, ex.getClass()
+					.getSimpleName(), JOptionPane.ERROR_MESSAGE);
 			jLabelStatus.setText("Finnished");
 			try {
 				Thread.sleep(3000);

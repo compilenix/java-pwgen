@@ -1,12 +1,14 @@
 package passwordGenerator;
 
 import java.text.DecimalFormat;
+import java.util.ArrayList;
 
+import passwordGenerator.Password.Hash;
 import passwordGenerator.windows.JFramePasswordGenerator;
 
 /**
  * @author Kevin Weis
- * @version 2013.09.14
+ * @version 2013-10-13
  * <p>
  * Handling commandline args or/and shows the GUI<br/>
  * <p>
@@ -24,7 +26,8 @@ public final class Main {
 	 * -n Set numbers<br>
 	 * -a Set all lowercase<br>
 	 * -A Set all UPPERCASE<br>
-	 * -s Set spezial chars<br>
+	 * -s Set special chars<br>
+	 * --all Get all supported Hash-Algorithms, of the password<br>
 	 * --MD2 PASSWORD Get the MD2-Hash of the password<br>
 	 * --MD5 PASSWORD Get the MD5-Hash of the password<br>
 	 * --SHA1 PASSWORD Get the SHA1-Hash of the password<br>
@@ -32,7 +35,7 @@ public final class Main {
 	 * --SHA384 PASSWORD Get the SHA384-Hash of the password<br>
 	 * --SHA512 PASSWORD Get the SHA512-Hash of the password
 	 * <p>
-	 * To use multiple charsets use this: -Aans (or simular)<br>
+	 * To use multiple Charset use this: -Aans (or similar)<br>
 	 * java -jar PassworGenerator.jar 3 6 -an<br>
 	 * java -jar PassworGenerator.jar --sha256 PASSWORD<br>
 	 */
@@ -41,20 +44,22 @@ public final class Main {
 		int pwLength = 12;
 		int pwCount = 1;
 		String charChoice = Password.Numbers + Password.AlphabetLOW + Password.AlphabetUP;
-		// String stringPassword;
 		String os = System.getProperty("os.name").toLowerCase();
+
 		if (args.length != 0) {
 			try {
-				if (args[0].equals("--help")) {
+				if (args[0].toLowerCase().equals("--help")) {
 					printHelp();
+					System.exit(0);
 				}
+
 				for (int i = 0; i < args.length; i++) {
-					String string = String.valueOf(args[i]);
-					// if ((string.equals("--no-gui") || string.equals("-S")) & args.length == 1) {
-					if (string.equals("--no-gui") || string.equals("-S")) {
+					String string = args[i];
+
+					if (string.toLowerCase().equals("--no-gui") || string.equals("-S")) {
 						printDefaultPassword();
-						// continue;
-					} else if (string.startsWith("-") && (args.length != 1)) {
+
+					} else if (string.startsWith("-") && (!string.startsWith("--")) && (args.length != 1)) {
 						charChoice = "";
 						if (string.contains("n")) {
 							charChoice += Password.Numbers;
@@ -68,62 +73,51 @@ public final class Main {
 						if (string.contains("s")) {
 							charChoice += Password.Special;
 						}
-					} else if (args[0].startsWith("--") && args.length == 2) {
-						String string1 = args[0];
-						Password pw;
-						if (string1.contains("md2") || string1.contains("MD2")) {
-							pw = new Password(args[1]);
-							pw.setMD2();
-							System.out.println(pw.getMD2());
-							System.exit(0);
-						} else if (string1.contains("md5") || string1.contains("MD5")) {
-							pw = new Password(args[1]);
-							pw.setMD5();
-							System.out.println(pw.getMD5());
-							System.exit(0);
-						} else if (string1.contains("sha1") || string1.contains("SHA1")) {
-							pw = new Password(args[1]);
-							pw.setSHA1();
-							System.out.println(pw.getSHA1());
-							System.exit(0);
-						} else if (string1.contains("sha256") || string1.contains("SHA256")) {
-							pw = new Password(args[1]);
-							pw.setSHA256();
-							System.out.println(pw.getSHA256());
-							System.exit(0);
-						} else if (string1.contains("sha384") || string1.contains("SHA384")) {
-							pw = new Password(args[1]);
-							pw.setSHA384();
-							System.out.println(pw.getSHA384());
-							System.exit(0);
-						} else if (string1.contains("sha512") || string1.contains("SHA512")) {
-							pw = new Password(args[1]);
-							pw.setSHA512();
-							System.out.println(pw.getSHA512());
-							System.exit(0);
+
+					} else if (string.startsWith("--") && (args.length == 2)) {
+						String string1 = string.toLowerCase();
+
+						if (string1.contains("all")) {
+							for (Hash alg : Password.Hash.values()) {
+								System.out.println(alg.toString() + "\t" + alg.Get(args[1].getBytes()));
+							}
+
+						} else if (string1.contains("md2")) {
+							System.out.println(Password.Hash.MD2.Get(args[1].getBytes()));
+						} else if (string1.contains("md5")) {
+							System.out.println(Password.Hash.MD5.Get(args[1].getBytes()));
+						} else if (string1.contains("sha1")) {
+							System.out.println(Password.Hash.SHA1.Get(args[1].getBytes()));
+						} else if (string1.contains("sha256")) {
+							System.out.println(Password.Hash.SHA256.Get(args[1].getBytes()));
+						} else if (string1.contains("sha384")) {
+							System.out.println(Password.Hash.SHA384.Get(args[1].getBytes()));
+						} else if (string1.contains("sha512")) {
+							System.out.println(Password.Hash.SHA512.Get(args[1].getBytes()));
 						} else {
 							printHelp();
+							System.exit(1);
 						}
+
 					} else {
 						try {
 							if (fistNumberSet) {
-								pwLength = Integer.parseInt(string);
+								pwLength = Integer.parseInt(args[0]);
 							} else {
-								pwCount = Integer.parseInt(string);
+								pwCount = Integer.parseInt(args[0]);
 								fistNumberSet = true;
 							}
 						} catch (Exception ex) {
 							printHelp();
-							System.exit(0);
+							System.exit(1);
 						}
 					}
 				}
-				new Worker(charChoice.toCharArray(), pwLength, pwCount).run();
+
+				new Worker(charChoice.toCharArray(), pwLength, pwCount, args).run();
 				System.exit(0);
 			} catch (Exception ex) {
 			}
-			// System.out.println("Command line arguments are not jet been implemented!");
-			// JOptionPane.showMessageDialog(null, "Command line arguments are not jet been implemented!");
 		} else if (os.indexOf("win") >= 0) {
 			try {
 				setLookAndFeel("Windows");
@@ -152,8 +146,6 @@ public final class Main {
 			}
 		}
 		if (args.length == 0) {
-//			JFramePasswordGenerator.setPasswordGui(new JFramePasswordGenerator());
-//			JFramePasswordGenerator.getPasswordGui().setVisible(true);
 			mainFrame = new JFramePasswordGenerator();
 			mainFrame.setVisible(true);
 		} else {
@@ -161,13 +153,32 @@ public final class Main {
 		}
 	}
 
-	private static void setLookAndFeel(String style) throws Exception {
+	/**
+	 * Author Kevin Weis<br>
+	 * Version 2013-11-13<br>
+	 * <p>
+	 * switch to a other look and feel
+	 * <p>
+	 * @param style name of the look and feel
+	 * @throws Exception if something went wrong, see javax.swing.UIManager.setLookAndFeel(String className)
+	 */
+	public static void setLookAndFeel(String style) throws Exception {
 		for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
 			if (style.equals(info.getName())) {
 				javax.swing.UIManager.setLookAndFeel(info.getClassName());
+				lookAndFeel = info.getName();
 				break;
 			}
 		}
+	}
+	
+	/**
+	 * Author Kevin Weis<br>
+	 * Version 2013-11-13<br>
+	 * @return The name of the current LookAndFeel
+	 */
+	public static String getLookAndFeel() {
+		return lookAndFeel;
 	}
 
 	private static void printDefaultPassword() {
@@ -178,7 +189,6 @@ public final class Main {
 	private static void printHelp() {
 		System.out
 				.print("Usage:\r\nThe first number is the count of how much passwords will be generated\r\nThe second number is how long each password\r\n\r\n--no-gui  -S         Get a default password\r\n--help               Prints this help\r\n-n                   Set numbers\r\n-a                   Set all lowercase\r\n-A                   Set all UPPERCASE\r\n-s                   Set spezial chars\r\n--MD2    PASSWORD  Get the MD2-Hash of the password\r\n--MD5    PASSWORD  Get the MD5-Hash of the password\r\n--SHA1   PASSWORD  Get the SHA1-Hash of the password\r\n--SHA256 PASSWORD  Get the SHA256-Hash of the password\r\n--SHA384 PASSWORD  Get the SHA384-Hash of the password\r\n--SHA512 PASSWORD  Get the SHA512-Hash of the password\r\n\r\nTo use multiple charsets use this: -Aans (or simular)\r\njava -jar PassworGenerator.jar 3 6 -an\r\njava -jar PassworGenerator.jar --sha256 PASSWORD\r\n");
-		System.exit(1);
 	}
 
 	/**
@@ -199,10 +209,7 @@ public final class Main {
 	 * contains the default JFrame window title
 	 */
 	public static final String title = "PasswordGenerator";
-	/**
-	 * contains the supported Hash Algorithms
-	 */
-	public static enum HashAlgos { SHA1, SHA256, SHA384, SHA512, MD2, MD5 }
+
 	/**
 	 * holds the current language
 	 */
@@ -213,22 +220,65 @@ public final class Main {
 	public static String DecimalSeparator = String.valueOf((((DecimalFormat) DecimalFormat.getInstance()).getDecimalFormatSymbols())
 			.getGroupingSeparator());
 	protected static JFramePasswordGenerator mainFrame;
+	private static String lookAndFeel = "";
 
 	private static class Worker extends Thread {
-		public Worker(char[] ch, int pwlen, int pwcnt) {
+
+		public Worker(char[] ch, int pwlen, int pwcnt, String[] args) {
 			this.choice = ch;
 			this.pwLength = pwlen;
 			this.pwCount = pwcnt;
+			this.algosToGen = new ArrayList<Password.Hash>();
+
+			for (int i = 0; i < args.length; i++) {
+				String string = args[i].toLowerCase();
+
+				if (string.startsWith("--")) {
+					if (string.contains("all")) {
+
+						for (Hash alg : Password.Hash.values()) {
+							algosToGen.add(alg);
+						}
+
+						break;
+					} else if (string.contains("md2")) {
+						algosToGen.add(Password.Hash.MD2);
+					} else if (string.contains("md5")) {
+						algosToGen.add(Password.Hash.MD5);
+					} else if (string.contains("sha1")) {
+						algosToGen.add(Password.Hash.SHA1);
+					} else if (string.contains("sha256")) {
+						algosToGen.add(Password.Hash.SHA256);
+					} else if (string.contains("sha384")) {
+						algosToGen.add(Password.Hash.SHA384);
+					} else if (string.contains("sha512")) {
+						algosToGen.add(Password.Hash.SHA512);
+					}
+				}
+			}
 		}
 
 		@Override
 		public void run() {
-			for (int i = 0; i < pwCount; i++) {
-				System.out.print(new Password(choice, pwLength) + "\n");
+			if (algosToGen.isEmpty()) {
+				for (int i = 0; i < pwCount; i++) {
+					System.out.println(new Password(choice, pwLength));
+				}
+			} else {
+				for (int i = 0; i < pwCount; i++) {
+					String pw = new Password(choice, pwLength).toString();
+					System.out.print(pw);
+
+					for (Hash alg : algosToGen) {
+						System.out.print("\t" + alg.toString() + "\t" + alg.Get(pw.getBytes()));
+					}
+					System.out.print("\n");
+				}
 			}
 		}
 
 		private char[] choice;
+		private ArrayList<Password.Hash> algosToGen;
 		private int pwLength;
 		private int pwCount;
 	}

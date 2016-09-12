@@ -149,7 +149,7 @@ public class JFrameChangeLog extends JFrame {
 		try {
 			urlChangeLog = new URL("https://dl.dropbox.com/u/27159788/PasswordGenerator/change.log");
 		} catch (Exception ex) {
-			JOptionPane.showMessageDialog(JFramePasswordGenerator.getPasswordGui(), currentLanguage.MessageCantConnectToServer, ex.getClass()
+			JOptionPane.showMessageDialog(JFramePasswordGenerator.GetPasswordGui(), currentLanguage.MessageCantConnectToServer, ex.getClass()
 					.getSimpleName(), 0);
 			ex.printStackTrace();
 		}
@@ -186,7 +186,7 @@ public class JFrameChangeLog extends JFrame {
 			Thread.sleep(500);
 		} catch (Exception ex) {
 			jLabelStatus.setText(ex.getClass().getSimpleName());
-			JOptionPane.showMessageDialog(JFramePasswordGenerator.getPasswordGui(), currentLanguage.MessageCantConnectToServer, ex.getClass()
+			JOptionPane.showMessageDialog(JFramePasswordGenerator.GetPasswordGui(), currentLanguage.MessageCantConnectToServer, ex.getClass()
 					.getSimpleName(), JOptionPane.ERROR_MESSAGE);
 			jLabelStatus.setText("Finnished");
 		}

@@ -33,7 +33,7 @@ public class JFrameDownloadUpdate extends javax.swing.JFrame {
 	 */
 	public JFrameDownloadUpdate() {
 		/*
-		 * Disabled because OpenJDK can´t handle it... setAlwaysOnTop(false); setType(Type.NORMAL);
+		 * Disabled because OpenJDK cant handle it... setAlwaysOnTop(false); setType(Type.NORMAL);
 		 */
 		setResizable(false);
 		jLabel = new javax.swing.JLabel();
@@ -169,10 +169,10 @@ public class JFrameDownloadUpdate extends javax.swing.JFrame {
 				outFile.close();
 				jLabelStatus.setText("Finnished");
 				JOptionPane.showMessageDialog(
-						JFramePasswordGenerator.getPasswordGui(), "You found it at:\n" + selectedFile.getAbsolutePath(), "Downloading finished", JOptionPane.INFORMATION_MESSAGE);
+						JFramePasswordGenerator.GetPasswordGui(), "You found it at:\n" + selectedFile.getAbsolutePath(), "Downloading finished", JOptionPane.INFORMATION_MESSAGE);
 			} catch (Exception ex) {
 				JOptionPane.showMessageDialog(
-						JFramePasswordGenerator.getPasswordGui(), ex.getMessage(), ex.getClass().getSimpleName(), 0);
+						JFramePasswordGenerator.GetPasswordGui(), ex.getMessage(), ex.getClass().getSimpleName(), 0);
 			}
 		}
 		this.dispose();
