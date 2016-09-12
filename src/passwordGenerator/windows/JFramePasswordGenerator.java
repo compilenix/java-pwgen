@@ -47,7 +47,7 @@ import passwordGenerator.Password;
  * <p/>
  * 
  * @author Kevin Weis
- * @version 2012.10.23
+ * @version 04.02.2013
  */
 public class JFramePasswordGenerator extends JFrame {
 	private static final long serialVersionUID = -5730437296736291058L;
@@ -171,12 +171,10 @@ public class JFramePasswordGenerator extends JFrame {
 		});
 		jButtonGenerate.addActionListener(new java.awt.event.ActionListener() {
 			public void actionPerformed(java.awt.event.ActionEvent evt) {
-				if (jButtonGenerate.getText().equals(
-						currentLanguage.ButtonGenerate)) {
+				if (jButtonGenerate.getText().equals(currentLanguage.ButtonGenerate)) {
 					worker = new workerGenerate();
 					worker.execute();
-				} else if (jButtonGenerate.getText().equals(
-						currentLanguage.ButtonCancel)) {
+				} else if (jButtonGenerate.getText().equals(currentLanguage.ButtonCancel)) {
 					worker.cancel(true);
 					jButtonGenerate.setText(currentLanguage.ButtonGenerate);
 					jLabelPleaseWait.setVisible(false);
@@ -305,8 +303,7 @@ public class JFramePasswordGenerator extends JFrame {
 			@Override
 			public void mousePressed(MouseEvent evt) {
 				if (Password.getCount() > 0) {
-					popupMenuExport.show(
-							evt.getComponent(), evt.getX(), evt.getY());
+					popupMenuExport.show(evt.getComponent(), evt.getX(), evt.getY());
 				}
 			}
 		});
@@ -324,15 +321,14 @@ public class JFramePasswordGenerator extends JFrame {
 
 		jButtonImport.addActionListener(new java.awt.event.ActionListener() {
 			public void actionPerformed(java.awt.event.ActionEvent evt) {
-				// TODO Import...
 				fc = new JFileChooser();
 				int showOpenDialog = fc.showOpenDialog(getPasswordGui());
 				if (showOpenDialog == JFileChooser.APPROVE_OPTION) {
 					@SuppressWarnings("unused")
 					File file = fc.getSelectedFile();
 					@SuppressWarnings("unused")
-					int showConfirmDialog = JOptionPane.showConfirmDialog(
-							getPasswordGui(), currentLanguage.MessageImportGenerateHash, currentLanguage.MessageImportGenerateHashTitle, JOptionPane.INFORMATION_MESSAGE);
+					int showConfirmDialog = JOptionPane.showConfirmDialog(getPasswordGui(), currentLanguage.MessageImportGenerateHash,
+							currentLanguage.MessageImportGenerateHashTitle, JOptionPane.INFORMATION_MESSAGE);
 				}
 			}
 		});
@@ -367,9 +363,7 @@ public class JFramePasswordGenerator extends JFrame {
 		};
 
 		jTable.setModel(tableModel);
-		jTable.getColumnModel().getColumn(
-				0).setPreferredWidth(
-				150);
+		jTable.getColumnModel().getColumn(0).setPreferredWidth(150);
 		jTable.setColumnSelectionAllowed(true);
 		jScrollPane.setViewportView(jTable);
 
@@ -388,8 +382,7 @@ public class JFramePasswordGenerator extends JFrame {
 
 		jMenuFile.setText(currentLanguage.MenuBarFile);
 
-		jMenuFileMenuItemExit.setAccelerator(javax.swing.KeyStroke.getKeyStroke(
-				java.awt.event.KeyEvent.VK_Q, java.awt.event.InputEvent.CTRL_MASK));
+		jMenuFileMenuItemExit.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_Q, java.awt.event.InputEvent.CTRL_MASK));
 
 		jMenuFileMenuItemExit.setText(currentLanguage.MenuBarFileExit);
 		jMenuFileMenuItemExit.addActionListener(new java.awt.event.ActionListener() {
@@ -397,10 +390,6 @@ public class JFramePasswordGenerator extends JFrame {
 				System.exit(0);
 			}
 		});
-
-		jMenuFileMenuItemImport = new JMenuItem(currentLanguage.MenuBarFileImport);
-		jMenuFileMenuItemImport.setEnabled(false);
-		jMenuFile.add(jMenuFileMenuItemImport);
 
 		jMenuFileMenuItemExport = new JMenuItem(currentLanguage.MenuBarFileExport);
 		jMenuFileMenuItemExport.addActionListener(new ActionListener() {
@@ -540,134 +529,137 @@ public class JFramePasswordGenerator extends JFrame {
 		jCheckBoxMD5 = new JCheckBox("MD5");
 
 		javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-		layout.setHorizontalGroup(layout.createParallelGroup(
-				Alignment.LEADING).addGroup(
-				layout.createSequentialGroup().addContainerGap().addGroup(
-						layout.createParallelGroup(
-								Alignment.TRAILING).addGroup(
-								layout.createSequentialGroup().addGroup(
-										layout.createParallelGroup(
-												Alignment.TRAILING).addGroup(
-												layout.createSequentialGroup().addComponent(
-														jRadioButtonGenPW).addPreferredGap(
-														ComponentPlacement.RELATED, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE).addComponent(
-														jCheckBoxSHA512).addPreferredGap(
-														ComponentPlacement.RELATED).addComponent(
-														jCheckBoxSHA384).addPreferredGap(
-														ComponentPlacement.RELATED).addComponent(
-														jCheckBoxSHA256).addPreferredGap(
-														ComponentPlacement.RELATED).addComponent(
-														jCheckBoxSHA1).addGap(
-														38)).addGroup(
-												layout.createSequentialGroup().addComponent(
-														jSliderPasswordLength, GroupLayout.DEFAULT_SIZE, 381, Short.MAX_VALUE).addPreferredGap(
-														ComponentPlacement.RELATED).addComponent(
-														jLabelSliderInt, GroupLayout.PREFERRED_SIZE, 19, GroupLayout.PREFERRED_SIZE).addGap(
-														18).addComponent(
-														jCheckBoxMD2).addGap(
-														6))).addPreferredGap(
-										ComponentPlacement.RELATED).addComponent(
-										jCheckBoxMD5)).addGroup(
-								layout.createSequentialGroup().addComponent(
-										jCheckBoxNum).addPreferredGap(
-										ComponentPlacement.RELATED).addComponent(
-										jCheckBoxaz).addPreferredGap(
-										ComponentPlacement.RELATED).addComponent(
-										jCheckBoxAZ).addPreferredGap(
-										ComponentPlacement.RELATED).addComponent(
-										jCheckBoxSpezial).addPreferredGap(
-										ComponentPlacement.RELATED, 105, Short.MAX_VALUE).addComponent(
-										jLabelPasswordCount).addPreferredGap(
-										ComponentPlacement.RELATED).addComponent(
-										jSpinnerCountOf, GroupLayout.PREFERRED_SIZE, 89, GroupLayout.PREFERRED_SIZE)).addGroup(
-								layout.createSequentialGroup().addComponent(
-										jLabelHint, GroupLayout.PREFERRED_SIZE, 356, GroupLayout.PREFERRED_SIZE).addPreferredGap(
-										ComponentPlacement.RELATED).addComponent(
-										jLabelPWCount, GroupLayout.DEFAULT_SIZE, 162, Short.MAX_VALUE)).addComponent(
-								jScrollPane, GroupLayout.DEFAULT_SIZE, 524, Short.MAX_VALUE).addGroup(
-								layout.createSequentialGroup().addComponent(
-										jButtonImport, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE).addPreferredGap(
-										ComponentPlacement.RELATED).addComponent(
-										jLabelPleaseWait, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE).addPreferredGap(
-										ComponentPlacement.RELATED).addComponent(
-										jProgressBar, GroupLayout.DEFAULT_SIZE, 15, Short.MAX_VALUE).addPreferredGap(
-										ComponentPlacement.RELATED).addComponent(
-										jButtonSelect, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE).addGap(
-										6).addComponent(
-										jButtonDelete, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE).addPreferredGap(
-										ComponentPlacement.RELATED).addComponent(
-										jButtonExport, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)).addGroup(
-								layout.createSequentialGroup().addComponent(
-										jRadioButtonGenOwnPW).addPreferredGap(
-										ComponentPlacement.RELATED).addComponent(
-										jTextFieldEnterOwnPW, GroupLayout.DEFAULT_SIZE, 415, Short.MAX_VALUE).addPreferredGap(
-										ComponentPlacement.RELATED).addGroup(
-										layout.createParallelGroup(
-												Alignment.LEADING, false).addComponent(
-												jButtonGenerate, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE).addComponent(
-												jButtonClear, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))).addGap(
-						10)));
-		layout.setVerticalGroup(layout.createParallelGroup(
-				Alignment.LEADING).addGroup(
-				layout.createSequentialGroup().addContainerGap().addGroup(
-						layout.createParallelGroup(
-								Alignment.LEADING).addGroup(
-								layout.createParallelGroup(
-										Alignment.LEADING, false).addComponent(
-										jRadioButtonGenOwnPW, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE).addComponent(
-										jButtonGenerate, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)).addComponent(
-								jTextFieldEnterOwnPW, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)).addPreferredGap(
-						ComponentPlacement.RELATED).addGroup(
-						layout.createParallelGroup(
-								Alignment.BASELINE).addComponent(
-								jRadioButtonGenPW).addComponent(
-								jButtonClear).addComponent(
-								jCheckBoxSHA1).addComponent(
-								jCheckBoxSHA256).addComponent(
-								jCheckBoxSHA384).addComponent(
-								jCheckBoxSHA512)).addPreferredGap(
-						ComponentPlacement.RELATED).addGroup(
-						layout.createParallelGroup(
-								Alignment.LEADING).addGroup(
-								layout.createParallelGroup(
-										Alignment.BASELINE).addComponent(
-										jCheckBoxMD5).addComponent(
-										jCheckBoxMD2).addComponent(
-										jLabelSliderInt)).addComponent(
-								jSliderPasswordLength, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)).addPreferredGap(
-						ComponentPlacement.RELATED).addGroup(
-						layout.createParallelGroup(
-								Alignment.BASELINE).addComponent(
-								jCheckBoxNum).addComponent(
-								jCheckBoxaz).addComponent(
-								jCheckBoxAZ).addComponent(
-								jCheckBoxSpezial).addComponent(
-								jSpinnerCountOf, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE).addComponent(
-								jLabelPasswordCount)).addPreferredGap(
-						ComponentPlacement.RELATED).addComponent(
-						jScrollPane, GroupLayout.DEFAULT_SIZE, 284, Short.MAX_VALUE).addPreferredGap(
-						ComponentPlacement.UNRELATED).addGroup(
-						layout.createParallelGroup(
-								Alignment.LEADING, false).addGroup(
-								layout.createParallelGroup(
-										Alignment.BASELINE).addComponent(
-										jButtonExport, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE).addComponent(
-										jButtonDelete, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)).addComponent(
-								jButtonImport, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE).addComponent(
-								jLabelPleaseWait, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE).addGroup(
-								layout.createParallelGroup(
-										Alignment.BASELINE).addComponent(
-										jProgressBar, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE).addComponent(
-										jButtonSelect))).addGap(
-						9).addGroup(
-						layout.createParallelGroup(
-								Alignment.BASELINE).addComponent(
-								jLabelHint).addComponent(
-								jLabelPWCount)).addContainerGap()));
+		layout.setHorizontalGroup(layout.createParallelGroup(Alignment.LEADING).addGroup(
+				layout.createSequentialGroup()
+						.addContainerGap()
+						.addGroup(
+								layout.createParallelGroup(Alignment.TRAILING)
+										.addGroup(
+												layout.createSequentialGroup()
+														.addGroup(
+																layout.createParallelGroup(Alignment.TRAILING)
+																		.addGroup(
+																				layout.createSequentialGroup()
+																						.addComponent(jRadioButtonGenPW)
+																						.addPreferredGap(ComponentPlacement.RELATED,
+																								GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+																						.addComponent(jCheckBoxSHA512)
+																						.addPreferredGap(ComponentPlacement.RELATED)
+																						.addComponent(jCheckBoxSHA384)
+																						.addPreferredGap(ComponentPlacement.RELATED)
+																						.addComponent(jCheckBoxSHA256)
+																						.addPreferredGap(ComponentPlacement.RELATED)
+																						.addComponent(jCheckBoxSHA1).addGap(38))
+																		.addGroup(
+																				layout.createSequentialGroup()
+																						.addComponent(jSliderPasswordLength,
+																								GroupLayout.DEFAULT_SIZE, 381, Short.MAX_VALUE)
+																						.addPreferredGap(ComponentPlacement.RELATED)
+																						.addComponent(jLabelSliderInt, GroupLayout.PREFERRED_SIZE,
+																								19, GroupLayout.PREFERRED_SIZE).addGap(18)
+																						.addComponent(jCheckBoxMD2).addGap(6)))
+														.addPreferredGap(ComponentPlacement.RELATED).addComponent(jCheckBoxMD5))
+										.addGroup(
+												layout.createSequentialGroup().addComponent(jCheckBoxNum).addPreferredGap(ComponentPlacement.RELATED)
+														.addComponent(jCheckBoxaz).addPreferredGap(ComponentPlacement.RELATED)
+														.addComponent(jCheckBoxAZ).addPreferredGap(ComponentPlacement.RELATED)
+														.addComponent(jCheckBoxSpezial)
+														.addPreferredGap(ComponentPlacement.RELATED, 105, Short.MAX_VALUE)
+														.addComponent(jLabelPasswordCount).addPreferredGap(ComponentPlacement.RELATED)
+														.addComponent(jSpinnerCountOf, GroupLayout.PREFERRED_SIZE, 89, GroupLayout.PREFERRED_SIZE))
+										.addGroup(
+												layout.createSequentialGroup()
+														.addComponent(jLabelHint, GroupLayout.PREFERRED_SIZE, 356, GroupLayout.PREFERRED_SIZE)
+														.addPreferredGap(ComponentPlacement.RELATED)
+														.addComponent(jLabelPWCount, GroupLayout.DEFAULT_SIZE, 162, Short.MAX_VALUE))
+										.addComponent(jScrollPane, GroupLayout.DEFAULT_SIZE, 524, Short.MAX_VALUE)
+										.addGroup(
+												layout.createSequentialGroup()
+														.addComponent(jButtonImport, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE,
+																Short.MAX_VALUE)
+														.addPreferredGap(ComponentPlacement.RELATED)
+														.addComponent(jLabelPleaseWait, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE,
+																Short.MAX_VALUE)
+														.addPreferredGap(ComponentPlacement.RELATED)
+														.addComponent(jProgressBar, GroupLayout.DEFAULT_SIZE, 15, Short.MAX_VALUE)
+														.addPreferredGap(ComponentPlacement.RELATED)
+														.addComponent(jButtonSelect, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE,
+																Short.MAX_VALUE)
+														.addGap(6)
+														.addComponent(jButtonDelete, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE,
+																Short.MAX_VALUE)
+														.addPreferredGap(ComponentPlacement.RELATED)
+														.addComponent(jButtonExport, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE,
+																Short.MAX_VALUE))
+										.addGroup(
+												layout.createSequentialGroup()
+														.addComponent(jRadioButtonGenOwnPW)
+														.addPreferredGap(ComponentPlacement.RELATED)
+														.addComponent(jTextFieldEnterOwnPW, GroupLayout.DEFAULT_SIZE, 415, Short.MAX_VALUE)
+														.addPreferredGap(ComponentPlacement.RELATED)
+														.addGroup(
+																layout.createParallelGroup(Alignment.LEADING, false)
+																		.addComponent(jButtonGenerate, GroupLayout.DEFAULT_SIZE,
+																				GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+																		.addComponent(jButtonClear, GroupLayout.DEFAULT_SIZE,
+																				GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))).addGap(10)));
+		layout.setVerticalGroup(layout.createParallelGroup(Alignment.LEADING).addGroup(
+				layout.createSequentialGroup()
+						.addContainerGap()
+						.addGroup(
+								layout.createParallelGroup(Alignment.LEADING)
+										.addGroup(
+												layout.createParallelGroup(Alignment.LEADING, false)
+														.addComponent(jRadioButtonGenOwnPW, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE,
+																Short.MAX_VALUE)
+														.addComponent(jButtonGenerate, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE,
+																Short.MAX_VALUE))
+										.addComponent(jTextFieldEnterOwnPW, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
+												GroupLayout.PREFERRED_SIZE))
+						.addPreferredGap(ComponentPlacement.RELATED)
+						.addGroup(
+								layout.createParallelGroup(Alignment.BASELINE).addComponent(jRadioButtonGenPW).addComponent(jButtonClear)
+										.addComponent(jCheckBoxSHA1).addComponent(jCheckBoxSHA256).addComponent(jCheckBoxSHA384)
+										.addComponent(jCheckBoxSHA512))
+						.addPreferredGap(ComponentPlacement.RELATED)
+						.addGroup(
+								layout.createParallelGroup(Alignment.LEADING)
+										.addGroup(
+												layout.createParallelGroup(Alignment.BASELINE).addComponent(jCheckBoxMD5).addComponent(jCheckBoxMD2)
+														.addComponent(jLabelSliderInt))
+										.addComponent(jSliderPasswordLength, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
+												GroupLayout.PREFERRED_SIZE))
+						.addPreferredGap(ComponentPlacement.RELATED)
+						.addGroup(
+								layout.createParallelGroup(Alignment.BASELINE)
+										.addComponent(jCheckBoxNum)
+										.addComponent(jCheckBoxaz)
+										.addComponent(jCheckBoxAZ)
+										.addComponent(jCheckBoxSpezial)
+										.addComponent(jSpinnerCountOf, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
+												GroupLayout.PREFERRED_SIZE).addComponent(jLabelPasswordCount))
+						.addPreferredGap(ComponentPlacement.RELATED)
+						.addComponent(jScrollPane, GroupLayout.DEFAULT_SIZE, 284, Short.MAX_VALUE)
+						.addPreferredGap(ComponentPlacement.UNRELATED)
+						.addGroup(
+								layout.createParallelGroup(Alignment.LEADING, false)
+										.addGroup(
+												layout.createParallelGroup(Alignment.BASELINE)
+														.addComponent(jButtonExport, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE,
+																Short.MAX_VALUE)
+														.addComponent(jButtonDelete, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE,
+																Short.MAX_VALUE))
+										.addComponent(jButtonImport, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+										.addComponent(jLabelPleaseWait, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+										.addGroup(
+												layout.createParallelGroup(Alignment.BASELINE)
+														.addComponent(jProgressBar, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE,
+																Short.MAX_VALUE).addComponent(jButtonSelect))).addGap(9)
+						.addGroup(layout.createParallelGroup(Alignment.BASELINE).addComponent(jLabelHint).addComponent(jLabelPWCount))
+						.addContainerGap()));
 
 		popupMenuExport = new JPopupMenu();
-		addPopup(
-				jButtonExport, popupMenuExport);
+		addPopup(jButtonExport, popupMenuExport);
 
 		jButtonExportPopupMenuItemAsText = new JMenuItem(currentLanguage.ButtonExportPopupMenuItemAsText);
 		jButtonExportPopupMenuItemAsText.addActionListener(new ActionListener() {
@@ -678,8 +670,7 @@ public class JFramePasswordGenerator extends JFrame {
 		});
 		popupMenuExport.add(jButtonExportPopupMenuItemAsText);
 		popupMenujTable = new JPopupMenu();
-		addPopup(
-				jTable, popupMenujTable);
+		addPopup(jTable, popupMenujTable);
 
 		jTable.setAutoscrolls(true);
 		jTablePopupMenuItemCopy = new JMenuItem(currentLanguage.TablePopupMenuItemCopy);
@@ -689,49 +680,33 @@ public class JFramePasswordGenerator extends JFrame {
 				String content = "";
 				int[] selected = jTable.getSelectedRows();
 				for (int i = 0; i < selected.length; i++) {
-					line = tableModel.getValueAt(
-							selected[i], 0).toString();
-					if (!tableModel.getValueAt(
-							selected[i], 1).toString().isEmpty()) {
-						line += "	" + "SHA-1:" + "	" + tableModel.getValueAt(
-								selected[i], 1).toString();
+					line = tableModel.getValueAt(selected[i], 0).toString();
+					if (!tableModel.getValueAt(selected[i], 1).toString().isEmpty()) {
+						line += "	" + "SHA-1:" + "	" + tableModel.getValueAt(selected[i], 1).toString();
 					}
-					if (!tableModel.getValueAt(
-							selected[i], 2).toString().isEmpty()) {
-						line += "	" + "SHA-256:" + "	" + tableModel.getValueAt(
-								selected[i], 2).toString();
+					if (!tableModel.getValueAt(selected[i], 2).toString().isEmpty()) {
+						line += "	" + "SHA-256:" + "	" + tableModel.getValueAt(selected[i], 2).toString();
 					}
-					if (!tableModel.getValueAt(
-							selected[i], 3).toString().isEmpty()) {
-						line += "	" + "SHA-384:" + "	" + tableModel.getValueAt(
-								selected[i], 3).toString();
+					if (!tableModel.getValueAt(selected[i], 3).toString().isEmpty()) {
+						line += "	" + "SHA-384:" + "	" + tableModel.getValueAt(selected[i], 3).toString();
 					}
-					if (!tableModel.getValueAt(
-							selected[i], 4).toString().isEmpty()) {
-						line += "	" + "SHA-512:" + "	" + tableModel.getValueAt(
-								selected[i], 4).toString();
+					if (!tableModel.getValueAt(selected[i], 4).toString().isEmpty()) {
+						line += "	" + "SHA-512:" + "	" + tableModel.getValueAt(selected[i], 4).toString();
 					}
-					if (!tableModel.getValueAt(
-							selected[i], 5).toString().isEmpty()) {
-						line += "	" + "MD2:" + "	" + tableModel.getValueAt(
-								selected[i], 5).toString();
+					if (!tableModel.getValueAt(selected[i], 5).toString().isEmpty()) {
+						line += "	" + "MD2:" + "	" + tableModel.getValueAt(selected[i], 5).toString();
 					}
-					if (!tableModel.getValueAt(
-							selected[i], 6).toString().isEmpty()) {
-						line += "	" + "MD5:" + "	" + tableModel.getValueAt(
-								selected[i], 6).toString();
+					if (!tableModel.getValueAt(selected[i], 6).toString().isEmpty()) {
+						line += "	" + "MD5:" + "	" + tableModel.getValueAt(selected[i], 6).toString();
 					}
-					content += line + "\n";
+					//content += line + "\n";
 				}
-				Toolkit.getDefaultToolkit().getSystemClipboard().setContents(
-						new StringSelection(content.toString()), null);
+				Toolkit.getDefaultToolkit().getSystemClipboard().setContents(new StringSelection(content.toString()), null);
 			}
 		});
 		popupMenujTable.add(jTablePopupMenuItemCopy);
-		getContentPane().setLayout(
-				layout);
-		setIconImage(Toolkit.getDefaultToolkit().getImage(
-				iconUrl));
+		getContentPane().setLayout(layout);
+		setIconImage(Toolkit.getDefaultToolkit().getImage(iconUrl));
 		setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 		setTitle("Password Generator V" + Main.version);
 		setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
@@ -739,8 +714,8 @@ public class JFramePasswordGenerator extends JFrame {
 		java.awt.Dimension DefaultDimension = new java.awt.Dimension(600, 550);// original 330px x 550px
 		setMinimumSize(new java.awt.Dimension(525, 310));
 		setPreferredSize(DefaultDimension);
-		setBounds(
-				(screenSize.width - DefaultDimension.width) / 2, (screenSize.height - DefaultDimension.height) / 2, DefaultDimension.width, DefaultDimension.height);
+		setBounds((screenSize.width - DefaultDimension.width) / 2, (screenSize.height - DefaultDimension.height) / 2, DefaultDimension.width,
+				DefaultDimension.height);
 		currentBounds = getBounds();
 		jTable.setAutoResizeMode(JTable.AUTO_RESIZE_SUBSEQUENT_COLUMNS);
 		clearHintText();
@@ -764,14 +739,9 @@ public class JFramePasswordGenerator extends JFrame {
 		PasswordGui.setBounds(currentBounds);
 		PasswordGui.setVisible(true);
 		for (int i = 0; i < Password.getCount(); i++) {
-			PasswordGui.tableModel.addRow(new Object[] { tableModel.getValueAt(
-					i, 0).toString(), tableModel.getValueAt(
-					i, 1).toString(), tableModel.getValueAt(
-					i, 2).toString(), tableModel.getValueAt(
-					i, 3).toString(), tableModel.getValueAt(
-					i, 4).toString(), tableModel.getValueAt(
-					i, 5).toString(), tableModel.getValueAt(
-					i, 6).toString() });
+			PasswordGui.tableModel.addRow(new Object[] { tableModel.getValueAt(i, 0).toString(), tableModel.getValueAt(i, 1).toString(),
+					tableModel.getValueAt(i, 2).toString(), tableModel.getValueAt(i, 3).toString(), tableModel.getValueAt(i, 4).toString(),
+					tableModel.getValueAt(i, 5).toString(), tableModel.getValueAt(i, 6).toString() });
 			// pause(1);
 		}
 		pause(75);
@@ -859,8 +829,7 @@ public class JFramePasswordGenerator extends JFrame {
 	}
 
 	/**
-	 * @param aPasswordGui
-	 *            the JFramePasswordGenerator to set.
+	 * @param aPasswordGui the JFramePasswordGenerator to set.
 	 */
 	public static void setPasswordGui(JFramePasswordGenerator aPasswordGui) {
 		PasswordGui = aPasswordGui;
@@ -891,10 +860,8 @@ public class JFramePasswordGenerator extends JFrame {
 	/**
 	 * compares two versions as string.
 	 * 
-	 * @param versionOld
-	 *            the first value.<br/>
-	 * @param versionNew
-	 *            the second value.<br/>
+	 * @param versionOld the first value.<br/>
+	 * @param versionNew the second value.<br/>
 	 * @return (as boolean) true if versionOld lower than versionNew.<br/>
 	 */
 	public static boolean versionCompare(String versionOld, String versionNew) {
@@ -930,15 +897,14 @@ public class JFramePasswordGenerator extends JFrame {
 	}
 
 	/**
-	 * This method connecting to the Internet, check if a new version of this application is available and shows the user if his version is up to date or not.<br/>
+	 * This method connecting to the Internet, check if a new version of this application is available and shows the user if his version is up to date
+	 * or not.<br/>
 	 * if its up to date a dialog will be shown to visual the user that there is no update.<br/>
 	 * if its NOT up to date a dialog will be shown, inform the user that there is new version to download and if he want to download the new version<br/>
 	 * - if the user want to download, a new updater will fired (JFrameDownloadUpdate)<br/>
 	 * 
-	 * @throws UnknownHostException
-	 *             if you entered a illegal URL
-	 * @throws Exception
-	 *             if can't read from stream
+	 * @throws UnknownHostException if you entered a illegal URL
+	 * @throws Exception if can't read from stream
 	 * @see JFrameDownloadUpdate
 	 */
 	public void checkForUpdate() throws UnknownHostException, Exception {
@@ -946,17 +912,18 @@ public class JFramePasswordGenerator extends JFrame {
 		try {
 			versionCompare = checkUpdate();
 		} catch (Exception ex) {
-			JOptionPane.showMessageDialog(
-					JFramePasswordGenerator.getPasswordGui(), currentLanguage.MessageCantConnectToServer, ex.getClass().getSimpleName(), 0);
+			JOptionPane.showMessageDialog(JFramePasswordGenerator.getPasswordGui(), currentLanguage.MessageCantConnectToServer, ex.getClass()
+					.getSimpleName(), 0);
 		}
 		if ((!versionCompare) & (Main.newVersion != null)) {
-			JOptionPane.showMessageDialog(
-					getPasswordGui(), currentLanguage.MessageUpdateUpToDate, currentLanguage.MessageUpdateUpToDateTitle, JOptionPane.INFORMATION_MESSAGE);
+			JOptionPane.showMessageDialog(getPasswordGui(), currentLanguage.MessageUpdateUpToDate, currentLanguage.MessageUpdateUpToDateTitle,
+					JOptionPane.INFORMATION_MESSAGE);
 		}
 	}
 
 	/**
-	 * This method connecting to the Internet, check if a new version of this application is available and shows the user if his version IS NOT up to date.<br/>
+	 * This method connecting to the Internet, check if a new version of this application is available and shows the user if his version IS NOT up to
+	 * date.<br/>
 	 * if its up to date nothing happens.<br/>
 	 * if its NOT up to date a dialog will be shown, inform the user that there is new version to download and if he want to download the new version<br/>
 	 * - if the user want to download, a new updater will fired (JFrameDownloadUpdate)<br/>
@@ -974,21 +941,24 @@ public class JFramePasswordGenerator extends JFrame {
 	private boolean checkUpdate() throws MalformedURLException, IOException {
 		Main.newVersion = getLastestVersion();
 		int showOptionDialog;
-		boolean versionCompare = versionCompare(
-				Main.version, Main.newVersion);
+		boolean versionCompare = versionCompare(Main.version, Main.newVersion);
 		switch (Language.CURRENT_LANG) {
 		case Language.ENGLISH:
-			Main.currentLanguage.MessageUpdateNeedToUpdate = "Please update your version!!!\n\nYour version is:\n" + Main.version + "\nNew version is:\n" + Main.newVersion + "\n\ndo you want to download the last version?";
-			currentLanguage.MessageUpdateNeedToUpdate = "Please update your version!!!\n\nYour version is:\n" + Main.version + "\nNew version is:\n" + Main.newVersion + "\n\ndo you want to download the last version?";
+			Main.currentLanguage.MessageUpdateNeedToUpdate = "Please update your version!!!\n\nYour version is:\n" + Main.version
+					+ "\nNew version is:\n" + Main.newVersion + "\n\ndo you want to download the last version?";
+			currentLanguage.MessageUpdateNeedToUpdate = "Please update your version!!!\n\nYour version is:\n" + Main.version + "\nNew version is:\n"
+					+ Main.newVersion + "\n\ndo you want to download the last version?";
 			break;
 		case Language.GERMAN:
-			Main.currentLanguage.MessageUpdateNeedToUpdate = "Bitte Speichere die Neue Version dieses Programmes!!!\n\nIhre momentane Version ist:\n" + Main.version + "\nDie Neue Version ist:\n" + Main.newVersion + "\n\nWollen Sie die neue Version herunterladen?";
-			currentLanguage.MessageUpdateNeedToUpdate = "Bitte Speichere die Neue Version dieses Programmes!!!\n\nIhre momentane Version ist:\n" + Main.version + "\nDie Neue Version ist:\n" + Main.newVersion + "\n\nWollen Sie die neue Version herunterladen?";
+			Main.currentLanguage.MessageUpdateNeedToUpdate = "Bitte Speichere die Neue Version dieses Programmes!!!\n\nIhre momentane Version ist:\n"
+					+ Main.version + "\nDie Neue Version ist:\n" + Main.newVersion + "\n\nWollen Sie die neue Version herunterladen?";
+			currentLanguage.MessageUpdateNeedToUpdate = "Bitte Speichere die Neue Version dieses Programmes!!!\n\nIhre momentane Version ist:\n"
+					+ Main.version + "\nDie Neue Version ist:\n" + Main.newVersion + "\n\nWollen Sie die neue Version herunterladen?";
 			break;
 		}
 		if (versionCompare) {
-			showOptionDialog = JOptionPane.showOptionDialog(
-					getPasswordGui(), currentLanguage.MessageUpdateNeedToUpdate, currentLanguage.MessageUpdateNeedToUpdateTitle, JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE, null, null, null);
+			showOptionDialog = JOptionPane.showOptionDialog(getPasswordGui(), currentLanguage.MessageUpdateNeedToUpdate,
+					currentLanguage.MessageUpdateNeedToUpdateTitle, JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE, null, null, null);
 			if (showOptionDialog == JOptionPane.OK_OPTION) {
 				JFrameDownloadUpdate updater = new JFrameDownloadUpdate();
 				updater.setUpdateURL("http://sourceforge.net/projects/java-pwgen/files/" + Main.newVersion + "/PasswordGenerator.jar");
@@ -1001,21 +971,18 @@ public class JFramePasswordGenerator extends JFrame {
 	}
 
 	/**
-	 * @param url
-	 *            (as String) the URL to the update file.
+	 * @param url (as String) the URL to the update file.
 	 */
 	public void setUpdateURL(String url) {
 		try {
 			this.updateURL = new URL(url);
 		} catch (Exception ex) {
-			JOptionPane.showMessageDialog(
-					getPasswordGui(), ex.getMessage(), ex.getClass().getSimpleName(), JOptionPane.ERROR_MESSAGE);
+			JOptionPane.showMessageDialog(getPasswordGui(), ex.getMessage(), ex.getClass().getSimpleName(), JOptionPane.ERROR_MESSAGE);
 		}
 	}
 
 	/**
-	 * @param url
-	 *            (as URL) the URL to the update file.
+	 * @param url (as URL) the URL to the update file.
 	 */
 	public void setUpdateURL(URL url) {
 		this.updateURL = url;
@@ -1027,10 +994,8 @@ public class JFramePasswordGenerator extends JFrame {
 	 * this method is looking only in that update file for a Properties named "version"!!!
 	 * 
 	 * @return (as String) the latest version of this application.
-	 * @throws MalformedURLException
-	 *             if you entered a illegal URL
-	 * @throws IOException
-	 *             if can't read from stream
+	 * @throws MalformedURLException if you entered a illegal URL
+	 * @throws IOException if can't read from stream
 	 * @see Properties
 	 */
 	public String getLastestVersion() throws MalformedURLException, IOException {
@@ -1092,16 +1057,15 @@ public class JFramePasswordGenerator extends JFrame {
 			if (jRadioButtonGenPW.isSelected()) {
 				int count = Integer.parseInt(jSpinnerCountOf.getValue().toString());
 				if (count > 2000000) {
-					JOptionPane.showMessageDialog(
-							getPasswordGui(), currentLanguage.MessageToMuchPasswords, currentLanguage.MessageToMuchPasswordsTitle, 2);
+					JOptionPane.showMessageDialog(getPasswordGui(), currentLanguage.MessageToMuchPasswords,
+							currentLanguage.MessageToMuchPasswordsTitle, 2);
 					jSpinnerCountOf.setValue(1000000);
 				} else if (count < 0) {
-					JOptionPane.showMessageDialog(
-							getPasswordGui(), currentLanguage.MessageNegativeCount, currentLanguage.MessageNegativeCountTitle, 2);
+					JOptionPane.showMessageDialog(getPasswordGui(), currentLanguage.MessageNegativeCount, currentLanguage.MessageNegativeCountTitle,
+							2);
 					jSpinnerCountOf.setValue(Math.abs(count));
 				} else if (count == 0) {
-					JOptionPane.showMessageDialog(
-							getPasswordGui(), currentLanguage.MessageZero, currentLanguage.MessageZeroTitle, 2);
+					JOptionPane.showMessageDialog(getPasswordGui(), currentLanguage.MessageZero, currentLanguage.MessageZeroTitle, 2);
 					jSpinnerCountOf.setValue(1);
 				}
 				if (jCheckBoxNum.isSelected()) {
@@ -1142,8 +1106,8 @@ public class JFramePasswordGenerator extends JFrame {
 					while (Integer.parseInt(jSpinnerCountOf.getValue().toString()) >= 1) {
 						try {
 							if (Password.getCount() >= 2000000) { // 2.0 Mio.
-								JOptionPane.showMessageDialog(
-										getPasswordGui(), currentLanguage.MessageToMuchOverAllPasswords, currentLanguage.MessageToMuchOverAllPasswordsTitle, 2);
+								JOptionPane.showMessageDialog(getPasswordGui(), currentLanguage.MessageToMuchOverAllPasswords,
+										currentLanguage.MessageToMuchOverAllPasswordsTitle, 2);
 								break;
 							}
 							Genpw = new Password(chars.toCharArray(), jSliderPasswordLength.getValue());
@@ -1196,8 +1160,8 @@ public class JFramePasswordGenerator extends JFrame {
 			jMenuFile.setVisible(true);
 			jMenuView.setVisible(true);
 		} else {
-			JOptionPane.showMessageDialog(
-					getPasswordGui(), currentLanguage.MessageToMuchOverAllPasswords, currentLanguage.MessageToMuchOverAllPasswordsTitle, JOptionPane.ERROR_MESSAGE);
+			JOptionPane.showMessageDialog(getPasswordGui(), currentLanguage.MessageToMuchOverAllPasswords,
+					currentLanguage.MessageToMuchOverAllPasswordsTitle, JOptionPane.ERROR_MESSAGE);
 		}
 		jButtonGenerate.setText(currentLanguage.ButtonGenerate);
 	}// generate()
@@ -1251,7 +1215,6 @@ public class JFramePasswordGenerator extends JFrame {
 	private JMenuItem jButtonExportPopupMenuItemAsText;
 	private JMenuItem jTablePopupMenuItemCopy;
 	private JMenuItem mntmNews;
-	private JMenuItem jMenuFileMenuItemImport;
 	private JMenuItem jMenuFileMenuItemExport;
 	private JCheckBox jCheckBoxSHA256;
 	private JCheckBox jCheckBoxSHA512;
@@ -1335,14 +1298,13 @@ public class JFramePasswordGenerator extends JFrame {
 				int showSaveDialog = fc.showSaveDialog(rootPane);
 				if (showSaveDialog == JFileChooser.APPROVE_OPTION) {
 					file = fc.getSelectedFile();
-					if (!file.getPath().toLowerCase().endsWith(
-							".txt")) {
+					if (!file.getPath().toLowerCase().endsWith(".txt")) {
 						file = new File(file.getPath() + ".txt");
 					}
 					if (file != null) {
 						if (file.exists()) {
-							int showConfirmDialog = JOptionPane.showConfirmDialog(
-									getPasswordGui(), currentLanguage.MessageFileExists, currentLanguage.MessageFileExistsTitle, JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE);
+							int showConfirmDialog = JOptionPane.showConfirmDialog(getPasswordGui(), currentLanguage.MessageFileExists,
+									currentLanguage.MessageFileExistsTitle, JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE);
 							if (showConfirmDialog == JOptionPane.YES_OPTION) {
 								file.delete();
 								export();
@@ -1372,37 +1334,24 @@ public class JFramePasswordGenerator extends JFrame {
 		private void export() {
 			String line;
 			for (int i = 0; i < count; i++) {
-				line = tableModel.getValueAt(
-						i, 0).toString();
-				if (!tableModel.getValueAt(
-						i, 1).toString().isEmpty()) {
-					line += "	" + "SHA-1:" + "	" + tableModel.getValueAt(
-							i, 1).toString();
+				line = tableModel.getValueAt(i, 0).toString();
+				if (!tableModel.getValueAt(i, 1).toString().isEmpty()) {
+					line += "	" + "SHA-1:" + "	" + tableModel.getValueAt(i, 1).toString();
 				}
-				if (!tableModel.getValueAt(
-						i, 2).toString().isEmpty()) {
-					line += "	" + "SHA-256:" + "	" + tableModel.getValueAt(
-							i, 2).toString();
+				if (!tableModel.getValueAt(i, 2).toString().isEmpty()) {
+					line += "	" + "SHA-256:" + "	" + tableModel.getValueAt(i, 2).toString();
 				}
-				if (!tableModel.getValueAt(
-						i, 3).toString().isEmpty()) {
-					line += "	" + "SHA-384:" + "	" + tableModel.getValueAt(
-							i, 3).toString();
+				if (!tableModel.getValueAt(i, 3).toString().isEmpty()) {
+					line += "	" + "SHA-384:" + "	" + tableModel.getValueAt(i, 3).toString();
 				}
-				if (!tableModel.getValueAt(
-						i, 4).toString().isEmpty()) {
-					line += "	" + "SHA-512:" + "	" + tableModel.getValueAt(
-							i, 4).toString();
+				if (!tableModel.getValueAt(i, 4).toString().isEmpty()) {
+					line += "	" + "SHA-512:" + "	" + tableModel.getValueAt(i, 4).toString();
 				}
-				if (!tableModel.getValueAt(
-						i, 5).toString().isEmpty()) {
-					line += "	" + "MD2:" + "	" + tableModel.getValueAt(
-							i, 5).toString();
+				if (!tableModel.getValueAt(i, 5).toString().isEmpty()) {
+					line += "	" + "MD2:" + "	" + tableModel.getValueAt(i, 5).toString();
 				}
-				if (!tableModel.getValueAt(
-						i, 6).toString().isEmpty()) {
-					line += "	" + "MD5:" + "	" + tableModel.getValueAt(
-							i, 6).toString();
+				if (!tableModel.getValueAt(i, 6).toString().isEmpty()) {
+					line += "	" + "MD5:" + "	" + tableModel.getValueAt(i, 6).toString();
 				}
 				lineWrite(line);
 				jProgressBar.setValue(jProgressBar.getValue() + 1);
@@ -1441,11 +1390,10 @@ public class JFramePasswordGenerator extends JFrame {
 				checkForUpdate();
 				return null;
 			} catch (UnknownHostException ex) {
-				JOptionPane.showMessageDialog(
-						getPasswordGui(), currentLanguage.MessageCantConnectToServer, ex.getClass().getSimpleName(), JOptionPane.ERROR_MESSAGE);
+				JOptionPane.showMessageDialog(getPasswordGui(), currentLanguage.MessageCantConnectToServer, ex.getClass().getSimpleName(),
+						JOptionPane.ERROR_MESSAGE);
 			} catch (Exception ex) {
-				JOptionPane.showMessageDialog(
-						getPasswordGui(), ex.getMessage(), ex.getClass().getSimpleName(), JOptionPane.ERROR_MESSAGE);
+				JOptionPane.showMessageDialog(getPasswordGui(), ex.getMessage(), ex.getClass().getSimpleName(), JOptionPane.ERROR_MESSAGE);
 			}
 			return null;
 		}
@@ -1513,8 +1461,7 @@ public class JFramePasswordGenerator extends JFrame {
 			}
 
 			private void showMenu(MouseEvent e) {
-				popup.show(
-						e.getComponent(), e.getX(), e.getY());
+				popup.show(e.getComponent(), e.getX(), e.getY());
 			}
 		});
 	}

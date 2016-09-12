@@ -1,10 +1,11 @@
 package passwordGenerator;
 
+import passwordGenerator.windows.JFrameMain;
 import passwordGenerator.windows.JFramePasswordGenerator;
 
 /**
  * @author Kevin Weis
- * @version 09.12.2012
+ * @version 04.02.2013
  * <p>
  * Handling commandline args or/and shows the GUI<br/>
  * <p>
@@ -12,28 +13,27 @@ import passwordGenerator.windows.JFramePasswordGenerator;
 public final class Main {
 
 	/**
-	 * @param args
-	 *            (as String[]) see following help:
-	 *            <p>
-	 *            Usage: The first number is the count of how much passwords will be generated<br>
-	 *            The second number is how long each password
-	 *            <p>
-	 *            --no-gui -S Get a default password<br>
-	 *            --help Prints this help<br>
-	 *            -n Set numbers<br>
-	 *            -a Set all lowercase<br>
-	 *            -A Set all UPPERCASE<br>
-	 *            -s Set spezial chars<br>
-	 *            --MD2 PASSWORD Get the MD2-Hash of the password<br>
-	 *            --MD5 PASSWORD Get the MD5-Hash of the password<br>
-	 *            --SHA1 PASSWORD Get the SHA1-Hash of the password<br>
-	 *            --SHA256 PASSWORD Get the SHA256-Hash of the password<br>
-	 *            --SHA384 PASSWORD Get the SHA384-Hash of the password<br>
-	 *            --SHA512 PASSWORD Get the SHA512-Hash of the password
-	 *            <p>
-	 *            To use multiple charsets use this: -Aans (or simular)<br>
-	 *            java -jar PassworGenerator.jar 3 6 -an<br>
-	 *            java -jar PassworGenerator.jar --sha256 PASSWORD<br>
+	 * @param args (as String[]) see following help:
+	 * <p>
+	 * Usage: The first number is the count of how much passwords will be generated<br>
+	 * The second number is how long each password
+	 * <p>
+	 * --no-gui -S Get a default password<br>
+	 * --help Prints this help<br>
+	 * -n Set numbers<br>
+	 * -a Set all lowercase<br>
+	 * -A Set all UPPERCASE<br>
+	 * -s Set spezial chars<br>
+	 * --MD2 PASSWORD Get the MD2-Hash of the password<br>
+	 * --MD5 PASSWORD Get the MD5-Hash of the password<br>
+	 * --SHA1 PASSWORD Get the SHA1-Hash of the password<br>
+	 * --SHA256 PASSWORD Get the SHA256-Hash of the password<br>
+	 * --SHA384 PASSWORD Get the SHA384-Hash of the password<br>
+	 * --SHA512 PASSWORD Get the SHA512-Hash of the password
+	 * <p>
+	 * To use multiple charsets use this: -Aans (or simular)<br>
+	 * java -jar PassworGenerator.jar 3 6 -an<br>
+	 * java -jar PassworGenerator.jar --sha256 PASSWORD<br>
 	 */
 	public static void main(String[] args) {
 		boolean fistNumberSet = false;
@@ -41,8 +41,7 @@ public final class Main {
 		int pwCount = 1;
 		String charChoice = Password.Numbers + Password.AlphabetLOW + Password.AlphabetUP;
 		// String stringPassword;
-		String os = System.getProperty(
-				"os.name").toLowerCase();
+		String os = System.getProperty("os.name").toLowerCase();
 		if (args.length != 0) {
 			try {
 				if (args[0].equals("--help")) {
@@ -152,9 +151,10 @@ public final class Main {
 			}
 		}
 		if (args.length == 0) {
-			JFramePasswordGenerator.setPasswordGui(new JFramePasswordGenerator());
-			JFramePasswordGenerator.getPasswordGui().setVisible(
-					true);
+//			JFramePasswordGenerator.setPasswordGui(new JFramePasswordGenerator());
+//			JFramePasswordGenerator.getPasswordGui().setVisible(true);
+			mainFrame = new JFrameMain();
+			mainFrame.setVisible(true);
 		} else {
 			printHelp();
 		}
@@ -195,7 +195,8 @@ public final class Main {
 		// System.out.println("To use multiple charsets use this: -Aans (or simular)");
 		// System.out.println("java -jar PassworGenerator.jar 3 6 -an");
 		// System.out.println("java -jar PassworGenerator.jar --sha256 PASSWORD");
-		System.out.print("Usage:\r\nThe first number is the count of how much passwords will be generated\r\nThe second number is how long each password\r\n\r\n--no-gui  -S         Get a default password\r\n--help               Prints this help\r\n-n                   Set numbers\r\n-a                   Set all lowercase\r\n-A                   Set all UPPERCASE\r\n-s                   Set spezial chars\r\n--MD2    PASSWORD  Get the MD2-Hash of the password\r\n--MD5    PASSWORD  Get the MD5-Hash of the password\r\n--SHA1   PASSWORD  Get the SHA1-Hash of the password\r\n--SHA256 PASSWORD  Get the SHA256-Hash of the password\r\n--SHA384 PASSWORD  Get the SHA384-Hash of the password\r\n--SHA512 PASSWORD  Get the SHA512-Hash of the password\r\n\r\nTo use multiple charsets use this: -Aans (or simular)\r\njava -jar PassworGenerator.jar 3 6 -an\r\njava -jar PassworGenerator.jar --sha256 PASSWORD\r\n");
+		System.out
+				.print("Usage:\r\nThe first number is the count of how much passwords will be generated\r\nThe second number is how long each password\r\n\r\n--no-gui  -S         Get a default password\r\n--help               Prints this help\r\n-n                   Set numbers\r\n-a                   Set all lowercase\r\n-A                   Set all UPPERCASE\r\n-s                   Set spezial chars\r\n--MD2    PASSWORD  Get the MD2-Hash of the password\r\n--MD5    PASSWORD  Get the MD5-Hash of the password\r\n--SHA1   PASSWORD  Get the SHA1-Hash of the password\r\n--SHA256 PASSWORD  Get the SHA256-Hash of the password\r\n--SHA384 PASSWORD  Get the SHA384-Hash of the password\r\n--SHA512 PASSWORD  Get the SHA512-Hash of the password\r\n\r\nTo use multiple charsets use this: -Aans (or simular)\r\njava -jar PassworGenerator.jar 3 6 -an\r\njava -jar PassworGenerator.jar --sha256 PASSWORD\r\n");
 		System.exit(1);
 	}
 
@@ -221,21 +222,22 @@ public final class Main {
 	 * holds the current language
 	 */
 	public static Language currentLanguage = new Language(Language.ENGLISH);
-	
+	protected static JFrameMain mainFrame;
+
 	private static class Worker extends Thread {
 		public Worker(char[] ch, int pwlen, int pwcnt) {
 			this.choice = ch;
 			this.pwLength = pwlen;
 			this.pwCount = pwcnt;
 		}
-		
+
 		@Override
 		public void run() {
 			for (int i = 0; i < pwCount; i++) {
-				System.out.print(new Password(choice, pwLength));
-				System.out.println();
+				System.out.print(new Password(choice, pwLength) + "\n");
 			}
 		}
+
 		private char[] choice;
 		private int pwLength;
 		private int pwCount;
