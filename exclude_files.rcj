@@ -1,0 +1,9 @@
+/XF
+	desktop.ini
+	exclude_dirs.rcj
+	exclude_files.rcj
+	updateSVN.bat
+	new-version.bat
+	new-version.sh
+	.classpath
+	.project
