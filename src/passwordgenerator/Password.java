@@ -6,10 +6,10 @@ import java.security.NoSuchAlgorithmException;
 import java.util.Random;
 
 /**
- * A object instance of this class "Password" has:
- *  - a Password (as String)
- *  - a MD5 Hash (as String)
- *  - (as char array) the choice of the containing characters for a generated plain text password
+ * A object instance of this class "Password" has: - a Password (as String) - a
+ * MD5 Hash (as String) - (as char array) the choice of the containing
+ * characters for a generated plain text password
+ *
  * @version 2012-04-19
  * @author Kevin Weis
  */
@@ -21,6 +21,7 @@ public class Password {
 
     /**
      * Constructor 1: Set a known password and a MD5 of it will be generated.
+     *
      * @param password (as String) The password to set.
      */
     public Password(String password) {
@@ -29,8 +30,11 @@ public class Password {
     }
 
     /**
-     * Constructor 2: A password will be generated from a known length and a choice (Checkboxes) of the containing characters than a MD5 of it.
-     * @param choice (as char array) a choice (Checkboxes) of the containing characters.
+     * Constructor 2: A password will be generated from a known length and a
+     * choice (Checkboxes) of the containing characters than a MD5 of it.
+     *
+     * @param choice (as char array) a choice (Checkboxes) of the containing
+     * characters.
      * @param length (as int) the length of the generated password.
      */
     public Password(char[] choice, int length) {
@@ -41,6 +45,7 @@ public class Password {
 
     /**
      * Set a known password and a MD5 of it will be generated.
+     *
      * @param password (as String) The password to set.
      */
     public void setPassword(String password) {
